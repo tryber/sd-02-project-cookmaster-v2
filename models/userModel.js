@@ -1,5 +1,4 @@
 const connection = require('./connection');
-const useSession = require('./useSession');
 
 const findUser = async (tableColumn) => {
   const userData = await connection()
