@@ -1,43 +1,40 @@
 const connection = require('./connection');
 
-const getNewUser = (userData) => {
-  const { id, firstName, lastName, email, password } = userData;
+// const getNewUser = (userData) => {
+//   const { id, firstName, lastName, email, password } = userData;
 
-  const fullName = [firstName, lastName].join(' ');
+//   const fullName = [firstName, lastName].join(' ');
 
-  return {
-    id,
-    name: fullName,
-    email,
-    password,
-  };
-};
+//   return {
+//     id,
+//     name: fullName,
+//     email,
+//     password,
+//   };
+// };
 
-/* Substitua o código das funções abaixo para que ela,
-de fato, realize a busca no banco de dados */
-
-/**
- * Busca um usuário através do seu email e, se encontrado, retorna-o.
- * @param {string} email Email do usuário a ser encontrado
- */
-const findByEmail = async (emailParam) => {
-  return connection()
+const findByEmail = async (emailParam) => (
+  connection()
     .then((session) => session.getSchema('cookmaster'))
     .then((db) => (
       db
         .getTable('users')
-        .select(['id', 'first_name', 'last_name', 'email', 'password'])
+        .select(['id', 'name', 'email', 'password', 'role'])
         .where('email = :email')
         .bind('email', emailParam)
         .execute()
     ))
     .then((results) => results.fetchAll())
     .then((users) => (
-      users.map(([id, firstName, lastName, email, password]) =>
-        getNewUser({ id, firstName, lastName, email, password }),
-      )[0]
-    ));
-};
+      users.map(([id, name, email, password, role]) => ({
+        id,
+        name,
+        email,
+        password,
+        role,
+      }))[0]
+    ))
+);
 
 /**
  * Busca um usuário através do seu ID

@@ -16,7 +16,7 @@ const boomErrorHandler = (err, _req, res, next) => {
       message: err.message,
       code: errorCodes[err.output.statusCode],
       data: err.data,
-    }
+    },
   });
 };
 

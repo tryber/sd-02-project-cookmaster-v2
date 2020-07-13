@@ -21,11 +21,16 @@ router.post('/', async (req, res, next) => {
     return next(boom.badData('Dados inválidos', invalidField));
   }
 
-  const { success, message, newUser } = await services.user.register(name, email, password);
+  const {
+    success,
+    conflict,
+    message,
+    newUser,
+  } = await services.user.register(name, email, password);
 
-  if (!success) {
-    return next({ message });
-  }
+  if (conflict) return next(boom.conflict(message));
+
+  if (!success) return next({ message });
 
   return res.status(201).json({ message, newUser });
 });

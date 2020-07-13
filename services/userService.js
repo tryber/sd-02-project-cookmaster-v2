@@ -2,6 +2,18 @@ const models = require('../models');
 
 const register = async (name, email, password) => {
   try {
+    const isNotUnique = await models.user.findByEmail(email);
+    if (isNotUnique) {
+      return {
+        conflict: true,
+        message: 'Email já está cadastrado',
+      };
+    }
+  } catch (err) {
+    return { message: err.message };
+  }
+
+  try {
     const newUser = await models.user.create(name, email, password);
     return {
       success: true,
@@ -10,7 +22,6 @@ const register = async (name, email, password) => {
     };
   } catch (err) {
     return {
-      success: false,
       message: err.message,
     };
   }
