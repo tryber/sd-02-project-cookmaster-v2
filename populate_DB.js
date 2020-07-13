@@ -6,14 +6,14 @@ db.users.insertMany([
     name: 'pedro',
     email: 'pedro@gmail.com',
     password: '123456',
-    role: 'normal',
+    role: 'user',
   },
   {
     _id: ObjectId('5f0cb22a6d3c8a379034fa4b'),
     name: 'joao',
     email: 'joao@gmail.com',
     password: '987654',
-    role: 'normal',
+    role: 'user',
   },
   {
     _id: ObjectId('5f0cb22a6d3c8a379034fa4c'),
