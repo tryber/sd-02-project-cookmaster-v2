@@ -1,4 +1,5 @@
 const ObjectId = () => { };
+const db = 'Use DB';
 
 db.users.insertMany([
   {

@@ -38,11 +38,11 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
   ```js
   const path = require('path');
   // ...
-  
+
   // /images é o caminho da API onde as imagens estarão disponíveis
   // path.join(__dirname, 'uploads') é o caminho da pasta onde o multer salva suas imagens ao realizar o upload
   app.use('/images', express.static(path.join(__dirname, 'uploads')));
-  
+
   // ...
   ```
 
@@ -218,45 +218,51 @@ O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como ban
 ### ANTES DE COMEÇAR A DESENVOLVER:
 
 1. Clone o repositório
-  - `git clone git@github.com:tryber/sd-0x-project-cookmaster-v2.git`.
-  - Entre na pasta do repositório que você acabou de clonar:
-    - `cd sd-0x-project-cookmaster-v2`
+
+- `git clone git@github.com:tryber/sd-0x-project-cookmaster-v2.git`.
+- Entre na pasta do repositório que você acabou de clonar:
+  - `cd sd-0x-project-cookmaster-v2`
 
 2. Instale as dependências
-  - `npm install`
+
+- `npm install`
 
 3. Crie uma branch a partir da branch `master`
-  - Verifique que você está na branch `master`
-    - Exemplo: `git branch`
-  - Se não estiver, mude para a branch `master`
-    - Exemplo: `git checkout master`
-  - Agora crie uma branch à qual você vai submeter os `commits` do seu projeto
-    - Você deve criar uma branch no seguinte formato: `nome-de-usuario-nome-do-projeto`
-    - Exemplo: `git checkout -b joaozinho-cookmaster-v2`
+
+- Verifique que você está na branch `master`
+  - Exemplo: `git branch`
+- Se não estiver, mude para a branch `master`
+  - Exemplo: `git checkout master`
+- Agora crie uma branch à qual você vai submeter os `commits` do seu projeto
+  - Você deve criar uma branch no seguinte formato: `nome-de-usuario-nome-do-projeto`
+  - Exemplo: `git checkout -b joaozinho-cookmaster-v2`
 
 4. Adicione as mudanças ao _stage_ do Git e faça um `commit`
-  - Verifique que as mudanças ainda não estão no _stage_
-    - Exemplo: `git status` (deve aparecer listado o arquivo alterado em vermelho)
-  - Adicione o arquivo alterado ao _stage_ do Git
-    - Exemplo:
-      - `git add .` (adicionando todas as mudanças - _que estavam em vermelho_ - ao stage do Git)
-      - `git status` (deve aparecer listado o arquivo adicionado em verde)
-  - Faça o `commit` inicial
-    - Exemplo:
-      - `git commit -m 'Iniciando o projeto Cookmaster v2'` (fazendo o primeiro commit)
-      - `git status` (deve aparecer uma mensagem tipo _nothing to commit_ )
+
+- Verifique que as mudanças ainda não estão no _stage_
+  - Exemplo: `git status` (deve aparecer listado o arquivo alterado em vermelho)
+- Adicione o arquivo alterado ao _stage_ do Git
+  - Exemplo:
+    - `git add .` (adicionando todas as mudanças - _que estavam em vermelho_ - ao stage do Git)
+    - `git status` (deve aparecer listado o arquivo adicionado em verde)
+- Faça o `commit` inicial
+  - Exemplo:
+    - `git commit -m 'Iniciando o projeto Cookmaster v2'` (fazendo o primeiro commit)
+    - `git status` (deve aparecer uma mensagem tipo _nothing to commit_ )
 
 5. Adicione a sua branch com o novo `commit` ao repositório remoto
-  - Usando o exemplo anterior: `git push -u origin joaozinho-cookmaster-v2`
+
+- Usando o exemplo anterior: `git push -u origin joaozinho-cookmaster-v2`
 
 6. Crie um novo `Pull Request` _(PR)_
-  - Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls)
-  - Clique no botão verde _"New pull request"_
-  - Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
-  - Clique no botão verde _"Create pull request"_
-  - Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
-  - **Não se preocupe em preencher mais nada por enquanto!**
-  - Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls) e confira que o seu _Pull Request_ está criado
+
+- Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls)
+- Clique no botão verde _"New pull request"_
+- Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
+- Clique no botão verde _"Create pull request"_
+- Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
+- **Não se preocupe em preencher mais nada por enquanto!**
+- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
