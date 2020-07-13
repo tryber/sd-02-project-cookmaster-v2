@@ -1,5 +1,9 @@
-const { authMiddleware } = require('./auth');
+//const { authMiddleware } = require('./auth');
+const boomErrorHandler = require('./boomErrorHandler');
+const otherErrorsHandler = require('./otherErrorsHandler');
 
 module.exports = {
-  auth: authMiddleware,
+  //auth: authMiddleware,
+  boomErrorHandler,
+  otherErrorsHandler,
 };

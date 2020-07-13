@@ -62,22 +62,26 @@ const findById = async (idParam) => {
     ));
 };
 
-const registerNewUser = async (userData) => {
-  const { email, password, firstName, lastName } = userData;
-
-  return connection()
+const create = async (name, email, password) => (
+  connection()
     .then((session) => session.getSchema('cookmaster'))
     .then((db) => (
       db
         .getTable('users')
-        .insert(['first_name', 'last_name', 'email', 'password'])
-        .values([firstName, lastName, email, password])
+        .insert(['name', 'email', 'password'])
+        .values([name, email, password])
         .execute()
-    ));
-};
+    ))
+    .then(() => ({
+      name,
+      email,
+      password,
+      role: 'user',
+    }))
+);
 
 module.exports = {
   findByEmail,
   findById,
-  registerNewUser,
+  create,
 };

@@ -4,10 +4,10 @@ USE cookmaster;
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  first_name VARCHAR(20) NOT NULL,
-  last_name VARCHAR(20) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  password VARCHAR(50) NOT NULL
+  name VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(50) NOT NULL,
+  role VARCHAR(10) DEFAULT 'user'
 );
 
 CREATE TABLE recipes (
@@ -21,8 +21,8 @@ CREATE TABLE recipes (
 
 INSERT INTO users (first_name, last_name, email, password)
   VALUES
-    ('Miguel', 'Miranda', 'miguel@gmail.com', '123'),
-    ('m', 'm', 'm', 'm');
+    ('Miguel Miranda', 'miguel@gmail.com', '123'),
+    ('m', 'm', 'm');
 
 INSERT INTO recipes (title, ingredients, directions, author_id)
   VALUES
