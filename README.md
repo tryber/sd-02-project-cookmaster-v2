@@ -185,7 +185,7 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
 
 - Esse usuário tem o poder de criar, deletar, atualizar ou remover qualquer receita, independente de quem a cadastrou.
 
-- Crie um script na raiz do seu projeto com a extensão `.sql`, caso utilize o MySQL, ou `.js`, caso utilize o mongodb. Este arquivo deve inicializar o banco de dados e cadastrar um usuário admin com o login `root` e a senha `admin`.
+- Crie um script na raiz do seu projeto com a extensão `.sql`, caso utilize o MySQL, ou `.js`, caso utilize o mongodb. Este arquivo deve inicializar o banco de dados e cadastrar um usuário admin com o email `root@email.com` e a senha `admin`.
 
 ## Bônus
 
