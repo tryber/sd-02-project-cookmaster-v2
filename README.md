@@ -218,9 +218,9 @@ O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como ban
 ### ANTES DE COMEÇAR A DESENVOLVER:
 
 1. Clone o repositório
-  - `git clone git@github.com:tryber/sd-0x-blockxx-cookmaster-v2.git`.
+  - `git clone git@github.com:tryber/sd-0x-project-cookmaster-v2.git`.
   - Entre na pasta do repositório que você acabou de clonar:
-    - `cd sd-0x-blockxx-cookmaster-v2`
+    - `cd sd-0x-project-cookmaster-v2`
 
 2. Instale as dependências
   - `npm install`
