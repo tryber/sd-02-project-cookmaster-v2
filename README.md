@@ -38,9 +38,11 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
   ```js
   const path = require('path');
   // ...
+  
   // /images é o caminho da API onde as imagens estarão disponíveis
   // path.join(__dirname, 'uploads') é o caminho da pasta onde o multer salva suas imagens ao realizar o upload
   app.use('/images', express.static(path.join(__dirname, 'uploads')));
+  
   // ...
   ```
 
@@ -60,7 +62,7 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
 
 ### 2 - Crie um endpoint para o cadastro de usuários
 
-- A rota deve ser (`/user`).
+- A rota deve ser (`/users`).
 
 - No banco um usuário precisa ter os campos Email, Senha, Nome e Role.
 
@@ -161,7 +163,11 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
 
 ### 9 - Crie um endpoint para a adição de uma imagem a uma receita
 
-- A rota deve ser (`/recipes/img/:id`).
+- A rota deve ser (`/recipes/:id/image/`).
+
+- A imagem deve ser lida do campo `image`.
+
+- O endpoint deve aceitar requisições no formato `multipart/form-data`.
 
 - A receita só pode ser atualizada caso o usuário esteja logado e o token `JWT` validado.
 
@@ -185,11 +191,11 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
 
 ### 11 - Cadastramento de admin
 
-- A rota deve ser (`/user/admin`).
+- A rota deve ser (`/users/admin`).
 
 - Só será possível adicionar um admin caso esta ação esteja sendo feita por outro admin, portanto, deve ser validado se há um admin logado.
 
-- Por padrão, as requisições pra esse endpoint devem adicionar a Role com o atributo _admin_ ao usuário criado.
+- Por padrão, as requisições pra esse endpoint devem adicionar um usuário com a role _admin_.
 
 - O corpo da requisição deve ter o seguinte formato:
 
