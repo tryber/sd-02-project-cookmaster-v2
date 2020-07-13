@@ -1,21 +1,9 @@
 const connection = require('./connection');
 
-const findUser = async (tableColumn) => {
-  const userData = await connection()
-    .then((database) => database
-      .getTable('users')
-      .select(['id', 'email', 'user_password', 'first_name', 'last_name'])
-      .where('id = :tableColumn OR email = :tableColumn')
-      .bind('tableColumn', tableColumn)
-      .execute())
-    .then((results) => results.fetchAll())
-    .then((users) => users[0]);
-
-  if (!userData) return null;
-
-  const [id, email, password, name, lastName] = userData;
-
-  return { id, email, password, name, lastName };
+const getUserByEmail = async (email) => {
+  const db = await connection();
+  const user = db.collection('users').findOne({ email });
+  return user;
 };
 
 const registerNewUser = async (newUserData) => {
@@ -66,7 +54,7 @@ const updateUser = async (userData) => {
 };
 
 module.exports = {
-  findUser,
+  getUserByEmail,
   registerNewUser,
   checkPassword,
   updateUser,

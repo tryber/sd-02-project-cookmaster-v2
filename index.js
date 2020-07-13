@@ -8,12 +8,13 @@ const userController = require('./controllers/userController');
 
 const app = express();
 
+app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, '/uploads')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/users', middlewares.validateFields, userController.newUser);
 
-app.post('/login', middlewares.validateFields, userController.login);
+app.post('/login', userController.login);
 
 app.route('/recipes')
   .get(recipeController.listRecipes)

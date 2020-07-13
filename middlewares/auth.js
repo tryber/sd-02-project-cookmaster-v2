@@ -1,35 +1,32 @@
+const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 
-const SESSIONS = {};
+const JWT_SECRET = 'segredo';
 
-const getUser = async (req) => {
-  const { token = '' } = req.cookies || {};
-  if (!token) return null;
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers.authorization;
 
-  const userId = SESSIONS[token];
-  if (!userId) return null;
+  if (!token) {
+    return res.status(401).json({ message: 'missing auth token' });
+  }
 
-  const user = await userModel.findUser(userId);
-  if (!user) return null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
 
-  return user;
-};
+    const user = await userModel.findOne({ email: payload.data.email });
 
-const authMiddleware = (required = true) => async (req, res, next) => {
-  const user = await getUser(req);
+    if (!user) {
+      return res.status(401).json({ message: 'user not found' });
+    }
 
-  if (!user && required) return res.redirect(`/login?redirect=${encodeURIComponent(req.url)}`);
+    req.user = user.toObject();
 
-  if (!user && !required) return next();
-
-  const { password, ...userData } = user;
-
-  req.user = userData;
-
-  return next();
+    next();
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
 };
 
 module.exports = {
-  SESSIONS,
   authMiddleware,
 };
