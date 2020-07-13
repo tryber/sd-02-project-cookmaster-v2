@@ -29,7 +29,7 @@ app.all('*', errorController.endpointNotFound);
 // app.get('/recipes/search', middlewares.auth(), controllers.recipeController.searchRecipe);
 
 // app.get('/recipes/:id/edit', middlewares.auth(), controllers.recipeController.showEditRecipe);
-// app.get('/recipes/:id/delete', middlewares.auth(), controllers.recipeController.showDeleteRecipe);
+// app.get('/recipes/:id/delete', controllers.recipeController.showDeleteRecipe);
 // app.post('/recipes/:id/delete', middlewares.auth(), controllers.recipeController.deleteRecipe);
 // app.get('/recipes/:id', middlewares.auth(false), controllers.recipeController.showRecipe);
 // app.post('/recipes/:id', middlewares.auth(), controllers.recipeController.editRecipe);

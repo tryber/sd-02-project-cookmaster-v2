@@ -35,7 +35,7 @@ const getUserByEmail = async (param) => {
 const createUser = async (name, email, password, role = 'std') => {
   const session = await connection();
   const id = await session.sql(
-    `INSERT INTO users (name, email, password, role) 
+    `INSERT INTO users (name, email, password, role)
     VALUES (?, ?, ?, ?);`,
   )
     .bind(name)
