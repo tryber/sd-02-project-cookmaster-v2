@@ -21,7 +21,16 @@ const createUser = rescue(async (req, res, next) => {
   res.status(201).json(serviceAnswer);
 });
 
+const loginUser = rescue(async (req, res, next) => {
+  const { email, password } = req.body;
+  const serviceAnswer = await usersService.loginUser(email, password);
+  console.log('controller', serviceAnswer);
+  if (serviceAnswer.error) return next(serviceAnswer);
+  res.status(200).json({ token: serviceAnswer });
+});
+
 module.exports = {
   getAllUsers,
   createUser,
+  loginUser,
 };

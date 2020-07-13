@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const validateJWT = require('./controllers/validateJWT');
 const errorController = require('./controllers/errorController');
 const usersController = require('./controllers/usersController');
 
@@ -9,8 +11,10 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/users', usersController.getAllUsers);
+app.get('/users', validateJWT, usersController.getAllUsers);
 app.post('/users', usersController.createUser);
+
+app.post('/login', usersController.loginUser);
 
 app.use(errorController.promiseErrors);
 

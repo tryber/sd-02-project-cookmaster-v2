@@ -1,4 +1,5 @@
 const objError = {
+  unauthorized: 401,
   not_found: 404,
   already_exists: 409,
   invalid_data: 422,

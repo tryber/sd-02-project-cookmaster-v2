@@ -18,7 +18,7 @@ const getAllUsers = async () => {
 const getUserByEmail = async (param) => {
   const session = await connection();
   const result = await session.sql(
-    `SELECT u.id, u.email, u.password
+    `SELECT u.id, u.email, u.password, u.role
     FROM users AS u
     WHERE u.email = ?;`,
   )
@@ -27,9 +27,9 @@ const getUserByEmail = async (param) => {
     .then((results) => results.fetchAll()[0] || []);
 
   if (!result.length) return null;
-  const [id, email, password] = result;
+  const [id, email, password, role] = result;
 
-  return { id, email, password };
+  return { id, email, password, role };
 };
 
 const createUser = async (name, email, password, role = 'std') => {
@@ -47,8 +47,26 @@ const createUser = async (name, email, password, role = 'std') => {
   return { id, email, name, role };
 };
 
+const getUserById = async (param) => {
+  const session = await connection();
+  const result = await session.sql(
+    `SELECT u.id, u.email, u.password, u.role
+    FROM users AS u
+    WHERE u.id = ?;`,
+  )
+    .bind(param)
+    .execute()
+    .then((results) => results.fetchAll()[0] || []);
+
+  if (!result.length) return null;
+  const [id, email, password, role] = result;
+
+  return { id, email, password, role };
+};
+
 module.exports = {
   getAllUsers,
   getUserByEmail,
   createUser,
+  getUserById,
 };
