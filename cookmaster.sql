@@ -12,9 +12,10 @@ CREATE TABLE users (
 
 CREATE TABLE recipes (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(50),
+  name VARCHAR(50),
   ingredients TEXT,
-  directions TEXT,
+  preparation TEXT,
+  image_url VARCHAR(1000),
   author_id INT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES users(id)
 );
@@ -24,7 +25,7 @@ INSERT INTO users (name, email, password)
     ('Miguel Miranda', 'miguel@gmail.com', '123'),
     ('m', 'm', 'm');
 
-INSERT INTO recipes (title, ingredients, directions, author_id)
+INSERT INTO recipes (name, ingredients, preparation, author_id)
   VALUES
     (
       'Ovo frito',

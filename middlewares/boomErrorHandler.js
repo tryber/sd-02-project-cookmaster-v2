@@ -1,10 +1,10 @@
 const boom = require('boom');
 
 const errorCodes = {
+  401: 'unauthorized',
   404: 'not_found',
   409: 'already_exists',
   422: 'invalid_data',
-  401: 'unauthorized'
 };
 
 const boomErrorHandler = (err, _req, res, next) => {

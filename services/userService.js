@@ -42,7 +42,7 @@ const login = async (email, password) => {
     const jwtConfig = {
       expiresIn: '10m',
       algorithm: 'HS256',
-      subject: `${id}`,
+      subject: String(id),
     };
 
     const token = jwt.sign(userData, JWT_SECRET, jwtConfig);

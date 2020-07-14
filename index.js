@@ -14,6 +14,8 @@ app.use('/users', controllers.user);
 
 app.use('/login', controllers.login);
 
+app.use('/recipes', controllers.recipe);
+
 // app.get('/admin', middlewares.auth(), (req, res) => {
 //   return res.render('admin/home', { user: req.user });
 // });

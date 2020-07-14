@@ -1,39 +1,67 @@
-const userModel = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const boom = require('boom');
 
-const SESSIONS = {};
+const { JWT_SECRET } = process.env;
 
-const getUser = async (req) => {
-  const { token = '' } = req.cookies || {};
-  if (!token) return null;
+const auth = async (req, _res, next) => {
+  const token = req.headers.authorization;
 
-  const userId = SESSIONS[token];
-  if (!userId) return null;
+  if (!token) return next(boom.unauthorized('Um token é necessário'));
 
-  const user = await userModel.findById(userId);
-  if (!user) return null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    const { sub, name, email, role } = payload;
 
-  return user;
-};
+    const user = {
+      id: Number(sub),
+      name,
+      email,
+      role,
+    };
 
-const authMiddleware = (required = true) => async (req, res, next) => {
-  const user = await getUser(req);
+    req.user = user;
+    return next();
+  } catch (err) {
+    next(boom.unauthorized(err.message));
+  }
+}
 
-  if (!user && required)
-    return res.redirect(`/login?redirect=${encodeURIComponent(req.url)}`);
+// const SESSIONS = {};
 
-  if (!user && !required) return next();
+// const getUser = async (req) => {
+//   const { token = '' } = req.cookies || {};
+//   if (!token) return null;
 
-  const { password, ...userData } = user;
+//   const userId = SESSIONS[token];
+//   if (!userId) return null;
 
-  req.user = userData;
+//   const user = await userModel.findById(userId);
+//   if (!user) return null;
 
-  req.userPassword = password;
+//   return user;
+// };
 
-  return next();
-};
+// const authMiddleware = (required = true) => async (req, res, next) => {
+//   const user = await getUser(req);
 
-module.exports = {
-  SESSIONS,
-  getUser,
-  authMiddleware,
-};
+//   if (!user && required)
+//     return res.redirect(`/login?redirect=${encodeURIComponent(req.url)}`);
+
+//   if (!user && !required) return next();
+
+//   const { password, ...userData } = user;
+
+//   req.user = userData;
+
+//   req.userPassword = password;
+
+//   return next();
+// };
+
+// module.exports = {
+//   SESSIONS,
+//   getUser,
+//   authMiddleware,
+// };
+
+module.exports = auth;
