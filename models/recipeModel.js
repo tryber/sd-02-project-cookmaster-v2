@@ -84,38 +84,26 @@ const update = async (id, name, ingredients, preparation) => (
     // })
 );
 
-// const deleteOne = async (id) => (
-//   connection()
-//     .then((session) =>
-//       session
-//         .getSchema('cookmaster')
-//         .getTable('recipes')
-//         .delete()
-//         .where('id = :id')
-//         .bind('id', id)
-//         .execute(),
-//     )
-//     .catch((err) => {
-//       console.error(err);
-//     })
-// );
-
-// const searchByTitle = async (q) => {
-//   if (q === '') {
-//     return [];
-//   }
-
-//   const allRecipes = await getAll();
-
-//   return allRecipes
-//     .filter(({ title }) => title.includes(q));
-// };
+const remove = async (id) => (
+  connection()
+    .then((session) =>
+      session
+        .getSchema('cookmaster')
+        .getTable('recipes')
+        .delete()
+        .where('id = :id')
+        .bind('id', id)
+        .execute(),
+    )
+    // .catch((err) => {
+    //   console.error(err);
+    // })
+);
 
 module.exports = {
   getAll,
   getById,
   create,
   update,
-  // deleteOne,
-  // searchByTitle,
+  remove,
 };

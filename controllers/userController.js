@@ -24,10 +24,4 @@ router.post('/', middlewares.fieldsValidator(fields), async (req, res, next) => 
   return res.status(201).json({ message, newUser });
 });
 
-// const logout = (req, res) => {
-//   res.clearCookie('token');
-//   if (!req.cookies || !req.cookies.token) return res.redirect('/login');
-//   res.render('admin/logout');
-// };
-
 module.exports = router;
