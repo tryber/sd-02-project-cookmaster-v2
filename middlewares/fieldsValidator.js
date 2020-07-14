@@ -14,9 +14,7 @@ const fieldsValidator = (fields) => async (req, _res, next) => {
     i += 1;
   }
 
-  if (invalidField) return next(boom.badData('Dados inválidos', invalidField));
-
-  return next();
+  return invalidField ? next(boom.badData('Dados inválidos', invalidField)) : next();
 };
 
 module.exports = fieldsValidator;
