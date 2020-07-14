@@ -6,7 +6,7 @@ const errorJoi = require('./errorJoi');
 const validateJoi = async (reqInfo) =>
   schemasJoi.addUser.validateAsync(reqInfo).catch((fail) => errorJoi(fail));
 
-const getAllUsers = rescue(async (_req, res, next) => {
+const getAllUsers = rescue(async (req, res, next) => {
   const serviceAnswer = await usersService.getAllUsers();
   if (serviceAnswer.error) return next(serviceAnswer);
   res.status(200).json(serviceAnswer);

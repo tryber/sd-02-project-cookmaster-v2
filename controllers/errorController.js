@@ -10,7 +10,7 @@ const objExtError = {
 };
 
 const promiseErrors = (err, _req, res, _next) => {
-  console.log(JSON.stringify(err));
+  console.log('xxt', JSON.stringify(err));
   const statusCode = objError[err.code] || err.statusCode || 500;
   const code = err.code || objExtError[err.type] || 'internal_error';
   return res.status(statusCode).json({
