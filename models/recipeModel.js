@@ -11,6 +11,7 @@ const getAll = async () => (
             R.ingredients,
             R.preparation,
             R.image_url,
+            R.author_id,
             U.name
           FROM cookmaster.recipes AS R
           INNER JOIN cookmaster.users AS U
@@ -20,12 +21,13 @@ const getAll = async () => (
     )
     .then((results) => results.fetchAll())
     .then((recipes) =>
-      recipes.map(([id, name, ingredients, preparation, imageUrl, authorName]) => ({
+      recipes.map(([id, name, ingredients, preparation, imageUrl, authorId, authorName]) => ({
         id,
         name,
         ingredients,
         preparation,
         imageUrl,
+        authorId,
         authorName,
       })),
     )
@@ -62,24 +64,25 @@ const create = async (name, ingredients, preparation, authorId) => (
     // })
 );
 
-// const editOne = async ({ id, title, ingredients, directions }) => (
-//   connection()
-//     .then((session) =>
-//       session
-//         .getSchema('cookmaster')
-//         .getTable('recipes')
-//         .update()
-//         .where('id = :id')
-//         .bind('id', id)
-//         .set('title', title)
-//         .set('ingredients', ingredients)
-//         .set('directions', directions)
-//         .execute(),
-//     )
-//     .catch((err) => {
-//       console.error(err);
-//     })
-// );
+const update = async (id, name, ingredients, preparation) => (
+  connection()
+    .then((session) =>
+      session
+        .getSchema('cookmaster')
+        .getTable('recipes')
+        .update()
+        .where('id = :id')
+        .bind('id', id)
+        .set('name', name)
+        .set('ingredients', ingredients)
+        .set('preparation', preparation)
+        .execute(),
+    )
+    .then(() => getById(id))
+    // .catch((err) => {
+    //   console.error(err);
+    // })
+);
 
 // const deleteOne = async (id) => (
 //   connection()
@@ -112,7 +115,7 @@ module.exports = {
   getAll,
   getById,
   create,
-  // editOne,
+  update,
   // deleteOne,
   // searchByTitle,
 };

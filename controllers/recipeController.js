@@ -47,6 +47,36 @@ router.get('/:id', async (req, res, next) => {
   return res.status(200).json({ message, recipe });
 });
 
+router.put(
+  '/:id',
+  middlewares.auth,
+  middlewares.fieldsValidator(fields),
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { name, ingredients, preparation } = req.body;
+    const recipeData = { recipeId: Number(id), name, ingredients, preparation };
+
+    const { id: userId, role } = req.user;
+    const userData = { userId, role };
+
+    const {
+      success,
+      notFound,
+      forbidden,
+      message,
+      updatedRecipe,
+    } = await services.recipe.edit(userData, recipeData);
+
+    if (notFound) return next(boom.notFound(message));
+
+    if (forbidden) return next(boom.forbidden(message));
+
+    if (!success) return next({ message });
+
+    return res.status(200).json({ message, updatedRecipe });
+  },
+);
+
 // const editRecipeForm = async (req, res) => {
 //   const idFromUrl = req.url.split('/')[2];
 
