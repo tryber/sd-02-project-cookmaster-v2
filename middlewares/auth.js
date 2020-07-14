@@ -5,11 +5,12 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = async (req, res, next) => {
 
-  const token = req.headers['authorization'];
+  const token = req.headers.authorization;
 
-  if (!token)
-    return res.status(401).json({ message: 'missing auth token' })
-  
+  if (!token) {
+    return res.status(401).json({ message: 'missing auth token' });
+  }
+
   try {
     const payload = jwt.verify(token, JWT_SECRET);
 
@@ -19,9 +20,8 @@ module.exports = async (req, res, next) => {
       return res.status(401).json({ message: 'user not found' });
     }
 
-    const { password: _, ...userWithoutPassword } = user;
-
-    req.user = userWithoutPassword;
+    const { password: _, _id: id, ...userWithoutPasswordAndId } = user;
+    req.user = { id, ...userWithoutPasswordAndId };
 
     next();
   } catch (error) {

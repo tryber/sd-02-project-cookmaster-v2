@@ -23,7 +23,6 @@ class User {
   }
 
   static async getByEmail(email) {
-    console.log(email)
     return connection().then((db) =>
       db.collection('users').findOne({ email }),
     );

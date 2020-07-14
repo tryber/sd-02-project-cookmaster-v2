@@ -3,16 +3,16 @@ const mongodb = require('mongodb');
 const connection = require('./connection');
 
 class Recipe {
-  constructor(name = '', ingredients = '', preparation = '', user_id, url = '') {
+  constructor(name = '', ingredients = '', preparation = '', userId, url = '') {
     this.name = name;
     this.ingredients = ingredients;
     this.preparation = preparation;
-    this.user_id = user_id;
+    this.userId = userId;
     this.url = url;
   }
 
   static async getAll() {
-    return connection().then((db) => db.collection('recipes').find().toArray())
+    return connection().then((db) => db.collection('recipes').find().toArray());
   }
 
   static async getById(id) {
@@ -41,7 +41,7 @@ class Recipe {
 
   async updateById(id) {
     return connection().then((db) => db.collection('recipes')
-      .updateOne({ _id: new mongodb.ObjectID(id) }, { $set: this })
+      .updateOne({ _id: new mongodb.ObjectID(id) }, { $set: this }),
     );
   }
 }
