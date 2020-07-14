@@ -1,18 +1,5 @@
 const connection = require('./connection');
 
-// const getNewUser = (userData) => {
-//   const { id, firstName, lastName, email, password } = userData;
-
-//   const fullName = [firstName, lastName].join(' ');
-
-//   return {
-//     id,
-//     name: fullName,
-//     email,
-//     password,
-//   };
-// };
-
 const findByEmail = async (emailParam) => (
   connection()
     .then((session) => session.getSchema('cookmaster'))
@@ -36,10 +23,6 @@ const findByEmail = async (emailParam) => (
     ))
 );
 
-/**
- * Busca um usuário através do seu ID
- * @param {string} id ID do usuário
- */
 // const findById = async (idParam) => {
 //   return connection()
 //     .then((session) => session.getSchema('cookmaster'))
@@ -79,6 +62,6 @@ const create = async (name, email, password) => (
 
 module.exports = {
   findByEmail,
-  //findById,
+// findById,
   create,
 };

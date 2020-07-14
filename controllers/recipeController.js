@@ -49,48 +49,6 @@ router.post(
 //   });
 // };
 
-// const newRecipeForm = (_req, res) => (
-//   res.render('recipe/form', {
-//     recipe: { title: '', ingredients: '', directions: '' },
-//     pageTitle: 'Nova Receita',
-//     action: '/recipes',
-//   })
-// );
-
-// const newRecipe = async (req, res) => {
-//   const { title, ingredients, directions } = req.body;
-
-//   const recipesBefore = await Recipe.getAll();
-
-//   if (!title || !ingredients || !directions) {
-//     return res.render('home', {
-//       user: req.user,
-//       recipes: recipesBefore,
-//       message: 'Ocorreu um erro no cadastro da nova receita, é necessário preencher todos os campos',
-//     });
-//   }
-
-//   const { id: authorId } = req.user;
-
-//   try {
-//     await Recipe.createOne({ title, ingredients, directions, authorId });
-
-//     const recipesAfter = await Recipe.getAll();
-
-//     res.render('home', {
-//       user: req.user,
-//       recipes: recipesAfter,
-//       message: 'Nova receita cadastrada com sucesso!',
-//     });
-//   } catch (_e) {
-//     res.render('home', {
-//       user: req.user,
-//       recipes: recipesBefore,
-//       message: 'Ocorreu um erro no cadastro da nova receita...',
-//     });
-//   }
-// };
-
 // const editRecipeForm = async (req, res) => {
 //   const idFromUrl = req.url.split('/')[2];
 
@@ -203,18 +161,6 @@ router.post(
 //   res.render('recipe/search', {
 //     recipes,
 //   });
-// };
-
-// module.exports = {
-//   listRecipes,
-//   showRecipeDetails,
-//   newRecipeForm,
-//   newRecipe,
-//   editRecipeForm,
-//   editRecipe,
-//   deleteRecipeForm,
-//   deleteRecipe,
-//   searchRecipes,
 // };
 
 module.exports = router;

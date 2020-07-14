@@ -67,7 +67,7 @@ const connection = require('./connection');
 //     .find((recipe) => recipe.id === Number(id));
 // };
 
-const create = async (name, ingredients, preparation, authorId ) => (
+const create = async (name, ingredients, preparation, authorId) => (
   connection()
     .then((session) =>
       session
