@@ -31,7 +31,25 @@ const getAllRecipes = async () => {
   return result;
 };
 
+const getRecipeById = async (paramId) => {
+  const session = await connection();
+  const result = await session.sql(
+    `SELECT id, name, ingredients, prepare_method, url_image, author_id
+    FROM recipes
+    WHERE id = ?`,
+  )
+    .bind(paramId)
+    .execute()
+    .then((results) => results.fetchAll()[0] || []);
+
+  if (!result.length) return null;
+
+  const [id, name, ingredients, preparation, image, authorId] = result;
+  return { id, name, ingredients, preparation, image, authorId };
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
+  getRecipeById,
 };

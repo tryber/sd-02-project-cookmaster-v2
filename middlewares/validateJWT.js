@@ -15,7 +15,8 @@ const validateJWT = rescue(async (req, _res, next) => {
     if (!userExists) {
       return next({ error: true, message: 'User does not exists', code: 'unauthorized' });
     }
-    req.user = userExists;
+    const { password, ...userWithoutPass } = userExists;
+    req.user = userWithoutPass;
     next();
   } catch (fail) {
     next({ error: true, message: 'Invalid or expired token', code: 'unauthorized' });
