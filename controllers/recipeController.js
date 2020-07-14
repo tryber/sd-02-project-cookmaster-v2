@@ -84,15 +84,13 @@ router.delete('/:id', middlewares.auth, middlewares.permissionsValidator, async 
   return res.status(200).json({ message, deletedRecipe });
 });
 
-//router.use(express.static(path.join(__dirname, 'images')));
-
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => {
     callback(null, 'images');
   },
   filename: (req, _file, callback) => {
     callback(null, req.params.id);
-  }
+  },
 });
 
 const upload = multer({ storage });
@@ -104,10 +102,14 @@ router.post(
   middlewares.permissionsValidator,
   upload.single('image'),
   async (req, res, next) => {
-    return res.send('será que deu certo??');
+    const { id: recipeId } = req.params;
+
+    const { success, message, imageUrl } = await services.recipe.addImage(recipeId);
+
+    if (!success) return next({ message });
+
+    return res.status(200).json({ message, imageUrl });
   },
 );
-
-//router.use(upload.single('image'));
 
 module.exports = router;

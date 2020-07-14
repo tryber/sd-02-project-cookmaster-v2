@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const controllers = require('./controllers');
 const middlewares = require('./middlewares');
 
@@ -15,6 +16,8 @@ app.use('/users', controllers.user);
 app.use('/login', controllers.login);
 
 app.use('/recipes', controllers.recipe);
+
+app.use('/images', express.static(path.resolve(__dirname, 'images')));
 
 // app.get('/admin', middlewares.auth(), (req, res) => {
 //   return res.render('admin/home', { user: req.user });

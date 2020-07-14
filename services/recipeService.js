@@ -1,5 +1,7 @@
 const models = require('../models');
 
+const { PORT } = process.env;
+
 const createNew = async (name, ingredients, preparation, authorId) => {
   try {
     const newRecipe = await models.recipe.create(name, ingredients, preparation, authorId);
@@ -110,6 +112,22 @@ const getAuthorId = async (recipeId) => {
   }
 };
 
+const addImage = async (recipeId) => {
+  try {
+    const imageUrl = `http://localhost:${PORT}/images/${recipeId}`;
+
+    await models.recipe.addImageUrl(recipeId, imageUrl);
+
+    return {
+      success: true,
+      message: 'Imagem adicionada com sucesso!',
+      imageUrl,
+    };
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+
 module.exports = {
   createNew,
   showAll,
@@ -117,4 +135,5 @@ module.exports = {
   edit,
   remove,
   getAuthorId,
+  addImage,
 };

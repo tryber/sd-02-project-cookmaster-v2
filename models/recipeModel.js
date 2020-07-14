@@ -100,10 +100,25 @@ const remove = async (id) => (
     // })
 );
 
+const addImageUrl = (recipeId, imageUrl) => (
+  connection()
+    .then((session) =>
+      session
+        .getSchema('cookmaster')
+        .getTable('recipes')
+        .update()
+        .where('id = :id')
+        .bind('id', recipeId)
+        .set('image_url', imageUrl)
+        .execute(),
+    )
+);
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   remove,
+  addImageUrl,
 };
