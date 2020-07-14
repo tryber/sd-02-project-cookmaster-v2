@@ -1,4 +1,5 @@
 const express = require('express');
+const boom = require('boom');
 const services = require('../services');
 const middlewares = require('../middlewares');
 
@@ -34,18 +35,17 @@ router.get('/', async (_req, res, next) => {
   return res.status(200).json({ message, recipes });
 });
 
-// const showRecipeDetails = async (req, res) => {
-//   const idFromUrl = req.url.split('/')[2];
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
 
-//   const recipe = await Recipe.getById(idFromUrl);
+  const { success, notFound, message, recipe } = await services.recipe.showOne(Number(id));
 
+  if (notFound) return next(boom.notFound(message));
 
-//   res.render('recipe/details', {
-//     recipe,
-//     user: req.user,
-//     message: null,
-//   });
-// };
+  if (!success) return next({ message });
+
+  return res.status(200).json({ message, recipe });
+});
 
 // const editRecipeForm = async (req, res) => {
 //   const idFromUrl = req.url.split('/')[2];

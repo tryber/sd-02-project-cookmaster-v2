@@ -26,7 +26,29 @@ const showAll = async () => {
   }
 };
 
+const showOne = async (id) => {
+  try {
+    const recipe = await models.recipe.getById(id);
+
+    if (!recipe) {
+      return {
+        notFound: true,
+        message: 'Receita não encontrada',
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Receita mostrada com sucesso!',
+      recipe,
+    };
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+
 module.exports = {
   createNew,
   showAll,
+  showOne,
 };

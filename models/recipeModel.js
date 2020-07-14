@@ -1,22 +1,5 @@
 const connection = require('./connection');
 
-// const getNewRecipe = (recipeData) => {
-//   const {
-//     id, title, ingredients, directions, authorId, authorFirstName, authorLastName,
-//   } = recipeData;
-
-//   const authorFullName = [authorFirstName, authorLastName].join(' ');
-
-//   return {
-//     id,
-//     title,
-//     ingredients,
-//     directions,
-//     authorId,
-//     authorName: authorFullName,
-//   };
-// };
-
 const getAll = async () => (
   connection()
     .then((session) =>
@@ -51,12 +34,12 @@ const getAll = async () => (
     // })
 );
 
-// const getById = async (id) => {
-//   const allRecipes = await getAll();
+const getById = async (id) => {
+  const allRecipes = await getAll();
 
-//   return allRecipes
-//     .find((recipe) => recipe.id === Number(id));
-// };
+  return allRecipes
+    .find((recipe) => recipe.id === id);
+};
 
 const create = async (name, ingredients, preparation, authorId) => (
   connection()
@@ -127,7 +110,7 @@ const create = async (name, ingredients, preparation, authorId) => (
 
 module.exports = {
   getAll,
-  // getById,
+  getById,
   create,
   // editOne,
   // deleteOne,
