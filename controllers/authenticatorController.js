@@ -51,13 +51,7 @@ const authUser = async (req, res, next) => {
   }
 };
 
-const authAdmin = async (req, res, next) => {
-  console.log('admin');
-  next();
-};
-
 module.exports = {
   login,
   authUser,
-  authAdmin,
 };

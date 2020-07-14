@@ -5,7 +5,7 @@ const getAllUsers = getAllData('users');
 
 const getUserByEmail = (email) => getDataFromField('users', { email });
 
-const createUser = async (body, role) => addData('users', { ...body, role });
+const createUser = async (body) => addData('users', body);
 
 module.exports = {
   getAllUsers,
