@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 
-const schema = Joi.object({
+const schemaUser = Joi.object({
   name: Joi.string()
     .required(),
 
@@ -12,8 +12,23 @@ const schema = Joi.object({
     .required(),
 });
 
-const validationNewUser = (body) => {
-  const { error } = schema.validate(body);
+const schemaRecipe = Joi.object({
+  name: Joi.string()
+    .required(),
+  ingredients: Joi.string()
+    .required(),
+  preparation: Joi.string()
+    .min(5)
+    .required(),
+});
+
+const objValidation = {
+  user: schemaUser,
+  recipe: schemaRecipe,
+};
+
+const validationFunc = (body, validationField) => {
+  const { error } = objValidation[validationField].validate(body);
   if (error) {
     return { error: true, message: error.details[0].message };
   }
@@ -21,5 +36,5 @@ const validationNewUser = (body) => {
 };
 
 module.exports = {
-  validationNewUser,
+  validationFunc,
 };

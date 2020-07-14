@@ -32,7 +32,7 @@ db.recipes.insertMany([
     ingredients: 'Miojo e água',
     preparation: 'Ferver o miojo',
     image: 'uploads/5f0cb22a6d3c8a379034fa4d',
-    author: '5f0cb22a6d3c8a379034fa4a',
+    author: ObjectId('5f0cb22a6d3c8a379034fa4a'),
   },
   {
     _id: ObjectId('5f0cb22a6d3c8a379034fa4e'),
@@ -40,7 +40,7 @@ db.recipes.insertMany([
     ingredients: 'Pipoca de microondas e um microondas',
     preparation: 'Colocar a pipoca para estourar no microondas',
     image: 'uploads/5f0cb22a6d3c8a379034fa4e',
-    author: '5f0cb22a6d3c8a379034fa4a',
+    author: ObjectId('5f0cb22a6d3c8a379034fa4a'),
   },
   {
     _id: ObjectId('5f0cb22a6d3c8a379034fa4f'),
@@ -48,6 +48,6 @@ db.recipes.insertMany([
     ingredients: 'Pó de café',
     preparation: 'Esquentar a água e coar o café',
     image: 'uploads/5f0cb22a6d3c8a379034fa4f',
-    author: '5f0cb22a6d3c8a379034fa4b',
+    author: ObjectId('5f0cb22a6d3c8a379034fa4b'),
   },
 ]);

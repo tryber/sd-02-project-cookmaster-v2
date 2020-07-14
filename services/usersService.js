@@ -1,10 +1,12 @@
 const { getAllUsers, createUser, getUserByEmail } = require('../models/usersModel');
-const { validationNewUser } = require('./utils/schemaValidator');
+const { validationFunc } = require('./utils/schemaValidator');
 
 const getUsers = getAllUsers;
 
+const getUser = async (email) => getUserByEmail(email);
+
 const validateAndCreateUser = async ({ name, email, password }) => {
-  const isNotValid = validationNewUser({ name, email, password });
+  const isNotValid = validationFunc({ name, email, password }, 'user');
   if (isNotValid.error) return isNotValid;
   const checkEmail = await getUserByEmail(email);
   if (checkEmail.length) return { error: true, message: 'This email already exists' };
@@ -14,4 +16,5 @@ const validateAndCreateUser = async ({ name, email, password }) => {
 module.exports = {
   getUsers,
   validateAndCreateUser,
+  getUser,
 };
