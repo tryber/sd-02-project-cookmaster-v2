@@ -1,5 +1,7 @@
 const express = require('express');
 const boom = require('boom');
+const multer = require('multer');
+const path = require('path');
 const services = require('../services');
 const middlewares = require('../middlewares');
 
@@ -50,26 +52,17 @@ router.get('/:id', async (req, res, next) => {
 router.put(
   '/:id',
   middlewares.auth,
+  middlewares.permissionsValidator,
   middlewares.fieldsValidator(fields),
   async (req, res, next) => {
     const { id } = req.params;
     const { name, ingredients, preparation } = req.body;
-    const recipeData = { recipeId: Number(id), name, ingredients, preparation };
-
-    const { id: userId, role } = req.user;
-    const userData = { userId, role };
 
     const {
       success,
-      notFound,
-      forbidden,
       message,
       updatedRecipe,
-    } = await services.recipe.edit(userData, recipeData);
-
-    if (notFound) return next(boom.notFound(message));
-
-    if (forbidden) return next(boom.forbidden(message));
+    } = await services.recipe.edit(Number(id), name, ingredients, preparation);
 
     if (!success) return next({ message });
 
@@ -77,32 +70,44 @@ router.put(
   },
 );
 
-router.delete(
-  '/:id',
+router.delete('/:id', middlewares.auth, middlewares.permissionsValidator, async (req, res, next) => {
+  const { id } = req.params;
+
+  const {
+    success,
+    message,
+    deletedRecipe,
+  } = await services.recipe.remove(Number(id));
+
+  if (!success) return next({ message });
+
+  return res.status(200).json({ message, deletedRecipe });
+});
+
+//router.use(express.static(path.join(__dirname, 'images')));
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, callback) => {
+    callback(null, 'images');
+  },
+  filename: (req, _file, callback) => {
+    callback(null, req.params.id);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post(
+  '/:id/image/',
+  express.static(path.join(__dirname, 'images')),
   middlewares.auth,
+  middlewares.permissionsValidator,
+  upload.single('image'),
   async (req, res, next) => {
-    const { id } = req.params;
-    const recipeData = { recipeId: Number(id) };
-
-    const { id: userId, role } = req.user;
-    const userData = { userId, role };
-
-    const {
-      success,
-      notFound,
-      forbidden,
-      message,
-      deletedRecipe,
-    } = await services.recipe.remove(userData, recipeData);
-
-    if (notFound) return next(boom.notFound(message));
-
-    if (forbidden) return next(boom.forbidden(message));
-
-    if (!success) return next({ message });
-
-    return res.status(200).json({ message, deletedRecipe });
+    return res.send('será que deu certo??');
   },
 );
+
+//router.use(upload.single('image'));
 
 module.exports = router;

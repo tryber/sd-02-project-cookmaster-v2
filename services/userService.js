@@ -40,7 +40,7 @@ const login = async (email, password) => {
     const { password: _, id, ...userData } = user;
 
     const jwtConfig = {
-      expiresIn: '10m',
+      expiresIn: '50m',
       algorithm: 'HS256',
       subject: String(id),
     };
