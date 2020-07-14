@@ -36,15 +36,3 @@ app.post('/recipes/:id/image', middlewares.auth, upload.single('file'), controll
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(5000, () => console.log('Listening on 5000'));
-
-
-// {
-//   "email": "andreytsuzuki@gmail.com",
-//   "password": "123"
-// }
-
-// {
-//   "name": "Jeijoada",
-//   "ingredients": "jeijão e limão",
-//   "preparation": "chacoalha tudo"
-// }
