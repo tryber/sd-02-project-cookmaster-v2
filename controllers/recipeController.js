@@ -26,23 +26,13 @@ router.post(
   },
 );
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (_req, res, next) => {
   const { success, message, recipes } = await services.recipe.showAll();
 
   if (!success) return next({ message });
 
   return res.status(200).json({ message, recipes });
 });
-
-// const listRecipes = async (req, res) => {
-//   const recipes = await Recipe.getAll();
-
-//   res.render('home', {
-//     recipes,
-//     user: req.user,
-//     message: null,
-//   });
-// };
 
 // const showRecipeDetails = async (req, res) => {
 //   const idFromUrl = req.url.split('/')[2];
