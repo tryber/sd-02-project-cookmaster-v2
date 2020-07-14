@@ -1,17 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const controllers = require('./controllers');
 const middlewares = require('./middlewares');
-//const cookieParser = require('cookie-parser');
+const { PORT } = process.env;
 
 const app = express();
-
-//app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(cookieParser());
 
 app.use(bodyParser.json());
 
 app.use('/users', controllers.user);
+
+app.use('/login', controllers.login);
 
 // app.get('/admin', middlewares.auth(), (req, res) => {
 //   return res.render('admin/home', { user: req.user });
@@ -39,4 +39,4 @@ app.use(middlewares.boomErrorHandler);
 
 app.use(middlewares.otherErrorsHandler);
 
-app.listen(3000, () => console.log('Listening on 3000'));
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
