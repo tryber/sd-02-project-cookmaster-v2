@@ -3,8 +3,8 @@ const userModel = require('../models/userModel');
 
 const secret = 'seusecretdetoken';
 
-const getUserByEmail = (id) =>
-  userModel.getUserByEmail(id);
+const getUserByEmail = (email) =>
+  userModel.getUserByEmail(email);
 
 const login = async ({ email, password }) => {
   const user = await userModel.getUserByEmail(email);
@@ -23,7 +23,22 @@ const login = async ({ email, password }) => {
   return token;
 };
 
+const createNewUser = async (newUserData) => {
+  const { email } = newUserData;
+
+  const userAlreadyRegistered = await userModel.getUserByEmail(email);
+
+  if (userAlreadyRegistered) return { error: true, code: 409, message: 'Email already registered' };
+
+  const newUser = await userModel.registerNewUser(newUserData);
+
+  const { password, ...userInfo } = newUser;
+
+  return userInfo;
+};
+
 module.exports = {
   login,
   getUserByEmail,
+  createNewUser,
 };
