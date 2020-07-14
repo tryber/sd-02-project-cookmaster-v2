@@ -48,8 +48,30 @@ const getRecipeById = async (paramId) => {
   return { id, name, ingredients, preparation, image, authorId };
 };
 
+const updateRecipeById = async (bodyReq, recipeId) => {
+  const { name, ingredients, preparation } = bodyReq;
+  const session = await connection();
+  await session.sql(
+    `UPDATE recipes
+    SET
+      name = ?,
+      ingredients = ?,
+      prepare_method = ?
+    WHERE
+      id = ?;`,
+  )
+    .bind(name)
+    .bind(ingredients)
+    .bind(preparation)
+    .bind(recipeId)
+    .execute();
+
+  return { id: recipeId, name, ingredients, preparation };
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
+  updateRecipeById,
 };

@@ -30,8 +30,21 @@ const getRecipeById = rescue(async (req, res, next) => {
   res.status(200).json(serviceAnswer);
 });
 
+const updateRecipeById = rescue(async (req, res, next) => {
+  const isValid = await validateJoi(req.body);
+  if (isValid.error) return next(isValid);
+  const { id: recipeId } = req.params;
+  const { id: userId, role } = req.user;
+  const { name, ingredients, preparation } = req.body;
+  const serviceAnswer = await recipesService
+    .updateRecipeById(recipeId, userId, role, { name, ingredients, preparation });
+  if (serviceAnswer.error) return next(serviceAnswer);
+  res.status(200).json(serviceAnswer);
+});
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
+  updateRecipeById,
 };

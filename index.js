@@ -20,6 +20,7 @@ app.post('/login', usersController.loginUser);
 app.get('/recipes', recipesController.getAllRecipes);
 app.post('/recipes', validateJWT, recipesController.createRecipe);
 app.get('/recipes/:id', recipesController.getRecipeById);
+app.put('/recipes/:id', validateJWT, recipesController.updateRecipeById);
 
 app.use(errorController.promiseErrors);
 
