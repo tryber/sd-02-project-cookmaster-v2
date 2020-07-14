@@ -3,13 +3,15 @@ const boom = require('boom');
 const fieldsValidator = (fields) => async (req, _res, next) => {
   const data = fields.map((field) => req.body[field]);
 
-  const invalidFields = [];
+  //const invalidFields = [];
 
-  for (let i = 0; i < fields.length; i += 1) {
-    if (typeof data[i] !== 'string') {
-      invalidFields.push(fields[i]);
-    }
-  }
+//   for (let i = 0; i < fields.length; i += 1) {
+//     if (typeof data[i] !== 'string') {
+//       invalidFields.push(fields[i]);
+//     }
+//   }
+
+  const invalidFields = fields.filter((_field, i) => typeof data[i] !== 'string');
 
 //   while (!invalidField && i < fields.length) {
 //     if (typeof data[i] !== 'string') {
