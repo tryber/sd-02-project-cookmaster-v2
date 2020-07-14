@@ -1,6 +1,7 @@
 const express = require('express');
 const boom = require('boom');
 const services = require('../services');
+const middlewares = require('../middlewares');
 
 //const { v4: uuid } = require('uuid');
 //const { SESSIONS } = require('../middlewares/auth');
@@ -8,18 +9,20 @@ const services = require('../services');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
+const fields = ['name', 'email', 'password'];
+
+router.post('/', middlewares.fieldsValidator(fields), async (req, res, next) => {
   const { name, email, password } = req.body;
 
-  const fields = ['name', 'email', 'password'];
-  const data = [name, email, password];
+  // const fields = ['name', 'email', 'password'];
+  // const data = [name, email, password];
 
-  const invalidData = data.find((fieldData) => typeof fieldData !== 'string');
+  // const invalidData = data.find((fieldData) => typeof fieldData !== 'string');
 
-  if (invalidData || data.some((fieldData) => fieldData === undefined)) {
-    const invalidField = fields[data.indexOf(invalidData)];
-    return next(boom.badData('Dados inválidos', invalidField));
-  }
+  // if (invalidData || data.some((fieldData) => fieldData === undefined)) {
+  //   const invalidField = fields[data.indexOf(invalidData)];
+  //   return next(boom.badData('Dados inválidos', invalidField));
+  // }
 
   const {
     success,

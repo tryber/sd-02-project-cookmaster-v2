@@ -1,40 +1,36 @@
 const express = require('express');
 const boom = require('boom');
 const services = require('../services');
+const middlewares = require('../middlewares');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
+const fields = ['email', 'password'];
+
+router.post('/', middlewares.fieldsValidator(fields), async (req, res, next) => {
   const { email, password } = req.body;
 
-  const fields = ['email', 'password'];
-  const data = [email, password];
+//   const fields = ['email', 'password'];
+//   const data = [email, password];
 
-//   const invalidData = data.find((fieldData) => typeof fieldData !== 'string');
+//   let invalidField = '';
+//   let i = 0;
 
-//   if (invalidData || data.some((fieldData) => fieldData === undefined)) {
-//     const invalidField = fields[data.indexOf(invalidData)];
-//     return next(boom.badData('Dados inválidos', invalidField));
+//   while (!invalidField && i < 2) {
+//     if (typeof data[i] !== 'string') {
+//       invalidField = fields[i];
+//     }
+
+//     i += 1;
 //   }
 
-  let invalidField = '';
-  let i = 0;
-
-  while (!invalidField && i < 2) {
-    if (typeof data[i] !== 'string') {
-      invalidField = fields[i]
-    }
-
-    i += 1;
-  }
-
-  if (invalidField) return next(boom.badData('Dados inválidos', invalidField));
+//   if (invalidField) return next(boom.badData('Dados inválidos', invalidField));
 
   const {
     success,
     unauthorized,
     message,
-    token
+    token,
   } = await services.user.login(email, password);
 
   if (unauthorized) return next(boom.unauthorized(message));

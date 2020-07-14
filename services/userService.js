@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const models = require('../models');
+
 const { JWT_SECRET } = process.env;
 
 const register = async (name, email, password) => {
@@ -29,7 +30,7 @@ const login = async (email, password) => {
   try {
     const user = await models.user.findByEmail(email);
 
-    if(!user || user.password !== password) {
+    if (!user || user.password !== password) {
       return {
         unauthorized: true,
         message: 'Verifique seu email e senha',
@@ -42,7 +43,7 @@ const login = async (email, password) => {
       expiresIn: '10m',
       algorithm: 'HS256',
       subject: `${id}`,
-    }
+    };
 
     const token = jwt.sign(userData, JWT_SECRET, jwtConfig);
 
