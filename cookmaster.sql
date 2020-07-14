@@ -20,10 +20,11 @@ CREATE TABLE recipes (
   FOREIGN KEY (author_id) REFERENCES users(id)
 );
 
-INSERT INTO users (name, email, password)
+INSERT INTO users (name, email, password, role)
   VALUES
-    ('Miguel Miranda', 'miguel@gmail.com', '123'),
-    ('m', 'm', 'm');
+    ('Primeiro Usuário Admin', 'root@email.com', 'admin', 'admin'),
+    ('Miguel Miranda', 'miguel@gmail.com', '123', 'user'),
+    ('m', 'm', 'm', 'user');
 
 INSERT INTO recipes (name, ingredients, preparation, author_id)
   VALUES
