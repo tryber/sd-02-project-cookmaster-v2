@@ -13,6 +13,20 @@ const createNew = async (name, ingredients, preparation, authorId) => {
   }
 };
 
+const showAll = async () => {
+  try {
+    const recipes = await models.recipe.getAll();
+    return {
+      success: true,
+      message: 'Receitas mostradas com sucesso!',
+      recipes,
+    };
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+
 module.exports = {
   createNew,
+  showAll,
 };

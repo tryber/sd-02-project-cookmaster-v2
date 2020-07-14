@@ -62,6 +62,6 @@ const create = async (name, email, password) => (
 
 module.exports = {
   findByEmail,
-// findById,
+  // findById,
   create,
 };
