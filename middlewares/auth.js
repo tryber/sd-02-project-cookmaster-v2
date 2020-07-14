@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 
-const JWT_SECRET = 'segredo';
+const JWT_SECRET = 'seusecretdetoken';
 
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -13,13 +13,15 @@ const authMiddleware = async (req, res, next) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET);
 
-    const user = await userModel.findOne({ email: payload.data.email });
+    const user = await userModel.getUserByEmail(payload.data.email);
 
     if (!user) {
       return res.status(401).json({ message: 'user not found' });
     }
 
-    req.user = user.toObject();
+    const { password, ...userInfo } = user;
+
+    req.user = userInfo;
 
     next();
   } catch (error) {
