@@ -35,6 +35,14 @@ const validationFunc = (body, validationField) => {
   return { error: false };
 };
 
+const validateIDFormat = (id) => {
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    return { error: false };
+  }
+  return { error: true };
+};
+
 module.exports = {
   validationFunc,
+  validateIDFormat,
 };

@@ -1,14 +1,19 @@
+const { ObjectId } = require('mongodb');
 const { getAllData, getDataFromField } = require('./utils/getData');
 const { addData } = require('./utils/addData');
+const { deleteData } = require('./utils/deleteData');
 
 const getAllRecipes = getAllData('recipes');
 
-const getRecipeById = (id) => getDataFromField('recipes', { id });
+const getRecipeById = (_id) => getDataFromField('recipes', { _id: new ObjectId(_id) });
 
 const createRecipe = async (body) => addData('recipes', body);
+
+const deleteRecipeId = (_id) => deleteData('recipes', { _id: new ObjectId(_id) });
 
 module.exports = {
   getAllRecipes,
   getRecipeById,
   createRecipe,
+  deleteRecipeId,
 };

@@ -19,8 +19,8 @@ db.users.insertMany([
   {
     _id: ObjectId('5f0cb22a6d3c8a379034fa4c'),
     name: 'roz',
-    email: 'roz@gmail.com',
-    password: 'roz123',
+    email: 'root@email.com',
+    password: 'admin',
     role: 'admin',
   },
 ]);
