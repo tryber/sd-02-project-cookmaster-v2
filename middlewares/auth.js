@@ -4,7 +4,6 @@ const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = async (req, res, next) => {
-
   const token = req.headers.authorization;
 
   if (!token) {
@@ -27,4 +26,4 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
-}
+};

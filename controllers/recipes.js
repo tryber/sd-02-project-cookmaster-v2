@@ -24,7 +24,7 @@ const add = rescue(async (req, res) => {
     return res.status(401).send('Nome, ingredientes e modo de preparação devem ser passados');
   }
 
-  const userId = req.user._id;
+  const userId = req.user.id;
 
   const newRecipe = new Recipe(name, ingredients, preparation, userId);
   const response = await newRecipe.add();
