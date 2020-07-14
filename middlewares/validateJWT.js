@@ -12,10 +12,13 @@ const validateJWT = rescue(async (req, _res, next) => {
   try {
     const decoded = jwt.verify(token, jwtSecret);
     const userExists = await usersService.getUserById(decoded.data.id);
+    if (!userExists) {
+      return next({ error: true, message: 'User does not exists', code: 'unauthorized' });
+    }
     req.user = userExists;
     next();
   } catch (fail) {
-    next({ error: true, message: 'Invalid token', code: 'unauthorized' });
+    next({ error: true, message: 'Invalid or expired token', code: 'unauthorized' });
   }
 });
 

@@ -6,6 +6,13 @@ const addUser = Joi.object({
   password: Joi.string().max(50).required(),
 });
 
+const addRecipe = Joi.object({
+  name: Joi.string().max(100).required(),
+  ingredients: Joi.string().max(200).required(),
+  preparation: Joi.string().max(500).required(),
+});
+
 module.exports = {
   addUser,
+  addRecipe,
 };

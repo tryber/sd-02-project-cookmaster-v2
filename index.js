@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// const validateJWT = require('./controllers/validateJWT');
+const validateJWT = require('./middlewares/validateJWT');
 const errorController = require('./controllers/errorController');
 const usersController = require('./controllers/usersController');
+const recipesController = require('./controllers/recipesController');
 
 const app = express();
 
@@ -15,6 +16,9 @@ app.get('/users', usersController.getAllUsers);
 app.post('/users', usersController.createUser);
 
 app.post('/login', usersController.loginUser);
+
+app.get('/recipes', recipesController.getAllRecipes);
+app.post('/recipes', validateJWT, recipesController.createRecipe);
 
 app.use(errorController.promiseErrors);
 

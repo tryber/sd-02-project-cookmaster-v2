@@ -14,9 +14,10 @@ CREATE TABLE users (
 
 CREATE TABLE recipes (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
     ingredients VARCHAR(200) NOT NULL,
     prepare_method VARCHAR(500) NOT NULL,
+    url_image VARCHAR(500),
     author_id INT NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY (author_id) REFERENCES users(id)

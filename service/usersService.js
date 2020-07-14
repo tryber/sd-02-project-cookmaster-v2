@@ -4,14 +4,11 @@ const usersModel = require('../models/usersModel');
 const { jwtSecret } = process.env;
 
 const jwtConfig = {
-  expiresIn: '30m',
+  expiresIn: '300m',
   algorithm: 'HS256',
 };
 
-const getAllUsers = async () => {
-  const result = await usersModel.getAllUsers();
-  return result;
-};
+const getAllUsers = async () => usersModel.getAllUsers();
 
 const createUser = async (name, email, password) => {
   const emailExists = await usersModel.getUserByEmail(email).then(Boolean);
