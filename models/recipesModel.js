@@ -80,10 +80,25 @@ const deleteRecipeById = async (recipeId) => {
   return result;
 };
 
+const updateImageById = async (fullPath, recipeId) => {
+  const session = await connection();
+  await session.sql(
+    `UPDATE recipes
+    SET
+      url_image = ?
+    WHERE
+      id = ?;`,
+  )
+    .bind(fullPath)
+    .bind(recipeId)
+    .execute();
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
   deleteRecipeById,
+  updateImageById,
 };

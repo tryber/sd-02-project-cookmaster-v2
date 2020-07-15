@@ -34,10 +34,18 @@ const deleteRecipeById = async (recipeId, userId, role) => {
   return result;
 };
 
+const updateImageById = async (filename, recipeId) => {
+  const { PORT } = process.env;
+  const fullPath = `http://localhost:${PORT}/images/${filename}`;
+  const update = await recipesModel.updateImageById(fullPath, recipeId);
+  return update;
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
   deleteRecipeById,
+  updateImageById,
 };

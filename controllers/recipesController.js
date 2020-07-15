@@ -45,10 +45,34 @@ const updateRecipeById = rescue(async (req, res, next) => {
 const deleteRecipeById = rescue(async (req, res, next) => {
   const { id: recipeId } = req.params;
   const { id: userId, role } = req.user;
-  console.log(recipeId, userId, role);
   const serviceAnswer = await recipesService.deleteRecipeById(recipeId, userId, role);
   if (serviceAnswer.error) return next(serviceAnswer);
   res.status(204).end();
+});
+
+const verifyImageById = rescue(async (req, _res, next) => {
+  const { id: recipeId } = req.params;
+  const recipeExists = await recipesService.getRecipeById(recipeId);
+  if (recipeExists.error) return next(recipeExists);
+  const { id: userId, role } = req.user;
+  if (recipeExists.authorId !== userId && role !== 'adm') {
+    return next(
+      { error: true, message: 'You don\'t have permission to change.', code: 'forbidden' },
+    );
+  }
+  return next();
+});
+
+const updateImageById = rescue(async (req, res, next) => {
+  if (!req.file) {
+    return next(
+      { error: true, message: 'An unknown error has been found.', code: 'bad_request' },
+    );
+  }
+  const { id: recipeId } = req.params;
+  const { filename } = req.file;
+  await recipesService.updateImageById(filename, recipeId);
+  res.status(200).end();
 });
 
 module.exports = {
@@ -57,4 +81,6 @@ module.exports = {
   getRecipeById,
   updateRecipeById,
   deleteRecipeById,
+  verifyImageById,
+  updateImageById,
 };
