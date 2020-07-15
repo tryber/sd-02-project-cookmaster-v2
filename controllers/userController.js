@@ -1,13 +1,7 @@
-const express = require('express');
 const boom = require('boom');
 const services = require('../services');
-const middlewares = require('../middlewares');
 
-const router = express.Router();
-
-const fields = ['name', 'email', 'password'];
-
-router.post('/', middlewares.fieldsValidator(fields), async (req, res, next) => {
+const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const {
@@ -22,6 +16,26 @@ router.post('/', middlewares.fieldsValidator(fields), async (req, res, next) => 
   if (!success) return next({ message });
 
   return res.status(201).json({ message, newUser });
-});
+};
 
-module.exports = router;
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const {
+    success,
+    unauthorized,
+    message,
+    token,
+  } = await services.user.login(email, password);
+
+  if (unauthorized) return next(boom.unauthorized(message));
+
+  if (!success) return next({ message });
+
+  return res.status(200).json({ message, token });
+};
+
+module.exports = {
+  register,
+  login,
+};

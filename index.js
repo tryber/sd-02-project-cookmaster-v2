@@ -7,13 +7,18 @@ const middlewares = require('./middlewares');
 
 const { PORT } = process.env;
 
+const fields = {
+  register: ['name', 'email', 'password'],
+  login: ['email', 'password'],
+};
+
 const app = express();
 
 app.use(bodyParser.json());
 
-app.use('/users', controllers.user);
+app.post('/users', middlewares.fieldsValidator(fields.register), controllers.user.register);
 
-app.use('/login', controllers.login);
+app.post('/login', middlewares.fieldsValidator(fields.login), controllers.user.login);
 
 app.use('/recipes', controllers.recipe);
 
