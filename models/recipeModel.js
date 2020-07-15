@@ -31,9 +31,6 @@ const getAll = async () => (
         authorName,
       })),
     )
-    // .catch((err) => {
-    //   console.error(err);
-    // })
 );
 
 const getById = async (id) => {
@@ -59,9 +56,6 @@ const create = async (name, ingredients, preparation, authorId) => (
       ingredients,
       preparation,
     }))
-    // .catch((err) => {
-    //   console.error(err);
-    // })
 );
 
 const update = async (id, name, ingredients, preparation) => (
@@ -79,9 +73,6 @@ const update = async (id, name, ingredients, preparation) => (
         .execute(),
     )
     .then(() => getById(id))
-    // .catch((err) => {
-    //   console.error(err);
-    // })
 );
 
 const remove = async (id) => (
@@ -95,9 +86,6 @@ const remove = async (id) => (
         .bind('id', id)
         .execute(),
     )
-    // .catch((err) => {
-    //   console.error(err);
-    // })
 );
 
 const addImageUrl = (recipeId, imageUrl) => (

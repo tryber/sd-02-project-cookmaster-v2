@@ -65,20 +65,6 @@ const edit = async (recipeId, name, ingredients, preparation) => {
 const remove = async (recipeId) => {
   try {
     const recipe = await models.recipe.getById(recipeId);
-    // if (!recipe) {
-    //   return {
-    //     notFound: true,
-    //     message: 'Receita não encontrada',
-    //   };
-    // }
-
-    // const { authorId } = recipe;
-    // if (authorId !== userId && role !== 'admin') {
-    //   return {
-    //     forbidden: true,
-    //     message: 'Você não tem autorização para realizar a exclusão dessa receita',
-    //   };
-    // }
 
     await models.recipe.remove(recipeId);
 

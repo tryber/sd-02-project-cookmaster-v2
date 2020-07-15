@@ -10,17 +10,65 @@ const { PORT } = process.env;
 const fields = {
   register: ['name', 'email', 'password'],
   login: ['email', 'password'],
+  recipe: ['name', 'ingredients', 'preparation'],
 };
 
 const app = express();
 
 app.use(bodyParser.json());
 
-app.post('/users', middlewares.fieldsValidator(fields.register), controllers.user.register);
+app.post(
+  '/users',
+  middlewares.fieldsValidator(fields.register),
+  controllers.user.register,
+);
 
-app.post('/login', middlewares.fieldsValidator(fields.login), controllers.user.login);
+app.post(
+  '/login',
+  middlewares.fieldsValidator(fields.login),
+  controllers.user.login,
+);
 
-app.use('/recipes', controllers.recipe);
+const recipeRouter = express.Router();
+
+recipeRouter
+  .post(
+    '/',
+    middlewares.auth,
+    middlewares.fieldsValidator(fields.recipe),
+    controllers.recipe.createNew,
+  )
+  .get(
+    '/',
+    controllers.recipe.showAll,
+  )
+  .get(
+    '/:id',
+    controllers.recipe.showOne,
+  )
+  .put(
+    '/:id',
+    middlewares.auth,
+    middlewares.permissionsValidator,
+    middlewares.fieldsValidator(fields.recipe),
+    controllers.recipe.edit,
+  )
+  .delete(
+    '/:id',
+    middlewares.auth,
+    middlewares.permissionsValidator,
+    controllers.recipe.remove,
+  );
+
+recipeRouter.put(
+  '/:id/image/',
+  middlewares.auth,
+  middlewares.permissionsValidator,
+  middlewares.uploadWithMulter(),
+  controllers.recipe.addImage,
+);
+
+app.use('/recipes', recipeRouter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

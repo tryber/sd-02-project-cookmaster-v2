@@ -1,42 +1,30 @@
-const express = require('express');
 const boom = require('boom');
-const multer = require('multer');
 const services = require('../services');
-const middlewares = require('../middlewares');
 
-const router = express.Router();
+const createNew = async (req, res, next) => {
+  const { name, ingredients, preparation } = req.body;
+  const { id: authorId } = req.user;
 
-const fields = ['name', 'ingredients', 'preparation'];
+  const {
+    success,
+    message,
+    newRecipe,
+  } = await services.recipe.createNew(name, ingredients, preparation, authorId);
 
-router.post(
-  '/',
-  middlewares.auth,
-  middlewares.fieldsValidator(fields),
-  async (req, res, next) => {
-    const { name, ingredients, preparation } = req.body;
-    const { id: authorId } = req.user;
+  if (!success) return next({ message });
 
-    const {
-      success,
-      message,
-      newRecipe,
-    } = await services.recipe.createNew(name, ingredients, preparation, authorId);
+  return res.status(201).json({ message, newRecipe });
+};
 
-    if (!success) return next({ message });
-
-    return res.status(201).json({ message, newRecipe });
-  },
-);
-
-router.get('/', async (_req, res, next) => {
+const showAll = async (_req, res, next) => {
   const { success, message, recipes } = await services.recipe.showAll();
 
   if (!success) return next({ message });
 
   return res.status(200).json({ message, recipes });
-});
+};
 
-router.get('/:id', async (req, res, next) => {
+const showOne = async (req, res, next) => {
   const { id } = req.params;
 
   const { success, notFound, message, recipe } = await services.recipe.showOne(Number(id));
@@ -46,30 +34,24 @@ router.get('/:id', async (req, res, next) => {
   if (!success) return next({ message });
 
   return res.status(200).json({ message, recipe });
-});
+};
 
-router.put(
-  '/:id',
-  middlewares.auth,
-  middlewares.permissionsValidator,
-  middlewares.fieldsValidator(fields),
-  async (req, res, next) => {
-    const { id } = req.params;
-    const { name, ingredients, preparation } = req.body;
+const edit = async (req, res, next) => {
+  const { id } = req.params;
+  const { name, ingredients, preparation } = req.body;
 
-    const {
-      success,
-      message,
-      updatedRecipe,
-    } = await services.recipe.edit(Number(id), name, ingredients, preparation);
+  const {
+    success,
+    message,
+    updatedRecipe,
+  } = await services.recipe.edit(Number(id), name, ingredients, preparation);
 
-    if (!success) return next({ message });
+  if (!success) return next({ message });
 
-    return res.status(200).json({ message, updatedRecipe });
-  },
-);
+  return res.status(200).json({ message, updatedRecipe });
+};
 
-router.delete('/:id', middlewares.auth, middlewares.permissionsValidator, async (req, res, next) => {
+const remove = async (req, res, next) => {
   const { id } = req.params;
 
   const {
@@ -81,37 +63,27 @@ router.delete('/:id', middlewares.auth, middlewares.permissionsValidator, async 
   if (!success) return next({ message });
 
   return res.status(200).json({ message, deletedRecipe });
-});
+};
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, callback) => {
-    callback(null, 'images');
-  },
-  filename: (req, _file, callback) => {
-    callback(null, req.params.id);
-  },
-});
+const addImage = async (req, res, next) => {
+  if (!req.file || req.file.fieldname !== 'image') {
+    return next(boom.badData('Dados inválidos', 'image'));
+  }
 
-const upload = multer({ storage });
+  const { id: recipeId } = req.params;
 
-router.post(
-  '/:id/image/',
-  middlewares.auth,
-  middlewares.permissionsValidator,
-  upload.single('image'),
-  async (req, res, next) => {
-    if (!req.file || req.file.fieldname !== 'image') {
-      return next(boom.badData('Dados inválidos', 'image'));
-    }
+  const { success, message, imageUrl } = await services.recipe.addImage(recipeId);
 
-    const { id: recipeId } = req.params;
+  if (!success) return next({ message });
 
-    const { success, message, imageUrl } = await services.recipe.addImage(recipeId);
+  return res.status(200).json({ message, imageUrl });
+};
 
-    if (!success) return next({ message });
-
-    return res.status(200).json({ message, imageUrl });
-  },
-);
-
-module.exports = router;
+module.exports = {
+  createNew,
+  showAll,
+  showOne,
+  edit,
+  remove,
+  addImage,
+};
