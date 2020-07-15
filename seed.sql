@@ -23,8 +23,7 @@ CREATE TABLE recipes (
 INSERT INTO users (name, email, password, role)
   VALUES
     ('Primeiro Usuário Admin', 'root@email.com', 'admin', 'admin'),
-    ('Miguel Miranda', 'miguel@gmail.com', '123', 'user'),
-    ('m', 'm', 'm', 'user');
+    ('Miguel Miranda', 'miguel@gmail.com', '123', 'user');
 
 INSERT INTO recipes (name, ingredients, preparation, author_id)
   VALUES

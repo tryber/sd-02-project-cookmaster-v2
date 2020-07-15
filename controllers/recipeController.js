@@ -97,11 +97,14 @@ const upload = multer({ storage });
 
 router.post(
   '/:id/image/',
-  express.static(path.join(__dirname, 'images')),
   middlewares.auth,
   middlewares.permissionsValidator,
   upload.single('image'),
   async (req, res, next) => {
+    if (!req.file || req.file.fieldname !== 'image') {
+      return next(boom.badData('Dados inválidos', 'image'));
+    }
+
     const { id: recipeId } = req.params;
 
     const { success, message, imageUrl } = await services.recipe.addImage(recipeId);

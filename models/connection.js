@@ -12,10 +12,10 @@ const connection = () => (
   //   console.log(session)
   //   // return session.getSchema('cookmaster');
   // })
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
+  // .catch((err) => {
+  //   console.error(err);
+  //   process.exit(1);
+  // })
 );
 
 module.exports = connection;
