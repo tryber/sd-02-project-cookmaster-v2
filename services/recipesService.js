@@ -8,6 +8,8 @@ const getRecipe = async (id) => getRecipeById(id);
 
 const deleteRecipe = async (id) => deleteRecipeId(id);
 
+const addURL = async (url, id) => updateRecipe({ image: url }, id);
+
 const validateAndUpdateRecipe = async ({ name, ingredients, preparation }, id) => {
   const isNotValid = validationFunc({ name, ingredients, preparation }, 'recipe');
   if (isNotValid.error) return isNotValid;
@@ -35,4 +37,5 @@ module.exports = {
   verifyRecipePermission,
   deleteRecipe,
   validateAndUpdateRecipe,
+  addURL,
 };

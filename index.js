@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const dotenv = require('dotenv');
 
@@ -16,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', usersRoute);
 app.use('/recipes', recipesRoute);
+
+app.use('/images', express.static(path.resolve(__dirname, 'uploads')));
 
 app.use(errorController);
 
