@@ -69,9 +69,21 @@ const updateRecipeById = async (bodyReq, recipeId) => {
   return { id: recipeId, name, ingredients, preparation };
 };
 
+const deleteRecipeById = async (recipeId) => {
+  const session = await connection();
+  const result = await session.sql(
+    `DELETE FROM recipes
+    WHERE id = ?`,
+  )
+    .bind(recipeId)
+    .execute();
+  return result;
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
+  deleteRecipeById,
 };

@@ -25,7 +25,7 @@ CREATE TABLE recipes (
 
 INSERT INTO users (id, email, password, name, role) VALUES 
     ('1', 'johnatas@trybe.com.br', '1', 'Johnatas Henrique', 'adm'),
-	('2', 'rogeriomunhoz@betrybe.com.br', 'senhaGrande', 'Rogerio Munhoz', 'adm');
+	('2', 'root@email.com', 'admin', 'Rogerio Munhoz', 'adm');
 
 INSERT INTO recipes(id, name, ingredients, prepare_method, author_id) VALUES
 ('1', 'Miojo', 'Pacote de miojo e água', 'Esquenta a água, joga o miojo dentro e espera 3 min, depois coloca o sachê', '1'),

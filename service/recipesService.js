@@ -24,9 +24,20 @@ const updateRecipeById = async (recipeId, id, role, body) => {
   return { ...result, image, authorId };
 };
 
+const deleteRecipeById = async (recipeId, userId, role) => {
+  const recipeInfo = await getRecipeById(recipeId);
+  if (recipeInfo.error) return recipeInfo;
+  if (recipeInfo.authorId !== userId && role !== 'adm') {
+    return { error: true, message: 'You don\'t have permission to delete.', code: 'forbidden' };
+  }
+  const result = await recipesModel.deleteRecipeById(recipeId);
+  return result;
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
+  deleteRecipeById,
 };

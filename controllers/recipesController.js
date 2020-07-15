@@ -42,9 +42,19 @@ const updateRecipeById = rescue(async (req, res, next) => {
   res.status(200).json(serviceAnswer);
 });
 
+const deleteRecipeById = rescue(async (req, res, next) => {
+  const { id: recipeId } = req.params;
+  const { id: userId, role } = req.user;
+  console.log(recipeId, userId, role);
+  const serviceAnswer = await recipesService.deleteRecipeById(recipeId, userId, role);
+  if (serviceAnswer.error) return next(serviceAnswer);
+  res.status(204).end();
+});
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
+  deleteRecipeById,
 };
