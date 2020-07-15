@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllRecipes, createRecipe, verifyPermissions,
+const { getAllRecipes, createRecipe, verifyPermissions, updateRecipe,
   getRecipeId, deleteRecipeId, verifyIdMiddleware } = require('../controllers/recipesController');
 const { authUser } = require('../controllers/authenticatorController');
 
@@ -13,6 +13,7 @@ router
 router
   .route('/:id')
   .get(verifyIdMiddleware, getRecipeId)
-  .delete(authUser, verifyIdMiddleware, verifyPermissions, deleteRecipeId);
+  .delete(authUser, verifyIdMiddleware, verifyPermissions, deleteRecipeId)
+  .put(authUser, verifyIdMiddleware, verifyPermissions, updateRecipe);
 
 module.exports = router;

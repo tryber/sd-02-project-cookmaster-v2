@@ -1,5 +1,5 @@
 const { getRecipes, getRecipe, validateAndCreateRecipe, verifyRecipePermission,
-  deleteRecipe } = require('../services/recipesService');
+  deleteRecipe, validateAndUpdateRecipe } = require('../services/recipesService');
 const { validateIDFormat } = require('../services/utils/schemaValidator');
 
 const getAllRecipes = async (req, res) => {
@@ -31,6 +31,21 @@ const createRecipe = async (req, res, next) => {
     const newRecipe = await validateAndCreateRecipe(req.body, _id);
     res.status(201).json({
       createdRecipe: newRecipe[0],
+    });
+  } catch (error) {
+    next({ code: 'something_wrong', message: 'Something went wrong' });
+  }
+};
+
+const updateRecipe = async (req, res, next) => {
+  const { name, ingredients, preparation } = req.body;
+  if (!name || !ingredients || !preparation) {
+    return next({ code: 'invalid_data', message: 'Missing fields' });
+  }
+  try {
+    const [updatedRecipe] = await validateAndUpdateRecipe(req.body, req.params.id);
+    res.status(201).json({
+      updatedRecipe,
     });
   } catch (error) {
     next({ code: 'something_wrong', message: 'Something went wrong' });
@@ -71,4 +86,5 @@ module.exports = {
   deleteRecipeId,
   verifyIdMiddleware,
   verifyPermissions,
+  updateRecipe,
 };
