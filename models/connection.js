@@ -1,13 +1,12 @@
 const mongoClient = require('mongodb').MongoClient;
-
-const MONGO_DB_URL = 'mongodb://127.0.0.1:27017';
+require('dotenv').config();
 
 const connection = async () => mongoClient
-  .connect(MONGO_DB_URL, {
+  .connect(process.env.MONGO_DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then((conn) => conn.db('cookmaster'))
+  .then((conn) => conn.db(process.env.DB_NAME))
   .catch((err) => {
     console.error(err);
     process.exit(1);

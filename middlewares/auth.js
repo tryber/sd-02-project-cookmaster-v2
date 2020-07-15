@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
-
-const JWT_SECRET = 'seusecretdetoken';
+require('dotenv').config();
 
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -11,7 +10,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await userModel.getUserByEmail(payload.data.email);
 
