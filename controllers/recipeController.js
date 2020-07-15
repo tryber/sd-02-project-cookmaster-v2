@@ -16,7 +16,7 @@ const showRecipe = async (req, res) => {
     if (recipe.error) return res.status(recipe.code).json({ message: recipe.message });
     return res.status(200).json(recipe);
   } catch (error) {
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: 'Error when connecting to database' });
   }
 };
 
@@ -46,14 +46,13 @@ const newRecipe = async (req, res) => {
 
     return res.status(201).json({ recipe });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: 'Error when connecting to database' });
   }
 };
 
 const editRecipe = async (req, res) => {
   const { name, ingredients, preparation } = req.body;
   const { id: recipeId } = req.params;
-  const { _id: userId } = req.user;
 
   const validEntries = validateRecipeFields({ name, ingredients, preparation });
 
@@ -62,29 +61,28 @@ const editRecipe = async (req, res) => {
   }
   try {
     const editedRecipe = await recipeService
-      .editRecipe({ name, ingredients, preparation, recipeId, userId });
-
-    if (editedRecipe.error) {
-      return res.status(editedRecipe.code).json({ message: editedRecipe.message });
-    }
+      .editRecipe({ name, ingredients, preparation, recipeId });
 
     return res.status(200).json(editedRecipe);
   } catch (error) {
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: 'Error when connecting to database' });
   }
 };
 
-const deleteRecipe = async (req, res) => {
-  const { id: recipeId } = req.params;
-  const { _id: userId } = req.user;
+const deleteRecipe = async (req, res) =>
+  recipeService.deleteRecipe(req.params.id)
+    .then((result) => res.status(204).json({ deletedRecipe: result }))
+    .catch(() => res.status(500).json({ message: 'Error when connecting to database' }));
 
-  return recipeService.deleteRecipe({ recipeId, userId })
-    .then((result) => (
-      result.error
-        ? res.status(result.code).json({ message: result.message })
-        : res.status(200).json({ deletedRecipe: result })
-    ))
-    .catch((e) => res.status(500).json({ message: e }));
+const insertRecipeImage = async (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'Please, select an image' });
+
+  const { id } = req.params;
+  const { path } = req.file;
+
+  return recipeService.insertRecipeImage({ id, path })
+    .then((result) => res.status(200).json(result))
+    .catch(() => res.status(500).json({ message: 'Error when connecting to database' }));
 };
 
 module.exports = {
@@ -93,4 +91,5 @@ module.exports = {
   newRecipe,
   editRecipe,
   deleteRecipe,
+  insertRecipeImage,
 };

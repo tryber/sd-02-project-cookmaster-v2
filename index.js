@@ -5,6 +5,7 @@ const path = require('path');
 const middlewares = require('./middlewares');
 const recipeController = require('./controllers/recipeController');
 const userController = require('./controllers/userController');
+const { upload } = require('./upload');
 
 const app = express();
 
@@ -22,10 +23,24 @@ app.route('/recipes')
 
 app.route('/recipes/:id')
   .get(recipeController.showRecipe)
-  .put(middlewares.auth, recipeController.editRecipe)
-  .delete(middlewares.auth, recipeController.deleteRecipe);
+  .put(
+    middlewares.auth,
+    middlewares.userPermissionAndRecipeValid,
+    recipeController.editRecipe,
+  )
+  .delete(
+    middlewares.auth,
+    middlewares.userPermissionAndRecipeValid,
+    recipeController.deleteRecipe,
+  );
 
-app.post('/recipes/:id/image', middlewares.auth, recipeController.editRecipe);
+app.put(
+  '/recipes/:id/image',
+  middlewares.auth,
+  middlewares.userPermissionAndRecipeValid,
+  upload.single('image'),
+  recipeController.insertRecipeImage,
+);
 
 // app.post('users/admin', middlewares.auth, userController.newAdmin);
 

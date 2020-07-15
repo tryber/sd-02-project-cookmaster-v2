@@ -24,7 +24,11 @@ const updateRecipe = async ({ name, ingredients, preparation, recipeId }) =>
   connection()
     .then((db) => db
       .collection('recipes')
-      .findOneAndUpdate({ _id: ObjectId(recipeId) }, { $set: { name, ingredients, preparation } }))
+      .findOneAndUpdate(
+        { _id: ObjectId(recipeId) },
+        { $set: { name, ingredients, preparation } },
+        { returnOriginal: false },
+      ))
     .then(({ value }) => value)
     .catch((e) => e);
 
@@ -34,10 +38,23 @@ const deleteRecipe = (id) =>
     .then(({ value }) => value)
     .catch((e) => e);
 
+const insertRecipeImage = ({ id, path }) =>
+  connection()
+    .then((db) => db
+      .collection('recipes')
+      .findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $set: { image: path } },
+        { returnOriginal: false },
+      ))
+    .then(({ value }) => value)
+    .catch((e) => e);
+
 module.exports = {
   getAllRecipes,
   getRecipeById,
   registerNewRecipe,
   updateRecipe,
   deleteRecipe,
+  insertRecipeImage,
 };
