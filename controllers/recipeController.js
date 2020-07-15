@@ -1,7 +1,6 @@
 const express = require('express');
 const boom = require('boom');
 const multer = require('multer');
-const path = require('path');
 const services = require('../services');
 const middlewares = require('../middlewares');
 
