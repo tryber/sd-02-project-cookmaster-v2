@@ -9,7 +9,7 @@ const getAllRecipes = async () => {
 
 const getRecipeById = async (id) => {
   const db = await connection();
-  if (!ObjectId.isValid(id)) return { idError: true };
+  if (!ObjectId.isValid(id)) return null;
   const recipe = await db.collection('recipes').findOne({ _id: ObjectId(id) });
   return recipe;
 };
@@ -28,9 +28,16 @@ const updateRecipe = async ({ name, ingredients, preparation, recipeId }) =>
     .then(({ value }) => value)
     .catch((e) => e);
 
+const deleteRecipe = (id) =>
+  connection()
+    .then((db) => db.collection('recipes').findOneAndDelete({ _id: ObjectId(id) }))
+    .then(({ value }) => value)
+    .catch((e) => e);
+
 module.exports = {
   getAllRecipes,
   getRecipeById,
   registerNewRecipe,
   updateRecipe,
+  deleteRecipe,
 };

@@ -10,13 +10,10 @@ const registerNewRecipe = async (newRecipeData) =>
 const showRecipe = async (id) => {
   const recipe = await recipeModel.getRecipeById(id);
   if (!recipe) return { error: true, code: 404, message: 'recipe not found' };
-  if (recipe.idError) return { error: true, code: 400, message: 'invalid recipe ID' };
   return recipe;
 };
 
-const editRecipe = async (editRequestData) => {
-  const { name, ingredients, preparation, recipeId, userId } = editRequestData;
-
+async function checkUserAuthorization({ userId, recipeId }) {
   const [recipe, user] = await Promise.all([
     recipeModel.getRecipeById(recipeId),
     userModel.getUserById(userId),
@@ -31,8 +28,25 @@ const editRecipe = async (editRequestData) => {
       message: 'You don\'t have permission to perform this action. Edit your own recipes ou log in as admin',
     };
   }
+  return false;
+}
+
+const editRecipe = async (editRequestData) => {
+  const { name, ingredients, preparation, recipeId, userId } = editRequestData;
+
+  const authError = await checkUserAuthorization({ userId, recipeId });
+
+  if (authError.error) return authError;
 
   return recipeModel.updateRecipe({ name, ingredients, preparation, recipeId });
+};
+
+const deleteRecipe = async ({ recipeId, userId }) => {
+  const authError = await checkUserAuthorization({ userId, recipeId });
+
+  if (authError.error) return authError;
+
+  return recipeModel.deleteRecipe(recipeId);
 };
 
 module.exports = {
@@ -40,4 +54,5 @@ module.exports = {
   registerNewRecipe,
   showRecipe,
   editRecipe,
+  deleteRecipe,
 };
