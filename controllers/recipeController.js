@@ -11,16 +11,16 @@ const listRecipes = async (_req, res) => {
 const showRecipe = async (req, res) => {
   const { id } = req.params;
 
-  const recipe = await recipeService.showRecipe(id);
-
-  if (!recipe) return res.status(500).json({ message: 'Error when connecting to database' });
-
-  if (recipe.error) return res.status(recipe.code).json({ message: recipe.message });
-
-  return res.status(200).json(recipe);
+  try {
+    const recipe = await recipeService.showRecipe(id);
+    if (recipe.error) return res.status(recipe.code).json({ message: recipe.message });
+    return res.status(200).json(recipe);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error when connecting to database' });
+  }
 };
 
-function validateNewRecipe({ name, ingredients, preparation }) {
+function validateRecipeFields({ name, ingredients, preparation }) {
   const validName = name && typeof name === 'string';
   const validIngredients = ingredients && typeof ingredients === 'string';
   const validPreparation = preparation && typeof preparation === 'string';
@@ -32,24 +32,49 @@ const newRecipe = async (req, res) => {
   const { name, ingredients, preparation } = req.body;
   const { _id: userId } = req.user;
 
-  const validEntries = validateNewRecipe({ name, ingredients, preparation });
+  const validEntries = validateRecipeFields({ name, ingredients, preparation });
 
   if (!validEntries) {
     return res.status(400).json({ message: 'Invalid entries. Try again.' });
   }
 
-  const recipe = await recipeService.registerNewRecipe({ name, ingredients, preparation, userId });
+  try {
+    const recipe = await recipeService
+      .registerNewRecipe({ name, ingredients, preparation, userId });
 
-  if (!recipe) return res.status(500).json({ message: 'Error when creating new recipe' });
+    if (recipe.error) return res.status(recipe.code).json({ message: recipe.message });
 
-  if (recipe.error) return res.status(recipe.code).json({ message: recipe.message });
-
-  return res.status(201).json({ recipe });
+    return res.status(201).json({ recipe });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error when connecting to database' });
+  }
 };
 
-const editRecipe = async (req, res) => { };
+const editRecipe = async (req, res) => {
+  const { name, ingredients, preparation } = req.body;
+  const { id: recipeId } = req.params;
+  const { _id: userId } = req.user;
 
-const deleteRecipe = async (req, res) => { };
+  const validEntries = validateRecipeFields({ name, ingredients, preparation });
+
+  if (!validEntries) {
+    return res.status(400).json({ message: 'Invalid entries. Try again.' });
+  }
+  try {
+    const editedRecipe = await recipeService
+      .editRecipe({ name, ingredients, preparation, recipeId, userId });
+
+    if (editedRecipe.error) {
+      return res.status(editedRecipe.code).json({ message: editedRecipe.message });
+    }
+
+    return res.status(200).json(editedRecipe);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error when connecting to database' });
+  }
+};
+
+const deleteRecipe = async () => {};
 
 module.exports = {
   listRecipes,

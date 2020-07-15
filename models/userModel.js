@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const getUserByEmail = async (email) => {
@@ -12,7 +13,14 @@ const registerNewUser = async ({ name, email, password }) => {
   return (await newUser).ops[0];
 };
 
+const getUserById = (id) =>
+  connection()
+    .then((db) => db.collection('users').findOne({ _id: ObjectId(id) }))
+    .then((user) => user)
+    .catch((e) => e);
+
 module.exports = {
   getUserByEmail,
   registerNewUser,
+  getUserById,
 };

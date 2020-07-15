@@ -14,29 +14,23 @@ const getRecipeById = async (id) => {
   return recipe;
 };
 
-const recipeAlreadyRegisteredByUser = async (userId, recipeName) => { };
-
 const registerNewRecipe = async (newRecipeData) => {
   const db = await connection();
   const newRecipe = db.collection('recipes').insertOne(newRecipeData);
   return (await newRecipe).ops[0];
 };
 
-const updateRecipe = async (recipeData) => { };
-
-const deleteRecipeFromTable = async (recipeId) => { };
-
-const findRecipes = async (searchTerm) => { };
-
-const getUserRecipes = (userId) => { };
+const updateRecipe = async ({ name, ingredients, preparation, recipeId }) =>
+  connection()
+    .then((db) => db
+      .collection('recipes')
+      .findOneAndUpdate({ _id: ObjectId(recipeId) }, { $set: { name, ingredients, preparation } }))
+    .then(({ value }) => value)
+    .catch((e) => e);
 
 module.exports = {
   getAllRecipes,
   getRecipeById,
-  recipeAlreadyRegisteredByUser,
   registerNewRecipe,
   updateRecipe,
-  deleteRecipeFromTable,
-  findRecipes,
-  getUserRecipes,
 };

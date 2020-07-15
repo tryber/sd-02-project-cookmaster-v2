@@ -1,6 +1,6 @@
 use cookmaster;
 
-db.users.insertOne({ name: 'root', email: 'admin@admin.com', password: 'admin' });
+db.users.insertOne({ name: 'root', email: 'admin@admin.com', password: 'admin', role: 'admin' });
 
 db.recipes.insertMany(
   [
