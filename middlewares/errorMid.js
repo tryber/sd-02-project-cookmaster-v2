@@ -2,6 +2,7 @@ const errorReceive = {
   internal_error: 400,
   not_found: 404,
   invalid_data: 422,
+  unauthorized: 401,
 };
 const errorMid = (err, _req, res, _next) =>
   res.status(errorReceive[err.code])

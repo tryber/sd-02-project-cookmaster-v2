@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const { errorMid } = require('./middlewares');
-const { postNewUser } = require('./controllers');
+const { postNewUser, login } = require('./controllers');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.post('/users', postNewUser);
+app.post('/login', login);
 
 // app.get('/admin', middlewares.auth(), (req, res) => {
 //   return res.render('admin/home', { user: req.user });
