@@ -23,7 +23,7 @@ async function find({ key, value }) {
 }
 
 async function list() {
-  return connection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes').find().toArray());
 }
 
 async function remove(id) {

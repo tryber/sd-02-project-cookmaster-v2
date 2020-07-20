@@ -55,7 +55,7 @@ async function find(id) {
 
 async function list() {
   try {
-    const recipes = await recipesModel.list(id);
+    const recipes = await recipesModel.list();
 
     return { recipes };
   } catch (err) {
