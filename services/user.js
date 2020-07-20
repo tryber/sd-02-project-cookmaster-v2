@@ -25,14 +25,14 @@ const schema = Joi.object({
 });
 
 
-const newUser = async ({ name, email: receivedEmail, password, role = "user" }) => {
+const newUser = async ({ name, email: receivedEmail, password, role = 'user' }) => {
   const { error } = await schema.validate({ name, receivedEmail, password });
   if (error) return objectError.data(error);
   const { email, err } = await findByEmail(receivedEmail).catch((err) => ({ err })) || {};
   if (err) return objectError.internal(err);
   if (email) return objectError.duplicate('E-mail');
   return postUser({ name, email: receivedEmail, password, role })
-    .catch((err) => objectError.internal(err));
+    .catch((catchError) => objectError.internal(catchError));
 };
 
 const loginUser = async ({ email, password }) => {

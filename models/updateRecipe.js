@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const updateRecipe = async (id, name, ingredients, preparation) => (
   getSchema().then((db) => db.collection('recipes').updateOne(
     {
-      _id: ObjectId(id)
+      _id: ObjectId(id),
     },
     {
       $set: {
