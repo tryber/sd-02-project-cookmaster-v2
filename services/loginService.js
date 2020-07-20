@@ -18,24 +18,25 @@ async function login(body) {
     if (error) {
       return {
         error: { type: 'invalid-data', details: error.details.map(({ message }) => message) },
+        token: null,
       };
     }
 
     const user = await userModel.find({ email: value.email });
 
     if (!user) {
-      return { error: { type: 'user-not-found' } };
+      return { error: { type: 'user-not-found', details: null }, token: null };
     }
 
     const { password, ...userWithoutPassword } = user;
 
     if (value.password !== password) {
-      return { error: { type: 'wrong-password' } };
+      return { error: { type: 'wrong-password', details: null }, token: null };
     }
 
     const token = jwt.sign({ data: userWithoutPassword }, process.env.JWT_SECRET, jwtConfig);
 
-    return { token };
+    return { error: { type: null, details: null }, token };
   } catch (err) {
     throw err;
   }
