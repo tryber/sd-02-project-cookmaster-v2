@@ -37,7 +37,7 @@ async function login(body) {
 
     return { token };
   } catch (err) {
-    return { error: 'server-error' };
+    throw err;
   }
 }
 

@@ -1,8 +1,8 @@
 const mongoClient = require('mongodb').MongoClient;
 
-DATABASE = process.env.DB_NAME;
+const DATABASE = process.env.DB_NAME;
 
-const connection = () => {
+async function connection() {
   return mongoClient
     .connect(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -13,6 +13,6 @@ const connection = () => {
       console.error(err);
       process.exit(1);
     });
-};
+}
 
 module.exports = connection;

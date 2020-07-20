@@ -16,18 +16,18 @@ function handleError(error) {
   if (type === 'wrong-password') {
     throw Boom.badRequest('Senha incorreta');
   }
-
-  if (type === 'server-error') {
-    throw Boom.badImplementation('Error Interno no Servidor');
-  }
 }
 
 async function login(req, res) {
-  const { error, token } = await userService.login(req.body);
+  try {
+    const { error, token } = await userService.login(req.body);
 
-  handleError(error);
+    handleError(error);
 
-  res.status(201).json({ token });
+    res.status(201).json({ token });
+  } catch (err) {
+    throw err;
+  }
 }
 
 module.exports = {
