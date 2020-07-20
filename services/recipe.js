@@ -67,4 +67,7 @@ const insertImageId = async ({ filename = '' }, id) => {
   return updateImage(id, filename).catch((error) => objectError.internal(error));
 };
 
-module.exports = { newRecipe, findAll, findOne, editRecipe, deleteRecipe, validInsertImage, insertImageId };
+module.exports = {
+  newRecipe, findAll, findOne, editRecipe,
+  deleteRecipe, validInsertImage, insertImageId,
+};

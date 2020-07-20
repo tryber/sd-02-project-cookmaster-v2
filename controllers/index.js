@@ -5,7 +5,7 @@ const login = require('./login');
 const postNewRecipe = require('./postNewRecipe');
 const recipeEdit = require('./recipeEdit');
 const recipeDelete = require('./recipeDelete');
-const verifyImageById =  require('./verifyImageById');
+const verifyImageById = require('./verifyImageById');
 const updateImageId = require('./updateImageId');
 
 module.exports = {
