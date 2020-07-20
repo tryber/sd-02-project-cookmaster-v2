@@ -1,5 +1,13 @@
 const userService = require('../services/userService');
 
+function validateNewUserData({ email, name, password }) {
+  const validEmail = email && /\S+@\S+[.][0-9a-z]+/.test(email) && typeof email === 'string';
+  const validName = name && typeof name === 'string';
+  const validPassword = password && typeof password === 'string';
+  if (!validEmail || !validName || !validPassword) return false;
+  return true;
+}
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -19,11 +27,9 @@ const newUser = async (req, res) => {
   const { _id: userId } = req.user;
   const role = req.path === '/users/admin' ? 'admin' : 'user';
 
-  const validEmail = email && /\S+@\S+[.][0-9a-z]+/.test(email) && typeof email === 'string';
-  const validName = name && typeof name === 'string';
-  const validPassword = password && typeof password === 'string';
+  const isDataValid = validateNewUserData({ email, name, password });
 
-  if (!validEmail || !validName || !validPassword) {
+  if (!isDataValid) {
     return res.status(400).json({ message: 'Invalid entries. Try again.' });
   }
 
