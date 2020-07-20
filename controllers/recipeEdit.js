@@ -5,4 +5,5 @@ const recipeEdit = async (req, res, next) => {
   if (error) return next(error);
   return res.status(200).json(true);
 };
+
 module.exports = recipeEdit;

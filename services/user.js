@@ -21,7 +21,7 @@ const schema = Joi.object({
   receivedEmail: Joi.string()
     .required(),
   password: Joi.string()
-    .required()
+    .required(),
 });
 
 
@@ -31,7 +31,8 @@ const newUser = async ({ name, email: receivedEmail, password, role = "user" }) 
   const { email, err } = await findByEmail(receivedEmail).catch((err) => ({ err })) || {};
   if (err) return objectError.internal(err);
   if (email) return objectError.duplicate('E-mail');
-  return postUser({ name, email: receivedEmail, password, role }).catch((error) => objectError.internal(error));
+  return postUser({ name, email: receivedEmail, password, role })
+    .catch((err) => objectError.internal(err));
 };
 
 const loginUser = async ({ email, password }) => {

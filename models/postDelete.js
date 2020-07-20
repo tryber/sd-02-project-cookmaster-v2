@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const postDelete = async (id) => (
   getSchema().then((db) => db.collection('recipes').deleteOne(
     {
-      _id: ObjectId(id)
+      _id: ObjectId(id),
     },
   ))
 );

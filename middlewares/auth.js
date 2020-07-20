@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const findById = require('../models/findById');
+
 const { jwtSecret } = process.env;
 
 const authMiddleware = async (req, _res, next) => {
@@ -9,9 +10,9 @@ const authMiddleware = async (req, _res, next) => {
   }
   try {
     const decoded = jwt.verify(token, jwtSecret);
-    req.user = await findById(decoded.data); 
+    req.user = await findById(decoded.data);
     next();
-  } catch (error) { 
+  } catch (error) {
     next({ message: error.message, code: 'unauthorized' });
   }
 };

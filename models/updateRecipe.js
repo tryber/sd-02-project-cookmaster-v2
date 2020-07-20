@@ -10,8 +10,8 @@ const updateRecipe = async (id, name, ingredients, preparation) => (
       $set: {
         name,
         ingredients,
-        preparation
-      }
+        preparation,
+      },
     }))
 );
 
