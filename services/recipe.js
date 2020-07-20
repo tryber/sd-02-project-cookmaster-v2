@@ -68,6 +68,5 @@ const insertImageId = async ({ filename = '' }, id) => {
 };
 
 module.exports = {
-  newRecipe, findAll, findOne, editRecipe,
-  deleteRecipe, validInsertImage, insertImageId,
+  newRecipe, findAll, findOne, editRecipe, deleteRecipe, validInsertImage, insertImageId,
 };
