@@ -23,11 +23,13 @@ const login = async ({ email, password }) => {
 };
 
 const createNewUser = async (newUserData) => {
-  const { email } = newUserData;
+  const { email, userId } = newUserData;
 
   const userAlreadyRegistered = await userModel.getUserByEmail(email);
-
   if (userAlreadyRegistered) return { error: true, code: 409, message: 'Email already registered' };
+
+  const user = await userModel.getUserById(userId);
+  if (user.role !== 'admin') return { error: true, code: 403, message: 'Only admins can add new admins' };
 
   const newUser = await userModel.registerNewUser(newUserData);
 

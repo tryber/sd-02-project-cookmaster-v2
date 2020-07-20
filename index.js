@@ -42,7 +42,11 @@ app.put(
   recipeController.insertRecipeImage,
 );
 
-// app.post('users/admin', middlewares.auth, userController.newAdmin);
+app.post(
+  '/users/admin',
+  middlewares.auth,
+  userController.newUser,
+);
 
 app.all('*', (error, _req, res, _next) => res.json(error).status(500));
 

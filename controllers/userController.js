@@ -16,6 +16,8 @@ const login = async (req, res) => {
 
 const newUser = async (req, res) => {
   const { email, name, password } = req.body;
+  const { _id: userId } = req.user;
+  const role = req.path === '/users/admin' ? 'admin' : 'user';
 
   const validEmail = email && /\S+@\S+[.][0-9a-z]+/.test(email) && typeof email === 'string';
   const validName = name && typeof name === 'string';
@@ -25,7 +27,7 @@ const newUser = async (req, res) => {
     return res.status(400).json({ message: 'Invalid entries. Try again.' });
   }
 
-  const user = await userService.createNewUser(req.body);
+  const user = await userService.createNewUser({ email, name, password, role, userId });
 
   if (user.error) return res.status(user.code).json({ message: user.message });
 
