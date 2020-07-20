@@ -44,7 +44,7 @@ const loginUser = async ({ email, password }) => {
   }
   const { password: _password, ...restUser } = result;
   const token = jwt.sign({ data: restUser }, process.env.jwtSecret, jwtConfig);
-  return token;
+  return { token };
 };
 
 module.exports = { newUser, loginUser };

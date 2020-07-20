@@ -5,7 +5,7 @@
 const postNewUser = require('./postNewUser');
 const login = require('./login');
 // const getNewRecipe = require('./getNewRecipe');
-// const postNewRecipe = require('./postNewRecipe');
+const postNewRecipe = require('./postNewRecipe');
 // const recipeEdit = require('./recipeEdit');
 // const postNewEdit = require('./postNewEdit');
 // const recipeDelete = require('./recipeDelete');
@@ -20,7 +20,7 @@ module.exports = {
   login,
   postNewUser,
   // getNewRecipe,
-  // postNewRecipe,
+  postNewRecipe,
   // recipeEdit,
   // postNewEdit,
   // recipeDelete,

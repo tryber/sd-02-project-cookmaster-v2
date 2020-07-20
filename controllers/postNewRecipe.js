@@ -1,10 +1,10 @@
-const postRecipe = require('../models/postRecipe');
+const { recipe } = require('../services');
 
-const postNewRecipe = async (req, res) => {
-  const { id } = req.user;
-  const validate = await postRecipe({ ...req.body, id });
-  if (typeof (validate) === 'string') return res.render('admin/formRecipe', { message: validate });
-  return res.redirect('/');
+const postNewRecipe = async (req, res, next) => {
+  const { _id: id } = req.user;
+  const { error } = await recipe.newRecipe(id, req.body);
+  if (error) return next(error);
+  return res.status(201).json(true);
 };
 
 module.exports = postNewRecipe;
