@@ -3,22 +3,21 @@ const userService = require('../services/userService');
 const Boom = require('@hapi/boom');
 
 function handleError(error) {
-  if (error === 'invalid-data') {
-    throw Boom.badRequest(
-      'Dados inválidos',
-      error.details.map(({ message }) => message),
-    );
+  const { type, details } = error;
+
+  if (type === 'invalid-data') {
+    throw Boom.badRequest('Dados inválidos', details);
   }
 
-  if (error === 'user-not-found') {
+  if (type === 'user-not-found') {
     throw Boom.badRequest('Usuário não existe');
   }
 
-  if (error === 'wrong-password') {
+  if (type === 'wrong-password') {
     throw Boom.badRequest('Senha incorreta');
   }
 
-  if (error) {
+  if (type === 'server-error') {
     throw Boom.badImplementation('Error Interno no Servidor');
   }
 }
