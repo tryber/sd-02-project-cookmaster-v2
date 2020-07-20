@@ -18,6 +18,8 @@ app.use(bodyParser.json());
 
 app.use('/login', routes.loginRouter);
 
+app.use('/users', routes.userRouter);
+
 app.use(middlewares.error);
 
 const PORT = process.env.PORT || 3000;
