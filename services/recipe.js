@@ -4,6 +4,7 @@ const getAllRecipes = require('../models/getAllRecipes');
 const getOneRecipe = require('../models/getOneRecipe');
 const updateRecipe = require('../models/updateRecipe');
 const postDelete = require('../models/postDelete');
+const updateImage = require('../models/updateImage');
 
 const schema = Joi.object({
   name: Joi.string()
@@ -55,4 +56,15 @@ const deleteRecipe = async (recipeId, { id, role }) => {
   return postDelete(recipeId).catch((error) => objectError.internal(error));
 };
 
-module.exports = { newRecipe, findAll, findOne, editRecipe, deleteRecipe };
+const validInsertImage = async (recipeId, { id, role }) => {
+  const recipe = await getOneRecipe(recipeId).catch((err) => objectError.internal(err));
+  if (recipe.error) return recipe.error;
+  if (validPermission(id, recipe, role)) return objectError.unauthorized('Access denied');
+};
+
+const insertImageId = async ({ filename = '' }, id) => {
+  if (!filename) return objectError.internal({ message: 'Unknown Error', code: 'internal_error' });
+  return updateImage(id, filename).catch((error) => objectError.internal(error));
+};
+
+module.exports = { newRecipe, findAll, findOne, editRecipe, deleteRecipe, validInsertImage, insertImageId };
