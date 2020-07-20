@@ -1,5 +1,7 @@
 const Joi = require('@hapi/joi');
 const postRecipe = require('../models/postRecipe');
+const getAllRecipes = require('../models/getAllRecipes');
+
 
 const schema = Joi.object({
   name: Joi.string()
@@ -22,5 +24,8 @@ const newRecipe = async (id, { name, ingredients, preparation }) => {
     .catch((error) => objectError.internal(error));
 }
 
+const findAll = async () =>
+  getAllRecipes()
+    .catch((error) => objectError.internal(error));
 
-module.exports = { newRecipe }
+module.exports = { newRecipe, findAll }
