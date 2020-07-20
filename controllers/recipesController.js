@@ -36,7 +36,7 @@ function handleErrorFind(error) {
 
 async function find(req, res) {
   try {
-    const { error, recipe } = await recipesService.find(req.params.id);
+    const { error, recipe } = await recipesService.find({ key: 'id', value: req.params.id });
 
     handleErrorFind(error);
 

@@ -36,17 +36,27 @@ Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload d
 - Para permitir que as imagens sejam acessadas através da API, você deve utilizar o middleware `static` do express, da seguinte forma:
 
   ```js
-  const path = require("path");
+  const path = require('path');
   // ...
 
   // /images é o caminho da API onde as imagens estarão disponíveis
   // path.join(__dirname, 'uploads') é o caminho da pasta onde o multer salva suas imagens ao realizar o upload
-  app.use("/images", express.static(path.join(__dirname, "uploads")));
+  app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
   // ...
   ```
 
 ---
+
+{
+"name" : "pudim",
+"ingredients" : "ovo",
+"preparation" : "shaaaaaaaaake"
+}
+{
+"email" : "bolivar.anderson@hotmail.com",
+"password" : "112312"
+} // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVmMTVlNWFmNTYzY2JmNzc1MGNkZDYyZCIsImVtYWlsIjoiYm9saXZhci5hbmRlcnNvbkBob3RtYWlsLmNvbSIsIm5hbWUiOiJCb2xpdmFyIn0sImlhdCI6MTU5NTI4NzE1NywiZXhwIjoxNTk1Mjk3OTU3fQ.HVCdaYe5BkZm9SRA7BfPOfvG_rybMVzvw79paqGvcaE
 
 ## Requisitos do projeto
 

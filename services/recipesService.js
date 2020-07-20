@@ -4,7 +4,8 @@ const recipesModel = require('../models/recipesModel');
 
 async function create(body) {
   try {
-    const { error, value } = recipesSchema.validate(body, {
+    const { authorId, ...recipeBody } = body;
+    const { error, value } = recipesSchema.validate(recipeBody, {
       abortEarly: false,
     });
 
@@ -15,9 +16,21 @@ async function create(body) {
       };
     }
 
-    const recipe = await recipesModel.create(value);
+    const recipe = await recipesModel.find({
+      key: 'name-authorId',
+      value: { name: value.name, authorId },
+    });
 
-    return { error: { type: null, details: null }, recipe };
+    if (recipe) {
+      return {
+        error: { type: 'exist-recipe', details: null },
+        recipe: null,
+      };
+    }
+
+    const newRecipe = await recipesModel.create({ ...value, authorId });
+
+    return { error: { type: null, details: null }, recipe: newRecipe.ops[0] };
   } catch (err) {
     throw err;
   }
@@ -25,7 +38,7 @@ async function create(body) {
 
 async function find(id) {
   try {
-    const recipe = await recipesModel.find(id);
+    const recipe = await recipesModel.find({ key: 'id', value: id });
 
     if (!recipe) {
       return {
@@ -52,7 +65,7 @@ async function list() {
 
 async function remove(id) {
   try {
-    const recipe = await recipesModel.find(id);
+    const recipe = await recipesModel.find({ key: 'id', value: id });
 
     if (recipe) {
       await recipesModel.remove(id);
@@ -64,7 +77,7 @@ async function remove(id) {
 
 async function update(id) {
   try {
-    const recipe = await recipesModel.find(id);
+    const recipe = await recipesModel.find({ key: 'id', value: id });
 
     if (!recipe) {
       return {
@@ -83,7 +96,7 @@ async function update(id) {
 
 async function upadateImage(id) {
   try {
-    const recipe = await recipesModel.find(id);
+    const recipe = await recipesModel.find({ key: 'id', value: id });
 
     if (!recipe) {
       return {

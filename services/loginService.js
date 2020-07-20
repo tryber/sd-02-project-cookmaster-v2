@@ -5,7 +5,7 @@ const { loginSchema } = require('./joinSchemas');
 const userModel = require('../models/userModel');
 
 const jwtConfig = {
-  expiresIn: '10m',
+  expiresIn: '3h',
   algorithm: 'HS256',
 };
 

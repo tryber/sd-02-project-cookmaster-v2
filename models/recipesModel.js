@@ -9,24 +9,33 @@ async function create({ name, ingredients, preparation, authorId }) {
   );
 }
 
-async function find(id) {
-  return onnection().then((db) => db.collection('recipes'));
+function getField({ key, value }) {
+  if (key === 'id') {
+    return ObjectId(value);
+  }
+  if (key === 'name-authorId') {
+    return { name: value.name, author_id: ObjectId(value.authorId) };
+  }
+}
+
+async function find({ key, value }) {
+  return connection().then((db) => db.collection('recipes').findOne(getField({ key, value })));
 }
 
 async function list() {
-  return onnection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes'));
 }
 
 async function remove(id) {
-  return onnection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes'));
 }
 
 async function update(id) {
-  return onnection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes'));
 }
 
 async function upadateImage(id) {
-  return onnection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes'));
 }
 
 module.exports = {
