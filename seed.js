@@ -1,4 +1,4 @@
-const db = 'use cookie_master';
+use cookie_master;
 db.users.insertMany([
     {
         "email":"teste1@gmail.com",
@@ -13,4 +13,22 @@ db.users.insertMany([
         "role": "admin",
     },
 ]);
-    
+db.recipes.insertMany(
+    [
+      {
+        name: 'Cachaça brava',
+        ingredients: 'cachaça, raiva',
+        preparation: 'vire uma garrafa de 51 e mantenha a fé',
+      },
+      {
+        name: 'drogas pesadas',
+        ingredients: 'drogas, peso',
+        preparation: 'pegue as drogas e use',
+      },
+      {
+        name: 'corote de satanas',
+        ingredients: 'todas as cores de corote',
+        preparation: 'misture todos os corotes e vá parar no hospital',
+      }
+    ]
+  );
