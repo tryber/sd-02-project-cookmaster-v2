@@ -10,6 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.listen(3000, () => {
-  console.log('Ouvindo  a porta 3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Ouvindo a porta ${PORT}`);
 });
