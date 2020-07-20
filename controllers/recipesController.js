@@ -16,7 +16,7 @@ function handleErrorCreate(error) {
 
 async function create(req, res) {
   try {
-    const { error, recipe } = await recipesService.create(req.body);
+    const { error, recipe } = await recipesService.create({ ...req.body, authorId: req.user._id });
 
     handleErrorCreate(error);
 

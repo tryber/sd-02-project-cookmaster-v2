@@ -55,7 +55,7 @@ async function remove(id) {
     const recipe = await recipesModel.find(id);
 
     if (recipe) {
-      await recipesModel.delte(id);
+      await recipesModel.remove(id);
     }
   } catch (err) {
     throw err;
