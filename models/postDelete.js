@@ -1,15 +1,13 @@
-// const requestSession = require('./requestSession');
+const getSchema = require('./getSchema');
+const { ObjectId } = require('mongodb');
 
-// const updateRecipe = async (id) =>
-//   requestSession()
-//     .then((session) =>
-//       session.sql('DELETE FROM cookie_master.Recipes WHERE id=?')
-//         .bind(id)
-//         .execute(),
-//     )
-//     .catch((err) => {
-//       console.error(err);
-//       process.exit(1);
-//     });
+const postDelete = async (id) => (
+  getSchema().then((db) => db.collection('recipes').deleteOne(
+    {
+      _id: ObjectId(id)
+    },
+  ))
+);
 
-// module.exports = updateRecipe;
+
+module.exports = postDelete;

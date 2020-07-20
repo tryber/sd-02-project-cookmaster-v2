@@ -8,7 +8,7 @@ const login = require('./login');
 const postNewRecipe = require('./postNewRecipe');
 const recipeEdit = require('./recipeEdit');
 // const postNewEdit = require('./postNewEdit');
-// const recipeDelete = require('./recipeDelete');
+const recipeDelete = require('./recipeDelete');
 // const postNewDelete = require('./postNewDelete');
 // const getSearch = require('./getSearch');
 
@@ -24,7 +24,7 @@ module.exports = {
   postNewRecipe,
   recipeEdit,
   // postNewEdit,
-  // recipeDelete,
+  recipeDelete,
   // postNewDelete,
   // getSearch,
 };

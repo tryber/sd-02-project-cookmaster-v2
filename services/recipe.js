@@ -3,6 +3,7 @@ const postRecipe = require('../models/postRecipe');
 const getAllRecipes = require('../models/getAllRecipes');
 const getOneRecipe = require('../models/getOneRecipe');
 const updateRecipe = require('../models/updateRecipe');
+const postDelete = require('../models/postDelete');
 
 const schema = Joi.object({
   name: Joi.string()
@@ -44,4 +45,11 @@ const editRecipe = async (recipeId, { id, role }, { name, ingredients, preparati
   return updateRecipe(recipeId, name, ingredients, preparation).catch((error) => objectError.internal(error));
 };
 
-module.exports = { newRecipe, findAll, findOne, editRecipe }
+const deleteRecipe = async (recipeId, { id, role }) => {
+  const recipe = await getOneRecipe(recipeId).catch((error) => objectError.internal(error));
+  if (recipe.error) return recipe.error;
+  if (id.toString() !== recipe.creatorId.toString() && role !== 'admin') return objectError.unauthorized('Access denied');
+  return postDelete(recipeId).catch((error) => objectError.internal(error));
+};
+
+module.exports = { newRecipe, findAll, findOne, editRecipe,deleteRecipe }

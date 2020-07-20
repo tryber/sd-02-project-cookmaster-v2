@@ -1,9 +1,9 @@
-const oneRecipe = require('../models/oneRecipe');
+const { recipe } = require('../services');
 
-const recipeDelete = async (req, res) => {
-  const recipe = await oneRecipe(req.params.id);
-  if (req.user.id !== recipe[4]) return res.redirect(`/recipes/${recipe[0]}`);
-  return res.render('admin/formDelete', { id: recipe[0] });
+const recipeDelete = async (req, res, next) => {
+  const { error } = await recipe.deleteRecipe(req.params.id, req.user);
+  if(error) return next(error);
+  res.status(200).json(true);
 };
 
 module.exports = recipeDelete;

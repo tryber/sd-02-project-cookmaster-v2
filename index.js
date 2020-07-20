@@ -7,7 +7,7 @@ dotenv.config();
 
 const { errorMid, authMiddleware } = require('./middlewares');
 const {
-  postNewUser, login, postNewRecipe, getRecipes, recipeDetails, recipeEdit,
+  postNewUser, login, postNewRecipe, getRecipes, recipeDetails, recipeEdit, recipeDelete,
 } = require('./controllers');
 
 const app = express();
@@ -23,7 +23,8 @@ app.route('/recipes')
 
 app.route('/recipes/:id')
   .get(recipeDetails)
-  .post(authMiddleware, recipeEdit);
+  .post(authMiddleware, recipeEdit)
+  .delete(authMiddleware, recipeDelete);
 
 // app.get('/admin', middlewares.auth(), (req, res) => {
 //   return res.render('admin/home', { user: req.user });
