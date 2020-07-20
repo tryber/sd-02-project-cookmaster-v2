@@ -2,6 +2,10 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+require('dotenv').config();
+
+const middlewares = require('./middlewares');
+
 const routes = require('./routes');
 
 const app = express();
@@ -13,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/login', routes.loginRouter);
+
+app.use(middlewares.error);
 
 const PORT = process.env.PORT || 3000;
 

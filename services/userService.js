@@ -24,13 +24,13 @@ async function login(body) {
     const user = await userModel.find({ email: value.email });
 
     if (!user) {
-      return { error: 'user-not-found' };
+      return { error: { type: 'user-not-found' } };
     }
 
     const { password, ...userWithoutPassword } = user;
 
     if (value.password !== password) {
-      return { error: 'wrong-password' };
+      return { error: { type: 'wrong-password' } };
     }
 
     const token = jwt.sign({ data: userWithoutPassword }, process.env.JWT_SECRET, jwtConfig);
