@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/tryber/sd-02-project-cookmaster-v2#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.4"
   }
 }
