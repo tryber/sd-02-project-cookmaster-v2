@@ -14,6 +14,8 @@ const schema = Joi.object({
     .required(),
 });
 
+const validPermission = (id, recipe, role) => id.toString() !== recipe.creatorId.toString() && role !== 'admin';
+
 const objectError = {
   internal: (err) => ({ error: { message: err.message, code: 'internal_error' } }),
   data: (error) => ({ error: { message: error.message, code: 'invalid_data' } }),
@@ -41,7 +43,7 @@ const editRecipe = async (recipeId, { id, role }, { name, ingredients, preparati
   if (error) return objectError.data(error);
   const recipe = await getOneRecipe(recipeId).catch((err) => objectError.internal(err));
   if (recipe.error) return recipe.error;
-  if (id.toString() !== recipe.creatorId.toString() && role !== 'admin') return objectError.unauthorized('Access denied');
+  if (validPermission(id, recipe, role)) return objectError.unauthorized('Access denied');
   return updateRecipe(recipeId, name, ingredients, preparation)
     .catch((err) => objectError.internal(err));
 };
@@ -49,7 +51,7 @@ const editRecipe = async (recipeId, { id, role }, { name, ingredients, preparati
 const deleteRecipe = async (recipeId, { id, role }) => {
   const recipe = await getOneRecipe(recipeId).catch((error) => objectError.internal(error));
   if (recipe.error) return recipe.error;
-  if (id.toString() !== recipe.creatorId.toString() && role !== 'admin') return objectError.unauthorized('Access denied');
+  if (validPermission(id, recipe, role)) return objectError.unauthorized('Access denied');
   return postDelete(recipeId).catch((error) => objectError.internal(error));
 };
 
