@@ -1,6 +1,6 @@
 const getRecipes = require('./getRecipes');
 // const recipeController = require('./recipeController');
-// const recipeDetails = require('./recipeDetails');
+const recipeDetails = require('./recipeDetails');
 // const getNewUser = require('./getNewUser');
 const postNewUser = require('./postNewUser');
 const login = require('./login');
@@ -15,7 +15,7 @@ const postNewRecipe = require('./postNewRecipe');
 module.exports = {
   // userController,
   // recipeController,
-  // recipeDetails,
+  recipeDetails,
   // getNewUser,
   login,
   postNewUser,

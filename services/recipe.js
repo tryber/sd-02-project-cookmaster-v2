@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const postRecipe = require('../models/postRecipe');
 const getAllRecipes = require('../models/getAllRecipes');
-
+const getOneRecipe = require('../models/getOneRecipe');
 
 const schema = Joi.object({
   name: Joi.string()
@@ -28,4 +28,10 @@ const findAll = async () =>
   getAllRecipes()
     .catch((error) => objectError.internal(error));
 
-module.exports = { newRecipe, findAll }
+const findOne = async (id) =>
+  getOneRecipe(id)
+    .then((results) => ({ results }))
+    .catch((error) => objectError.internal(error));
+
+
+module.exports = { newRecipe, findAll, findOne }
