@@ -4,8 +4,8 @@ const router = express.Router();
 
 const rescue = require('express-rescue');
 
-const userController = require('../controllers/userController');
+const loginController = require('../controllers/loginController');
 
-router.post('/', rescue(userController.login));
+router.post('/', rescue(loginController.login));
 
 module.exports = router;

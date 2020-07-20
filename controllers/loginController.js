@@ -1,4 +1,4 @@
-const userService = require('../services/userService');
+const loginService = require('../services/loginService');
 
 const Boom = require('@hapi/boom');
 
@@ -20,7 +20,7 @@ function handleError(error) {
 
 async function login(req, res) {
   try {
-    const { error, token } = await userService.login(req.body);
+    const { error, token } = await loginService.login(req.body);
 
     handleError(error);
 
