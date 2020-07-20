@@ -1,9 +1,8 @@
-const oneRecipe = require('../models/oneRecipe');
+const { recipe } = require('../services');
 
-const recipeEdit = async (req, res) => {
-  const recipe = await oneRecipe(req.params.id);
-  const [id, name, ingredients, how, createId] = recipe;
-  if (req.user.id !== createId) return res.redirect(`/recipes/${id}`);
-  return res.render('admin/formEdit', { id, name, ingredients, how });
+const recipeEdit = async (req, res, next) => {
+  const { error } = await recipe.editRecipe(req.params.id, req.user, req.body);
+  if (error) return next(error);
+  return res.status(200).json(true);
 };
 module.exports = recipeEdit;

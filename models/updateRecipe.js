@@ -1,18 +1,19 @@
-// const requestSession = require('./requestSession');
+const getSchema = require('./getSchema');
+const { ObjectId } = require('mongodb');
 
-// const updateRecipe = async ({ name, ingredients, prepare, id }) =>
-//   requestSession()
-//     .then((session) =>
-//       session.sql('UPDATE cookie_master.Recipes SET recipe_name=?,ingredients=?, how_to_prepare=? WHERE id=?')
-//         .bind(name)
-//         .bind(ingredients)
-//         .bind(prepare)
-//         .bind(id)
-//         .execute(),
-//     )
-//     .catch((err) => {
-//       console.error(err);
-//       process.exit(1);
-//     });
+const updateRecipe = async (id, name, ingredients, preparation) => (
+  getSchema().then((db) => db.collection('recipes').updateOne(
+    {
+      _id: ObjectId(id)
+    },
+    {
+      $set: {
+        name,
+        ingredients,
+        preparation
+      }
+    }))
+);
 
-// module.exports = updateRecipe;
+
+module.exports = updateRecipe;
