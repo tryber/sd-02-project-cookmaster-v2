@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { userSchema } = require('./joinSchemas');
+const { loginSchema } = require('./joinSchemas');
 
 const userModel = require('../models/userModel');
 
@@ -11,7 +11,7 @@ const jwtConfig = {
 
 async function login(body) {
   try {
-    const { error, value } = userSchema.validate(body, {
+    const { error, value } = loginSchema.validate(body, {
       abortEarly: false,
     });
 
