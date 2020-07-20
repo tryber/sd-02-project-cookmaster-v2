@@ -27,7 +27,7 @@ async function list() {
 }
 
 async function remove(id) {
-  return connection().then((db) => db.collection('recipes'));
+  return connection().then((db) => db.collection('recipes').deleteOne({ _id: ObjectId(id) }));
 }
 
 async function update(id) {
