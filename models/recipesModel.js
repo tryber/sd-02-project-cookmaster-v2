@@ -30,8 +30,12 @@ async function remove(id) {
   return connection().then((db) => db.collection('recipes').deleteOne({ _id: ObjectId(id) }));
 }
 
-async function update(id) {
-  return connection().then((db) => db.collection('recipes'));
+async function update({ id, recipe: { name, ingredients, preparation } }) {
+  return connection().then((db) =>
+    db
+      .collection('recipes')
+      .updateOne({ _id: ObjectId(id) }, { $set: { name, ingredients, preparation } }),
+  );
 }
 
 async function upadateImage(id) {

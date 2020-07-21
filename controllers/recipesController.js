@@ -66,11 +66,31 @@ async function remove(req, res) {
   }
 }
 
+function handleErrorUpdate(error) {
+  const { type, details } = error;
+
+  if (type === 'user-not-allowed') {
+    throw Boom.badRequest('Usuário não permitido');
+  }
+
+  if (type === 'invalid-data') {
+    throw Boom.badRequest('Dados inválidos', details);
+  }
+
+  if (type === 'recipe-not-found') {
+    throw Boom.badRequest('Receita não encontrada');
+  }
+}
+
 async function update(req, res) {
   try {
-    const { recipe } = await recipesService.update(req.params.id);
+    const { error, recipe } = await recipesService.update({
+      id: req.params.id,
+      body: req.body,
+      user: req.user,
+    });
 
-    handleErrorFind(error);
+    handleErrorUpdate(error);
 
     res.status(200).json({ recipe });
   } catch (err) {

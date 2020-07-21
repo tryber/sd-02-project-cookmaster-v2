@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 app.use('/login', routes.loginRouter);
 
-app.use('/recipes', middlewares.auth, routes.recipesRouter);
+app.use('/recipes', routes.recipesRouter);
 
 app.use('/users', routes.userRouter);
 

@@ -75,20 +75,40 @@ async function remove(id) {
   }
 }
 
-async function update(id) {
+async function update({ id, body, user }) {
   try {
-    const recipe = await recipesModel.find({ key: 'id', value: id });
+    const { error, value } = recipesSchema.validate(body, {
+      abortEarly: false,
+    });
 
-    if (!recipe) {
+    if (error) {
       return {
-        error: { type: 'recipe-not-found' },
+        error: { type: 'invalid-data', details: error.details.map(({ message }) => message) },
         recipe: null,
       };
     }
 
-    const newRecipe = await recipesModel.update(id);
+    const recipe = await recipesModel.find({ key: 'id', value: id });
 
-    return { error: { type: null }, recipe: newRecipe };
+    if (!recipe) {
+      return {
+        error: { type: 'recipe-not-found', details: null },
+        recipe: null,
+      };
+    }
+
+    if (`${recipe.author_id}` !== `${user._id}`) {
+      return {
+        error: { type: 'user-not-allowed', details: null },
+        recipe: null,
+      };
+    }
+
+    await recipesModel.update({ id, recipe: value });
+
+    const newRecipe = await recipesModel.find({ key: 'id', value: id });
+
+    return { error: { type: null, details: null }, recipe: newRecipe };
   } catch (err) {
     throw err;
   }
