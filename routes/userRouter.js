@@ -10,11 +10,13 @@ const middlewares = require('../middlewares');
 
 const userController = require('../controllers/userController');
 
-router.post('/', rescue(middlewares.validate(userSchema)), rescue(userController.register));
+router.post('/', middlewares.validate(userSchema), rescue(userController.register));
 
 router.post(
   '/admin',
-  rescue(middlewares.validate(userSchema)),
+  middlewares.auth,
+  middlewares.validate(userSchema),
+  middlewares.user,
   rescue(userController.registerAdmin),
 );
 

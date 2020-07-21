@@ -36,23 +36,12 @@ async function update({ id, body }) {
   return { recipe };
 }
 
-async function upadateImage(id) {
-  try {
-    const recipe = await recipesModel.find({ key: 'id', value: id });
+async function upadateImage({ id, url }) {
+  await recipesModel.upadateImage({ id, url });
 
-    if (!recipe) {
-      return {
-        error: { type: 'recipe-not-found' },
-        recipe: null,
-      };
-    }
+  const recipe = await recipesModel.find({ key: 'id', value: id });
 
-    const newRecipe = await recipesModel.upadateImage(id);
-
-    return { error: { type: null }, recipe: newRecipe };
-  } catch (err) {
-    throw err;
-  }
+  return { recipe };
 }
 
 module.exports = {

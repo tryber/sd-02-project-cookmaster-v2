@@ -5,12 +5,12 @@ async function register(body) {
     const user = await userModel.find({ email: body.email });
 
     if (user) {
-      return { error: { type: 'exist-user', details: null } };
+      return { error: 'exist-user' };
     }
 
     await userModel.create(body);
 
-    return { error: { type: null, details: null } };
+    return { error: null };
   } catch (err) {
     throw err;
   }

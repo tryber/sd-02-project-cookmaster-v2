@@ -2,7 +2,10 @@ const Boom = require('@hapi/boom');
 
 async function user(req, _res, next) {
   try {
-    if (req.user.role !== 'admin' && `${req.recipe.author_id}` !== `${req.user._id}`) {
+    const isNotAdmin = req.user.role !== 'admin';
+    const isOwner = req.recipe ? `${req.recipe.author_id}` !== `${req.user._id}` : true;
+
+    if (isNotAdmin && isOwner) {
       throw Boom.badRequest('Usuário não permitido');
     }
 

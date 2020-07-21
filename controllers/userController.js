@@ -3,39 +3,29 @@ const userService = require('../services/userService');
 const Boom = require('@hapi/boom');
 
 function handleError(error) {
-  const { type, details } = error;
-
-  if (type === 'invalid-data') {
-    throw Boom.badRequest('Dados inválidos', details);
-  }
-
-  if (type === 'exist-user') {
+  if (error === 'exist-user') {
     throw Boom.badRequest('Email já cadastrado');
   }
 }
 
 async function register(req, res) {
-  try {
-    const { error } = await userService.register(req.body);
+  const { error } = await userService.register(req.body);
 
+  if (error) {
     handleError(error);
-
-    res.status(201).json({ message: 'Usuário criado com sucesso!' });
-  } catch (err) {
-    throw err;
   }
+
+  res.status(201).json({ message: 'Usuário criado com sucesso!' });
 }
 
 async function registerAdmin(req, res) {
-  try {
-    const { error } = await userService.register(req.body);
+  const { error } = await userService.register({ ...req.body, role: 'admin' });
 
+  if (error) {
     handleError(error);
-
-    res.status(201).json({ message: 'Usuário criado com sucesso!' });
-  } catch (err) {
-    throw err;
   }
+
+  res.status(201).json({ message: 'Usuário criado com sucesso!' });
 }
 
 module.exports = {

@@ -12,8 +12,8 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: 'uploads',
-  filename: (_req, file, callback) => {
-    callback(null, file.originalname);
+  filename: (req, file, callback) => {
+    callback(null, `${req.recipe._id}.${file.mimetype.split('/')[1]}`);
   },
 });
 
@@ -54,6 +54,8 @@ router.put(
 router.put(
   '/:id/image',
   middlewares.auth,
+  middlewares.recipe,
+  middlewares.user,
   upload.single('image'),
   rescue(recipesController.upadateImage),
 );

@@ -18,9 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, 'uploads')));
-
-// app.use('/images', routes.imagesRouter);
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/login', routes.loginRouter);
 

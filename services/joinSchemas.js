@@ -8,7 +8,7 @@ const ingredients = Joi.string().required();
 
 const name = Joi.string().required();
 
-const password = Joi.string().min(6).required();
+const password = Joi.string().min(5).required();
 
 const preparation = Joi.string().required();
 

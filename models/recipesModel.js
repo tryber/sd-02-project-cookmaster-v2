@@ -38,8 +38,10 @@ async function update({ id, recipe: { name, ingredients, preparation } }) {
   );
 }
 
-async function upadateImage(id) {
-  return connection().then((db) => db.collection('recipes'));
+async function upadateImage({ id, url }) {
+  return connection().then((db) =>
+    db.collection('recipes').updateOne({ _id: ObjectId(id) }, { $set: { url_image: url } }),
+  );
 }
 
 module.exports = {
