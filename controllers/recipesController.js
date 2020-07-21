@@ -2,100 +2,35 @@ const recipesService = require('../services/recipesService');
 
 const Boom = require('@hapi/boom');
 
-function handleErrorCreate(error) {
-  const { type, details } = error;
+async function create(req, res) {
+  const { error, recipe } = await recipesService.create({ ...req.body, authorId: req.user._id });
 
-  if (type === 'invalid-data') {
-    throw Boom.badRequest('Dados inválidos', details);
-  }
-
-  if (type === 'exist-recipe') {
+  if (error === 'exist-recipe') {
     throw Boom.badRequest('Receita já cadastrada pelo usuário');
   }
-}
 
-async function create(req, res) {
-  try {
-    const { error, recipe } = await recipesService.create({ ...req.body, authorId: req.user._id });
-
-    handleErrorCreate(error);
-
-    res.status(201).json({ recipe });
-  } catch (err) {
-    throw err;
-  }
-}
-
-function handleErrorFind(error) {
-  const { type } = error;
-
-  if (type === 'recipe-not-found') {
-    throw Boom.badRequest('Receita não encontrada');
-  }
-}
-
-async function find(req, res) {
-  try {
-    const { error, recipe } = await recipesService.find(req.params.id);
-
-    handleErrorFind(error);
-
-    res.status(200).json({ recipe });
-  } catch (err) {
-    throw err;
-  }
+  res.status(201).json({ recipe });
 }
 
 async function list(_req, res) {
-  try {
-    const { recipes } = await recipesService.list();
+  const { recipes } = await recipesService.list();
 
-    res.status(200).json({ recipes });
-  } catch (err) {
-    throw err;
-  }
+  res.status(200).json({ recipes });
 }
 
 async function remove(req, res) {
-  try {
-    await recipesService.remove(req.params.id);
+  await recipesService.remove(req.params.id);
 
-    res.status(200).json({ message: 'Receita removida com sucesso!' });
-  } catch (err) {
-    throw err;
-  }
-}
-
-function handleErrorUpdate(error) {
-  const { type, details } = error;
-
-  if (type === 'user-not-allowed') {
-    throw Boom.badRequest('Usuário não permitido');
-  }
-
-  if (type === 'invalid-data') {
-    throw Boom.badRequest('Dados inválidos', details);
-  }
-
-  if (type === 'recipe-not-found') {
-    throw Boom.badRequest('Receita não encontrada');
-  }
+  res.status(200).json({ message: 'Receita removida com sucesso!' });
 }
 
 async function update(req, res) {
-  try {
-    const { error, recipe } = await recipesService.update({
-      id: req.params.id,
-      body: req.body,
-      user: req.user,
-    });
+  const { recipe } = await recipesService.update({
+    id: req.params.id,
+    body: req.body,
+  });
 
-    handleErrorUpdate(error);
-
-    res.status(200).json({ recipe });
-  } catch (err) {
-    throw err;
-  }
+  res.status(200).json({ recipe });
 }
 
 async function upadateImage(req, res) {
@@ -113,7 +48,6 @@ async function upadateImage(req, res) {
 
 module.exports = {
   create,
-  find,
   list,
   remove,
   update,

@@ -4,6 +4,10 @@ const multer = require('multer');
 
 const rescue = require('express-rescue');
 
+const { recipesSchema } = require('../services/joinSchemas');
+
+const middlewares = require('../middlewares');
+
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -15,20 +19,43 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const auth = require('../middlewares/auth');
-
 const recipesController = require('../controllers/recipesController');
 
-router.delete('/:id', auth, rescue(recipesController.remove));
+router.delete(
+  '/:id',
+  middlewares.auth,
+  middlewares.recipe,
+  middlewares.user,
+  rescue(recipesController.remove),
+);
 
 router.get('/', rescue(recipesController.list));
 
-router.get('/:id', rescue(recipesController.find));
+router.get('/:id', middlewares.recipe, (req, res) => {
+  res.status(200).json({ recipe: req.recipe });
+});
 
-router.post('/', auth, rescue(recipesController.create));
+router.post(
+  '/',
+  middlewares.auth,
+  middlewares.validate(recipesSchema),
+  rescue(recipesController.create),
+);
 
-router.put('/:id', auth, rescue(recipesController.update));
+router.put(
+  '/:id',
+  middlewares.auth,
+  middlewares.validate(recipesSchema),
+  middlewares.recipe,
+  middlewares.user,
+  rescue(recipesController.update),
+);
 
-router.put('/:id/image', auth, upload.single('image'), rescue(recipesController.upadateImage));
+router.put(
+  '/:id/image',
+  middlewares.auth,
+  upload.single('image'),
+  rescue(recipesController.upadateImage),
+);
 
 module.exports = router;
