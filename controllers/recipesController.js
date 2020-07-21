@@ -100,11 +100,12 @@ async function update(req, res) {
 
 async function upadateImage(req, res) {
   try {
-    const { recipe } = await recipesService.upadateImage(req.params.id);
+    console.log(req.file);
+    // const { urlImage } = await recipesService.upadateImage(req.params.id);
 
-    handleErrorFind(error);
+    // handleErrorFind(error);
 
-    res.status(200).json({ recipe });
+    // res.status(200).json({ recipe });
   } catch (err) {
     throw err;
   }

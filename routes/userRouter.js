@@ -8,4 +8,6 @@ const userController = require('../controllers/userController');
 
 router.post('/', rescue(userController.register));
 
+router.post('/admin', rescue(userController.registerAdmin));
+
 module.exports = router;

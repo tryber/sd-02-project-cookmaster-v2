@@ -2,6 +2,8 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+const path = require('path');
+
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
@@ -15,6 +17,10 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'uploads')));
+
+// app.use('/images', routes.imagesRouter);
 
 app.use('/login', routes.loginRouter);
 

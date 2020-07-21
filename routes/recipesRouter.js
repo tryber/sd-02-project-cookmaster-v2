@@ -1,8 +1,19 @@
 const express = require('express');
 
-const router = express.Router();
+const multer = require('multer');
 
 const rescue = require('express-rescue');
+
+const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: 'uploads',
+  filename: (_req, file, callback) => {
+    callback(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 const auth = require('../middlewares/auth');
 
@@ -18,6 +29,6 @@ router.post('/', auth, rescue(recipesController.create));
 
 router.put('/:id', auth, rescue(recipesController.update));
 
-router.put('/:id/image', auth, rescue(recipesController.upadateImage));
+router.put('/:id/image', auth, upload.single('image'), rescue(recipesController.upadateImage));
 
 module.exports = router;

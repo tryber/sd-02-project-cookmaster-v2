@@ -26,6 +26,19 @@ async function register(req, res) {
   }
 }
 
+async function registerAdmin(req, res) {
+  try {
+    const { error } = await userService.register(req.body);
+
+    handleError(error);
+
+    res.status(201).json({ message: 'Usuário criado com sucesso!' });
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   register,
+  registerAdmin,
 };
