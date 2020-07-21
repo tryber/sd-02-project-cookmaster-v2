@@ -2,8 +2,6 @@
 
 ## O que deverá ser desenvolvido
 
-Você vai desenvolver seu app utilizando a arquitetura MSC!
-
 Você já construiu o projeto cookmaster, uma aplicação de cadastro de receitas, onde era possível criar e visualizar receitas, seus ingredientes, e sua forma de preparo. Agora você vai implementar novas funcionalidades ao projeto anterior! Caso deseje, pode começar um novo projeto do zero.
 Nesse novo projeto deverá ser possível fazer o cadastramento e login de usuário, onde apenas esse usúario poderá acessar, modificar e deletar as receitas que cadastrou.
 
