@@ -45,7 +45,7 @@ app.put(
 app.post(
   '/users/admin',
   middlewares.auth,
-  userController.newUser,
+  userController.newAdmin,
 );
 
 app.all('*', (error, _req, res, _next) => res.json(error).status(500));

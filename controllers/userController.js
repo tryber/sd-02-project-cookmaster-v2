@@ -24,8 +24,7 @@ const login = async (req, res) => {
 
 const newUser = async (req, res) => {
   const { email, name, password } = req.body;
-  const { _id: userId } = req.user;
-  const role = req.path === '/users/admin' ? 'admin' : 'user';
+  const role = 'user';
 
   const isDataValid = validateNewUserData({ email, name, password });
 
@@ -33,7 +32,7 @@ const newUser = async (req, res) => {
     return res.status(400).json({ message: 'Invalid entries. Try again.' });
   }
 
-  const user = await userService.createNewUser({ email, name, password, role, userId });
+  const user = await userService.createNewUser({ email, name, password, role });
 
   if (user.error) return res.status(user.code).json({ message: user.message });
 
@@ -42,7 +41,28 @@ const newUser = async (req, res) => {
   return res.status(201).json({ user });
 };
 
+const newAdmin = async (req, res) => {
+  const { email, name, password } = req.body;
+  const { _id: userId } = req.user;
+  const role = 'admin';
+
+  const isDataValid = validateNewUserData({ email, name, password });
+
+  if (!isDataValid) {
+    return res.status(400).json({ message: 'Invalid entries. Try again.' });
+  }
+
+  const user = await userService.createNewAdmin({ email, name, password, role, userId });
+
+  if (user.error) return res.status(user.code).json({ message: user.message });
+
+  if (!user) return res.status(500).json({ message: 'Error when creating new admin' });
+
+  return res.status(201).json({ user });
+};
+
 module.exports = {
   login,
   newUser,
+  newAdmin,
 };

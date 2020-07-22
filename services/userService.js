@@ -23,13 +23,26 @@ const login = async ({ email, password }) => {
 };
 
 const createNewUser = async (newUserData) => {
-  const { email, userId } = newUserData;
+  const { email } = newUserData;
 
   const userAlreadyRegistered = await userModel.getUserByEmail(email);
   if (userAlreadyRegistered) return { error: true, code: 409, message: 'Email already registered' };
 
+  const newUser = await userModel.registerNewUser(newUserData);
+
+  const { password, ...userInfo } = newUser;
+
+  return userInfo;
+};
+
+const createNewAdmin = async (newUserData) => {
+  const { email, userId } = newUserData;
+
   const user = await userModel.getUserById(userId);
-  if (user.role !== 'admin') return { error: true, code: 403, message: 'Only admins can add new admins' };
+  if (user.role !== 'admin') return { error: true, code: 403, message: 'Only admins can register new admins' };
+
+  const userAlreadyRegistered = await userModel.getUserByEmail(email);
+  if (userAlreadyRegistered) return { error: true, code: 409, message: 'Email already registered' };
 
   const newUser = await userModel.registerNewUser(newUserData);
 
@@ -42,4 +55,5 @@ module.exports = {
   login,
   getUserByEmail,
   createNewUser,
+  createNewAdmin,
 };
