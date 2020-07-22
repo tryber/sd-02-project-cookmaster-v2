@@ -1,4 +1,11 @@
+const bcrypt = require('bcrypt');
+
 const userModel = require('../models/userModel');
+
+async function hashPassoword(password) {
+  const saltRounds = 10;
+  return bcrypt.hash(password, saltRounds);
+}
 
 async function register(body) {
   try {
@@ -8,7 +15,9 @@ async function register(body) {
       return { error: 'exist-user' };
     }
 
-    await userModel.create(body);
+    const hash = await hashPassoword(body.password);
+
+    await userModel.create({ ...body, password: hash });
 
     return { error: null };
   } catch (err) {

@@ -2,9 +2,11 @@ const mongoClient = require('mongodb').MongoClient;
 
 const DATABASE = process.env.DB_NAME;
 
+const URI = process.env.DB_URL;
+
 async function connection() {
   return mongoClient
-    .connect(process.env.DB_URL, {
+    .connect(URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

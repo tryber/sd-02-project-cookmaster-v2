@@ -2,7 +2,7 @@ const Boom = require('@hapi/boom');
 
 const recipesModel = require('../models/recipesModel');
 
-async function recipe(req, _res, next) {
+async function recipeMiddleware(req, _res, next) {
   try {
     const recipe = await recipesModel.find({ key: 'id', value: req.params.id });
 
@@ -11,11 +11,11 @@ async function recipe(req, _res, next) {
     }
 
     req.recipe = recipe;
-
+    console.log(req.recipe);
     next();
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = recipe;
+module.exports = recipeMiddleware;

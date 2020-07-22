@@ -1,14 +1,14 @@
 const express = require('express');
 
-const router = express.Router();
-
 const rescue = require('express-rescue');
 
-const { loginSchema } = require('../services/joinSchemas');
+const router = express.Router();
 
 const middlewares = require('../middlewares');
 
 const loginController = require('../controllers/loginController');
+
+const { loginSchema } = require('../services/joinSchemas');
 
 router.post('/', middlewares.validate(loginSchema), rescue(loginController.login));
 

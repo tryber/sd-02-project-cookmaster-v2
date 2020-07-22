@@ -6,7 +6,7 @@ const userModel = require('../models/userModel');
 
 async function auth(req, _res, next) {
   try {
-    const token = req.headers['authorization'];
+    const token = req.headers.authorization;
 
     if (!token) {
       throw Boom.badRequest('Token não encontrado ou informado');

@@ -1,4 +1,5 @@
 const connection = require('./connection');
+
 const { ObjectId } = require('mongodb');
 
 async function create({ name, ingredients, preparation, authorId }) {
@@ -19,7 +20,9 @@ function getField({ key, value }) {
 }
 
 async function find({ key, value }) {
-  return connection().then((db) => db.collection('recipes').findOne(getField({ key, value })));
+  return connection()
+    .then((db) => db.collection('recipes').findOne(getField({ key, value })))
+    .then((recipe) => ({ ...recipe, id: recipe._id }));
 }
 
 async function list() {

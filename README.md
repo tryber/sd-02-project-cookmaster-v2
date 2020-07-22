@@ -1,5 +1,12 @@
 ## Requisitos do projeto
 
+{
+"email": "ana.rita@hotmail.com",
+"name": "Ana Rita",
+"password": "12345",
+"confirm": "12345"
+}
+
 ### 1 - Todos os seus endpoints devem estar no padrão REST
 
 - Use os verbos HTTP adequados para cada operação.

@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-const { loginSchema } = require('./joinSchemas');
+const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/userModel');
 
@@ -18,7 +18,9 @@ async function login(body) {
 
   const { password, ...userWithoutPassword } = user;
 
-  if (body.password !== password) {
+  const isCorrectPassword = await bcrypt.compare(body.password, password);
+
+  if (!isCorrectPassword) {
     return { error: 'wrong-password', token: null };
   }
 
