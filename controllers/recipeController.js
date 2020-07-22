@@ -78,9 +78,9 @@ const insertRecipeImage = async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'Please, select an image' });
 
   const { id } = req.params;
-  const { path } = req.file;
+  const { filename } = req.file;
 
-  return recipeService.insertRecipeImage({ id, path })
+  return recipeService.insertRecipeImage({ id, filename })
     .then((result) => res.status(200).json(result))
     .catch(() => res.status(500).json({ message: 'Error when connecting to database' }));
 };

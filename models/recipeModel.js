@@ -38,13 +38,13 @@ const deleteRecipe = (id) =>
     .then(({ value }) => value)
     .catch((e) => e);
 
-const insertRecipeImage = ({ id, path }) =>
+const insertRecipeImage = ({ id, filename }) =>
   connection()
     .then((db) => db
       .collection('recipes')
       .findOneAndUpdate(
         { _id: ObjectId(id) },
-        { $set: { image: path } },
+        { $set: { image: `localhost:3000/images/${filename}` } },
         { returnOriginal: false },
       ))
     .then(({ value }) => value)
