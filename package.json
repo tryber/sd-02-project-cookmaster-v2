@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:watch": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:watch": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -25,10 +24,13 @@
     "express": "^4.17.1",
     "express-rescue": "^1.1.30",
     "jsonwebtoken": "^8.5.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "node": "^14.5.0"
   },
   "devDependencies": {
     "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
     "nodemon": "^2.0.4"
   }
 }
