@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 require('dotenv').config();
 
 const mongoClient = require('mongodb').MongoClient;
@@ -11,10 +13,12 @@ async function connection() {
       useUnifiedTopology: true,
     });
 
+    const hash = await bcrypt.hash('admin', 10);
+
     await session.db(DATABASE).collection('users').insertOne({
       email: 'root@email.com',
       name: 'Taylor Swift',
-      password: 'admin',
+      password: hash,
       role: 'admin',
     });
 
