@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET);
 
-    const user = await User.getByEmail(payload.data.email);
+    const user = await User.getByEmail(payload.user.email);
 
     if (!user) {
       return res.status(401).json({ message: 'user not found' });

@@ -21,7 +21,7 @@ const login = rescue(async (req, res) => {
 
   const { password: _, ...userWithoutPassword } = user;
 
-  const token = jwt.sign({ data: userWithoutPassword }, JWT_SECRET, jwtConfig);
+  const token = jwt.sign({ user: userWithoutPassword }, JWT_SECRET, jwtConfig);
 
   res.status(200).json({ token });
 });
@@ -38,7 +38,8 @@ const register = rescue(async (req, res) => {
 
   const newUser = new User(name, email, password);
   const response = await newUser.add();
-  return res.status(201).send(response);
+  const { password: _, ...withoutPassword } = response.ops[0];
+  return res.status(201).json(withoutPassword);
 });
 
 module.exports = {

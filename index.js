@@ -12,9 +12,10 @@ app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   destination: 'uploads/',
-  filename: (req, file, callback) => {
+  filename: (req, file, setFileName) => {
     const mimetype = file.mimetype.replace(/image\//, '');
-    return callback(null, `${req.params.id}.${mimetype}`);
+    console.log(mimetype)
+    return setFileName(null, `${req.params.id}.${mimetype}`);
   },
 });
 
@@ -32,7 +33,14 @@ app.get('/recipes/:id', controllers.recipes.getById);
 app.put('/recipes/:id', middlewares.auth, controllers.recipes.edit);
 app.delete('/recipes/:id', middlewares.auth, controllers.recipes.del);
 
-app.post('/recipes/:id/image', middlewares.auth, upload.single('file'), controllers.recipes.addImage);
+app.post('/recipes/:id/image', middlewares.auth, upload.single('image'), controllers.recipes.addImage);
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(5000, () => console.log('Listening on 5000'));
+
+
+// {
+//   "name": "Jeijoado",
+//   "ingredients": "jeijão e limão",
+//   "preparation": "chacoalha tudo"
+// }

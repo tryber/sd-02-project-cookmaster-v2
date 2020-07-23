@@ -3,7 +3,7 @@ require('dotenv').config();
 const User = require('./models/User');
 
 (async () => {
-  const newUser = new User('Alguém', 'email_de_alguem@gmail.com', 'password', 'admin');
+  const newUser = new User('Alguém', 'root@email.com', 'admin', 'admin');
 
   const user = await newUser.add();
 
