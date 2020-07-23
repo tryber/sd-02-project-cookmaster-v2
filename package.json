@@ -1,0 +1,39 @@
+{
+  "name": "cookmaster",
+  "version": "1.0.0",
+  "description": "Project Cookmaster - MSC - JWT - Multer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tryber/sd-02-project-cookmaster-v2.git"
+  },
+  "keywords": [
+    "MSC",
+    "JWT",
+    "Multer"
+  ],
+  "author": "Bolivar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tryber/sd-02-project-cookmaster-v2/issues"
+  },
+  "homepage": "https://github.com/tryber/sd-02-project-cookmaster-v2#readme",
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-rescue": "^1.1.30",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.5.9",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
