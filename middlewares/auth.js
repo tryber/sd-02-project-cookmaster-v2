@@ -20,7 +20,9 @@ async function auth(req, _res, next) {
       throw Boom.unauthorized('Erro ao procurar usuario referente ao token.');
     }
 
-    req.user = user;
+    const { _id: id, ...userWithoutId } = user;
+
+    req.user = { id, ...userWithoutId };
 
     next();
   } catch (err) {

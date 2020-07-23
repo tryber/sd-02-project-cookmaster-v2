@@ -3,7 +3,7 @@ const recipesService = require('../services/recipesService');
 const Boom = require('@hapi/boom');
 
 async function create(req, res) {
-  const { error, recipe } = await recipesService.create({ ...req.body, authorId: req.user._id });
+  const { error, recipe } = await recipesService.create({ ...req.body, authorId: req.user.id });
 
   if (error === 'exist-recipe') {
     throw Boom.badRequest('Receita já cadastrada pelo usuário');
