@@ -12,16 +12,14 @@ const schemaNewUser = Joi.object({
     .required(),
 });
 
-// const schemaNewSale = Joi.object({
-//   productId: Joi.string().max(100).required(),
-//   quantity: Joi.number()
-//   .integer()
-//   .min(1)
-//   .required()
-//   .strict(),
-// });
-
-// const schemaSales = Joi.array().items(schemaNewSale);
+const schemaLogin = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .required(),
+  password: Joi.string()
+    .min(5)
+    .required(),
+});
 
 const validateNewUser = async (obj) => {
   try {
@@ -33,16 +31,17 @@ const validateNewUser = async (obj) => {
   }
 };
 
-// const validateSales = async (obj) => {
-//   try {
-//     const val = await schemaSales.validateAsync(obj);
-//     if (val) return true;
-//   } catch (err) {
-//     const error = { error: { message: err.details[0].message, code: 'Invalid_data' } };
-//     throw error;
-//   }
-// };
+const validateLogin = async (obj) => {
+  try {
+    const val = await schemaLogin.validateAsync(obj);
+    if (val) return true;
+  } catch (err) {
+    const error = { error: { message: err.details[0].message, code: 'Invalid_data' } };
+    throw error;
+  }
+};
 
 module.exports = {
   validateNewUser,
+  validateLogin,
 };

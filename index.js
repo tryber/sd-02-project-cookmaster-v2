@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const indexControllers = require('./controllers');
+// const middlewares = require('./middlewares/validateJwt');
 
 const app = express();
 
@@ -11,7 +12,8 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
-app.post('/users', indexControllers.newUsers.getNewUsers);
+app.post('/users', indexControllers.usersController.getNewUsers);
+app.post('/login', indexControllers.usersController.loginUser);
 
 app.use(indexControllers.errorController);
 
