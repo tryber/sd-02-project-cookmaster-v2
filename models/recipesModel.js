@@ -20,9 +20,7 @@ function getField({ key, value }) {
 }
 
 async function find({ key, value }) {
-  return connection()
-    .then((db) => db.collection('recipes').findOne(getField({ key, value })))
-    .then((recipe) => ({ ...recipe, id: recipe._id }));
+  return connection().then((db) => db.collection('recipes').findOne(getField({ key, value })));
 }
 
 async function list() {

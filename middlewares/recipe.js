@@ -11,7 +11,7 @@ async function recipeMiddleware(req, _res, next) {
     }
 
     req.recipe = recipe;
-    console.log(req.recipe);
+
     next();
   } catch (err) {
     next(err);
