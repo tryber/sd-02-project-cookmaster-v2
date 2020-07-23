@@ -11,7 +11,8 @@ const getAllUsers = async (req, res) => {
 
 const createNewCLient = async (req, res, next) => {
   try {
-    const newUserInfo = await validateAndCreateUser({ ...req.body, roleReq: req.user.role });
+    const reqUser = req.user || { role: 'user' };
+    const newUserInfo = await validateAndCreateUser({ ...req.body, role: reqUser.role });
     if (newUserInfo.error) next({ ...newUserInfo, code: 'invalid_data' });
     const { name, email } = newUserInfo[0];
     res.status(201).json({
