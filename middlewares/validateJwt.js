@@ -1,15 +1,32 @@
-// const jwt = require('jsonwebtoken');
-// const rescue = require('express-rescue');
-// const usersModel = require('../models/usersModels');
+const jwt = require('jsonwebtoken');
+const rescue = require('express-rescue');
+const usersModel = require('../models/usersModels');
 
-// const loginJwt = rescue(async (req, res, next) => {
+const secret = process.env.SECRET;
 
-//   const userValid = await usersModel.findByEmail();
-//   if (!userValid) {
-//     const err = { error: { message: 'User doesn\'t exist', code: 'Invalid_data' } };
-//     throw err;
-//   }
-// });
+const loginJwt = rescue(async (req, _res, next) => {
+  const { authorization: token } = req.headers;
+  if (!token) {
+    const err = { error: { message: 'Token not found', code: 'Invalid_data' } };
+    throw err;
+  }
+  try {
+    const validToken = jwt.verify(token, secret);
+    const { data: id } = validToken;
+    const userExist = await usersModel.findById(id);
+    if (!userExist) {
+      const err = { error: { message: 'User does not exist', code: 'Invalid_data' } };
+      throw err;
+    }
+    const { password, ...noPass } = userExist;
+    req.user = noPass;
+    next();
+  } catch (err) {
+    const error = { error: { message: err.message, code: 'Unauthorized' } };
+    throw error;
+  }
+});
 
 module.exports = {
+  loginJwt,
 };

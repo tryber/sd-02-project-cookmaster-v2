@@ -23,11 +23,11 @@ const loginUser = async (user) => {
   const { email, password: keyPass } = user;
   const existUser = await usersModel.findByEmail(email);
   if (!existUser) {
-    const err = { error: { message: 'E-mail doesn\'t exist', code: 'Invalid_data' } };
+    const err = { error: { message: 'E-mail does not exist', code: 'Invalid_data' } };
     throw err;
   }
   if (keyPass !== existUser.password) {
-    const err = { error: { message: 'Password doens\'t match', code: 'Invalid_data' } };
+    const err = { error: { message: 'Password does not match', code: 'Invalid_data' } };
     throw err;
   }
   const { password, ...noPass } = existUser;

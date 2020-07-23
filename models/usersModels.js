@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const newUser = async (user, role = 'user') => {
@@ -13,6 +14,13 @@ const findByEmail = async (email) => {
   return user;
 };
 
+const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  const user = await db.collection('users').findOne({ _id: ObjectId(id) });
+  return user;
+};
+
 const findAll = async () => {
   const db = await connection();
   const allUsers = db.collection('users').find().toArray();
@@ -23,4 +31,5 @@ module.exports = {
   newUser,
   findByEmail,
   findAll,
+  findById,
 };
