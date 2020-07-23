@@ -75,7 +75,7 @@ const verifyPermissions = async (req, res, next) => {
   const { id } = req.params;
   const permission = await verifyRecipePermission(_id, id, role);
   if (permission.error) return next({ code: 'not_found', message: 'Recipe not found' });
-  if (permission.denied) return next({ code: 'unauthorized', message: 'User unauthorized' });
+  if (permission.denied) return next({ code: 'access_denied', message: 'User unauthorized' });
   next();
 };
 

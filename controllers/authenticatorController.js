@@ -34,8 +34,8 @@ const login = async (req, res, next) => {
 
 const authUser = async (req, res, next) => {
   const token = req.headers.authorization;
+  if (!token) return next({ code: 'unauthorized', message: 'Missing JWT' });
   try {
-    if (!token) return next({ code: 'unauthorized', message: 'Missing JWT' });
     const payload = jwt.verify(token, JWT_SECRET);
 
     const user = await getUser(payload.email);
@@ -47,7 +47,7 @@ const authUser = async (req, res, next) => {
 
     next();
   } catch (err) {
-    next({ code: 'something_wrong', message: 'Something went wrong' });
+    next({ code: 'unauthorized', message: 'Invalid Token' });
   }
 };
 
