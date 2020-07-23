@@ -26,7 +26,6 @@ const schemaNewUser = Joi.object({
 const validateNewUser = async (obj) => {
   try {
     const val = await schemaNewUser.validateAsync(obj);
-    console.log(val)
     if (val) return true;
   } catch (err) {
     const error = { error: { message: err.details[0].message, code: 'Invalid_data' } };

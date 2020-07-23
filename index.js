@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
-app.get('/users', indexControllers.newUsers.getNewUsers);
+app.post('/users', indexControllers.newUsers.getNewUsers);
 
 app.use(indexControllers.errorController);
 
