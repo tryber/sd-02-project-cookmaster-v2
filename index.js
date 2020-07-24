@@ -14,6 +14,7 @@ app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.post('/users', indexControllers.usersControllers.getNewUsers);
 app.post('/login', indexControllers.usersControllers.loginUser);
+
 app.post('/recipes', middlewares.loginJwt, indexControllers.recipesControllers.newRecipe);
 
 app.use(indexControllers.errorController);
