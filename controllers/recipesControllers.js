@@ -22,8 +22,17 @@ const findRecipeById = rescue(async (req, res) => {
   res.status(200).json(recipe);
 });
 
+const updateRecipeById = rescue(async (req, res) => {
+  const { ...recipe } = req.body;
+  const { user, params: { id } } = req;
+  await validJoi.validateJoi(schemaNewRecipe, recipe);
+  const updatedRecipe = await recipesServices.updateRecipeById(recipe, user, id);
+  res.status(200).json(updatedRecipe);
+});
+
 module.exports = {
   newRecipe,
   getAllRecipes,
   findRecipeById,
+  updateRecipeById,
 };

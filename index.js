@@ -18,8 +18,11 @@ app.post('/login', indexControllers.usersControllers.loginUser);
 app.post('/recipes', middlewares.loginJwt, indexControllers.recipesControllers.newRecipe);
 app.get('/recipes', indexControllers.recipesControllers.getAllRecipes);
 app.get('/recipes/:id', indexControllers.recipesControllers.findRecipeById);
+app.put('/recipes/:id', middlewares.loginJwt, indexControllers.recipesControllers.updateRecipeById);
 
 app.use(indexControllers.errorController);
+
+app.all('*', indexControllers.endPointController);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

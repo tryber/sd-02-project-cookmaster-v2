@@ -28,8 +28,22 @@ const findRecipeById = async (id) => {
   return recipe;
 };
 
+const updateRecipeById = async (recipe, user, id) => {
+  const { _id, role } = user;
+  const existRecipe = await findRecipeById(id);
+  const { authorId } = existRecipe;
+  if (String(authorId) === String(_id) || role === 'admin') {
+    const mountedRecipe = { ...recipe, url: '', authorId };
+    const updatedRecipe = await recipesModel.updateRecipeById(id, mountedRecipe);
+    return updatedRecipe;
+  }
+  const err = { error: { message: 'You not have permission to update', code: 'Unauthorized' } };
+  throw err;
+};
+
 module.exports = {
   newRecipe,
   getAllRecipes,
   findRecipeById,
+  updateRecipeById,
 };

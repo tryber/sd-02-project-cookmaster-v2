@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const rescue = require('express-rescue');
 const usersModel = require('../models/usersModels');
 
 const secret = process.env.SECRET;
