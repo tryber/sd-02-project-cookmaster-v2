@@ -14,6 +14,7 @@ const findByName = async (name) => {
 };
 
 const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
   const db = await connection();
   const recipe = await db.collection('recipes').findOne({ _id: ObjectId(id) });
   return recipe;

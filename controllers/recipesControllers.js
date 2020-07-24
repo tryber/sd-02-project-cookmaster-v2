@@ -16,7 +16,14 @@ const getAllRecipes = rescue(async (req, res) => {
   res.status(200).json(allRecipes);
 });
 
+const findRecipeById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const recipe = await recipesServices.findRecipeById(id);
+  res.status(200).json(recipe);
+});
+
 module.exports = {
   newRecipe,
   getAllRecipes,
+  findRecipeById,
 };
