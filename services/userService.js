@@ -10,7 +10,7 @@ const findById = (id) => userModels.findById(id);
 const validateUser = async (email, password) => {
   const jwtConfig = {
     expiresIn: '2h',
-    algorithm: 'HS256'
+    algorithm: 'HS256',
   };
   const user = await userModels.findByEmail(email);
 
@@ -25,7 +25,7 @@ const validateUser = async (email, password) => {
   const userInfo = { id: user._id, name: user.name, role: user.role };
   const token = jwt.sign({ data: userInfo }, process.env.JWT_SECRET, jwtConfig);
   return { token };
-}
+};
 
 const validateLogin = async (name, email, password) => {
   if (!name || !email || !password) {
@@ -42,7 +42,7 @@ const validateLogin = async (name, email, password) => {
   }
 
   return true;
-}
+};
 
 module.exports = {
   createUser,

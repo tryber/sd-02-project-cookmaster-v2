@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
   const isValid = await userService.validateLogin(name, email, password);
 
   if (isValid.error) {
-    return res.status(isValid.status).json({ message: isValid.error, code: isValid.code })
+    return res.status(isValid.status).json({ message: isValid.error, code: isValid.code });
   }
 
   const createdUser = await userService.createUser({ name, email, password, role: 'user' });
@@ -20,6 +20,5 @@ router.post('/', async (req, res) => {
 
   return res.status(200).json(createdUser);
 });
-
 
 module.exports = router;

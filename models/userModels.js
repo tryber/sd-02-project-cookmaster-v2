@@ -1,5 +1,5 @@
-const connection = require('./connections');
 const { ObjectId } = require('mongodb');
+const connection = require('./connections');
 
 const createUser = async (user) => {
   try {
@@ -11,7 +11,7 @@ const createUser = async (user) => {
     console.error(err);
     return false;
   }
-}
+};
 
 const findByEmail = async (email) => {
   try {
@@ -19,10 +19,10 @@ const findByEmail = async (email) => {
       .then((db) => db.collection('users').findOne({ email }));
     return existUser;
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return false;
   }
-}
+};
 
 const findById = async (id) => {
   try {
@@ -30,10 +30,10 @@ const findById = async (id) => {
       .then((db) => db.collection('users').findOne({ _id: ObjectId(id) }));
     return existUser;
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return false;
   }
-}
+};
 
 module.exports = {
   createUser,

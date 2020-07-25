@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const connection = require('./models/connections');
 const userRoutes = require('./controllers/userController');
-const middlewares = require('./middlewares/authMiddleware');
+const recipesRoutes = require('./controllers/recipeController');
 const { loginValidation } = require('./controllers/loginController');
 
 require('dotenv').config();

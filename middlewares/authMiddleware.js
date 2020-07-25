@@ -7,7 +7,7 @@ const tokenValidation = async (req, res, next) => {
   if (!token) {
     return res.status(400).json({
       message: 'Token não encontrado ou não informado',
-      code: 'token_not_found'
+      code: 'token_not_found',
     });
   }
 
@@ -17,9 +17,9 @@ const tokenValidation = async (req, res, next) => {
     const user = await userService.findById(payload.data.id);
 
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Erro ao procurar usuario do token.',
-        code: 'token_error'
+        code: 'token_error',
       });
     }
 
@@ -29,9 +29,11 @@ const tokenValidation = async (req, res, next) => {
   } catch (err) {
     return res.status(401).json({
       message: 'Erro: Seu token é inválido',
-      code: 'invalid_token'
+      code: 'invalid_token',
     });
   }
+
+  return true;
 };
 
 module.exports = {
