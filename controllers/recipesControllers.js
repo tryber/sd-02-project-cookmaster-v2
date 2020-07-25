@@ -30,9 +30,23 @@ const updateRecipeById = rescue(async (req, res) => {
   res.status(200).json(updatedRecipe);
 });
 
+const deleteById = rescue(async (req, res) => {
+  const { user, params: { id } } = req;
+  await recipesServices.deleteById(user, id);
+  res.status(204).end();
+});
+
+const uploadImage = rescue(async (req, res) => {
+  const { file: { filename }, params: { id } } = req;
+  const updatedRecipe = await recipesServices.uploadImage(id, filename);
+  res.status(200).json(updatedRecipe);
+});
+
 module.exports = {
   newRecipe,
   getAllRecipes,
   findRecipeById,
   updateRecipeById,
+  deleteById,
+  uploadImage,
 };

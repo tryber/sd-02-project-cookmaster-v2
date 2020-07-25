@@ -12,7 +12,6 @@ const errorController = async (err, req, res, _next) => {
     return res.status(err.statusCode)
       .json({ error: { message: err.message, code: err.type } });
   }
-
   const now = Date.now();
   console.error(`ErrorController: Message: ${err.message}, Date: ${now}`);
   return res.status(err.status || 500)
