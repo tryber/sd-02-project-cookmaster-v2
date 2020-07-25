@@ -83,26 +83,12 @@ router.put('/:id', middlewares.tokenValidation, async (req, res) => {
   const { _id: authorID, role } = req.user;
   const { id } = req.params;
 
-  const isUpdated = await recipeService.findById(id);
+  const isUpdated = await recipeService.validateUpdate(id, authorID, role);
 
-  if (!isUpdated) {
-    return res.status(404).json({
-      message: 'Receita não existe',
-      code: 'not_found',
-    });
-  }
-
-  if (isUpdated.error) {
+  if (isUpdated.message) {
     return res.status(isUpdated.status).json({
-      message: isUpdated.error,
+      message: isUpdated.message,
       code: isUpdated.code,
-    });
-  }
-
-  if (JSON.stringify(isUpdated.authorID) !== JSON.stringify(authorID) && role === 'user') {
-    return res.status(200).json({
-      message: 'Usuário não tem permissão para alterar a receita',
-      code: 'not_allowed',
     });
   }
 
