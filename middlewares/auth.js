@@ -5,6 +5,7 @@ const userModel = require('../models/userModel');
 const auth = async (req, res, next) => {
   const token = req.headers.Authorization;
   const payload = jwt.verify(token, privateKey);
+  console.log(payload);
   const user = await userModel.findByEmail(payload.user.email);
   if (!user) { return res.status(401).json({ message: 'usuário não autorizado' }); };
   req.user = user; 

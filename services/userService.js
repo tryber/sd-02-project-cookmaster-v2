@@ -8,21 +8,17 @@ const userModel = require('../models/userModel');
 //   return false;
 // };
 
-const checkAndAdd = async ({ name, email, password }) => {
-  // if (!existsCheck(name)) { return 409; }
+const checkAndAdd = async ({ name, email, password, role }) => {
   const findByEmail = await userModel.findByEmail(email);
-
-  // if (!findByEmail) { throw exists; } lembrar como tratar o erro
-
-  const addUserModel = await userModel.addUser({ name, email, password });
+  // if (!findByEmail) { throw exists; } lembrar como tratar o erro (olhar store manager)
+  // if (!existsCheck(name)) { return 409; }
+  const addUserModel = await userModel.addUser({ name, email, password, role });
 
   return addUserModel;
 };
 
 const userLogin = async ({ email, password }) => {
-  console.log('email: ', email, 'password: ', password)
   const findByEmail = await userModel.findByEmail(email);
-  console.log(findByEmail)
   // if (!findByEmail) { throw exists; }; lembrar como tratar o erro
   return findByEmail.password === password;
 }

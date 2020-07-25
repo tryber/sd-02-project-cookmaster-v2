@@ -10,12 +10,12 @@ const jwtConfig = {
 
 const { notFound, badData, exists } = require('../middlewares/error');
 
-const addUser = async (req, res) => {
-  const { name, email, password } = req.body;
-  const addUser = await userService.checkAndAdd({ name, email, password });
+const addUser = rescue(async (req, res) => {
+  const { name, email, password, role } = req.body;
+  const addUser = await userService.checkAndAdd({ name, email, password, role });
 
   return res.status(201).json(addUser);
-};
+});
 
 const logInUser = async (req, res) => {
   const { email, password } = req.body;
