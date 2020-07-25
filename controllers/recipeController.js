@@ -53,4 +53,28 @@ router.get('/', async (_req, res) => {
   });
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const recipe = await recipeService.findById(id);
+
+  if (!recipe) {
+    return res.status(404).json({
+      message: 'Receita não existe',
+      code: 'not_found',
+    });
+  }
+
+  if (recipe.error) {
+    return res.status(recipe.status).json({
+      message: recipe.error,
+      code: recipe.code,
+    });
+  }
+
+  return res.status(200).json({
+    recipe,
+  });
+});
+
 module.exports = router;

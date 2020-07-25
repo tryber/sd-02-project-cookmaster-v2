@@ -4,6 +4,8 @@ const createRecipe = (recipe) => recipeModels.createRecipe(recipe);
 
 const getAllRecipes = recipeModels.getAllRecipes;
 
+const findById = (id) => recipeModels.findById(id);
+
 const validateRecipe = (name, ingredients, preparation) => {
   if (!name || !ingredients || !preparation) {
     return { status: 200, error: 'Dados Inválidos', code: 'invalid_data' };
@@ -20,4 +22,5 @@ module.exports = {
   createRecipe,
   validateRecipe,
   getAllRecipes,
+  findById,
 };
