@@ -38,8 +38,28 @@ const findById = async (id) => {
   }
 };
 
+const updateRecipeById = async (id, newRecipe) => {
+  if (!ObjectId.isValid(id)) {
+    return { status: 200, error: 'Id inválida', code: 'invalid_data' };
+  }
+
+  const query = { _id: ObjectId(id) };
+  const replacement = newRecipe;
+  const options = { returnOriginal: false };
+  try {
+    const updatedRecipe = await connection()
+      .then((db) => db.collection('recipes').findOneAndReplace(query, replacement, options))
+      .then((result) => result.value);
+    return updatedRecipe;
+  } catch (err) {
+    console.error(err);
+    return { status: 500, error: 'Erro interno', code: 'db_connection_error' };
+  }
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   findById,
+  updateRecipeById,
 };

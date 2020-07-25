@@ -18,9 +18,12 @@ const validateRecipe = (name, ingredients, preparation) => {
   return true;
 };
 
+const updateRecipeById = (id, newRecipe) => recipeModels.updateRecipeById(id, newRecipe);
+
 module.exports = {
   createRecipe,
   validateRecipe,
   getAllRecipes,
   findById,
+  updateRecipeById,
 };

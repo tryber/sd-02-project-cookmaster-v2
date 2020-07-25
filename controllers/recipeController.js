@@ -1,6 +1,7 @@
 const express = require('express');
 const recipeService = require('../services/recipeService');
 const middlewares = require('../middlewares/authMiddleware');
+const { json } = require('body-parser');
 
 const router = express.Router();
 
@@ -75,6 +76,60 @@ router.get('/:id', async (req, res) => {
   return res.status(200).json({
     recipe,
   });
+});
+
+router.put('/:id', middlewares.tokenValidation, async (req, res) => {
+  const { name, ingredients, preparation } = req.body;
+  const { _id: authorID, role } = req.user;
+  const { id } = req.params;
+
+  const isUpdated = await recipeService.findById(id);
+
+  if (!isUpdated) {
+    return res.status(404).json({
+      message: 'Receita não existe',
+      code: 'not_found',
+    });
+  }
+
+  if (isUpdated.error) {
+    return res.status(isUpdated.status).json({
+      message: isUpdated.error,
+      code: isUpdated.code,
+    });
+  }
+
+  if (JSON.stringify(isUpdated.authorID) !== JSON.stringify(authorID) && role === 'user') {
+    return res.status(200).json({
+      message: 'Usuário não tem permissão para alterar a receita',
+      code: 'not_allowed',
+    });
+  }
+
+  const isValid = await recipeService.validateRecipe(name, ingredients, preparation);
+
+  if (isValid.error) {
+    return res.status(isValid.status).json({
+      message: isValid.error,
+      code: isValid.code,
+    });
+  }
+
+  const newRecipe = {
+    name,
+    ingredients,
+    preparation,
+    urlImg: isUpdated.urlImg,
+    authorID,
+  };
+
+  const updatedRecipe = await recipeService.updateRecipeById(id, newRecipe);
+
+  return res.status(200).json({
+    updatedRecipe,
+  });
+
+  // const isValidUser = await recipeService.validateRecipeUser(req.user);
 });
 
 module.exports = router;
