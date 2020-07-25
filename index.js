@@ -22,4 +22,6 @@ app.post('/login', loginValidation);
 
 app.use('/users', userRoutes);
 
+app.use('/recipes', recipesRoutes);
+
 app.listen(3000, () => console.log('Listening on 3000'));
