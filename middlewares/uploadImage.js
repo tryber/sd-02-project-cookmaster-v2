@@ -1,5 +1,5 @@
 const multer = require('multer');
-const recipesService = require('../services/recipesServices');
+const recipesService = require('../services/recipesService');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
   },
   filename: async (req, file, cb) => {
     const { params: { id }, user: { _id: userId, role } } = req;
-    const existRecipe = await recipesService.findRecipeById(id);
+    const existRecipe = await recipesService.showOneRecipe(id);
     if (String(existRecipe.authorId) === String(userId) || role === 'admin') {
       const type = file.mimetype.split('/');
       const fileName = `${id}.${type[1]}`;

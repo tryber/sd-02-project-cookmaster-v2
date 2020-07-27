@@ -45,15 +45,16 @@ const deleteRecipe = async (id) => {
   return { ok: true };
 };
 
-const updateRecipeById = async (id, recipe) =>
+const addImage = async (id, url) =>
   connection()
     .then((db => db.collection('recipes')
       .findOneAndUpdate({
         _id: ObjectId(id)
       },
-        { $set: recipe },
+        { $set: { url } },
         { returnOriginal: false })
-    ));
+    ))
+    .then(({ value: { _id: id, name, ingredients, preparation, url, authorId } }) => ({ id, name, ingredients, preparation, url, authorId }));
 
 module.exports = {
   findRecipeByName,
@@ -63,5 +64,5 @@ module.exports = {
   showOneRecipe,
   updateRecipe,
   deleteRecipe,
-  updateRecipeById
+  addImage,
 };

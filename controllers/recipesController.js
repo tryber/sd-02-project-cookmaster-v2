@@ -54,10 +54,10 @@ router.delete('/:id', rescue(async (req, res) => {
   return res.status(204).json();
 }));
 
-router.put('/:id/image', auth, verifyImage, uploadImage, rescue(async (req, res, _next) => {
+router.put('/:id/image', auth, verifyImage, uploadImage, async (req, res, _next) => {
   const { file: { filename }, params: { id } } = req;
   const updatedRecipe = await recipesService.uploadRecipeImage(id, filename);
   res.status(200).json(updatedRecipe);
-}));
+});
 
 module.exports = router;

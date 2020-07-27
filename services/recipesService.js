@@ -39,11 +39,8 @@ const deleteRecipe = async (id) => {
 };
 
 const uploadRecipeImage = async (id, filename) => {
-  const recipe = await showOneRecipe(id);
-  const { _id, name, ingredients, preparation, authorId } = recipe;
-  const recipewithImage = {
-    _id, name, ingredients, preparation, url: `/images/${filename}`, authorId };
-  const updatedRecipe = await recipesModel.updateRecipeById(id, recipewithImage);
+  const url = `http://localhost:3001/images/${filename}`;
+  const updatedRecipe = await recipesModel.addImage(id, url);
   return updatedRecipe;
 };
 
