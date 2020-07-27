@@ -31,7 +31,8 @@ const newUser = async ({ name, email: receivedEmail, password, role = 'user' }) 
   const { email, err: newError } = await findByEmail(receivedEmail).catch((err) => ({ err })) || {};
   if (newError) return objectError.internal(newError);
   if (email) return objectError.duplicate('E-mail');
-  return postUser({ name, email: receivedEmail, password, role }).then((results) => ({ ...results }))
+  return postUser({ name, email: receivedEmail, password, role })
+    .then((results) => ({ ...results }))
     .catch((catchError) => objectError.internal(catchError));
 };
 

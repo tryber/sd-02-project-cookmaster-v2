@@ -44,8 +44,7 @@ const editRecipe = async (recipeId, { id, role }, { name, ingredients, preparati
   const { error } = schema.validate({ name, ingredients, preparation });
   if (error) return objectError.data(error);
   const recipe = await getOneRecipe(recipeId).catch((err) => objectError.internal(err));
-  if (!recipe) return objectError.data({ message: 'Recipe no exist' });
-  if (recipe.error) return recipe;
+  if (!recipe || recipe.error) return recipe || objectError.data({ message: 'Recipe no exist' });
   if (validPermission(id, recipe, role)) return objectError.unauthorized('Access denied');
   return updateRecipe(recipeId, name, ingredients, preparation)
     .catch((err) => objectError.internal(err));

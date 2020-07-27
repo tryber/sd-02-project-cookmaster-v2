@@ -6,10 +6,10 @@ const errorReceive = {
   unknown: 500,
 };
 
-const errorMid = (err, _req, res, _next) => 
+const errorMid = (err, _req, res, _next) =>
   res.status(errorReceive[err.code])
     .json({
-      err,
+      error: err,
     });
 
 module.exports = errorMid;
