@@ -39,7 +39,7 @@ app.get('/recipes/:id', recipesController.getRecipeById);
 app.put('/recipes/:id', validateJWT, recipesController.updateRecipeById);
 app.delete('/recipes/:id', validateJWT, recipesController.deleteRecipeById);
 app.put(
-  '/recipes/:id/upload',
+  '/recipes/:id/image',
   validateJWT,
   recipesController.verifyImageById,
   upload.single('image'),
