@@ -22,5 +22,10 @@ router.post('/', auth, rescue(async (req, res, _next) => {
   return res.status(201).json(newRecipe);
 }));
 
+router.get('/', rescue(async (_req, res) => {
+  const listRecipes = await recipesService.listRecipes();
+  return res.status(201).json(listRecipes);
+}));
+
 
 module.exports = router;

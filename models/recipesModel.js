@@ -7,10 +7,16 @@ const findRecipeByName = async (name, id = null) =>
 
 const createRecipe = async ({ name, ingredients, preparation, url = '', _id }) =>
   connection()
-    .then((db) => db.collection('users').insertOne({ name, ingredients, preparation, url, authorId: _id }))
+    .then((db) => db.collection('recipes').insertOne({ name, ingredients, preparation, url, authorId: _id }))
     .then(({ insertedId }) => ({ id: insertedId, name, ingredients, preparation, url, authorId: _id }));
+
+const listRecipes = async () =>
+  connection()
+    .then((db) => db.collection('recipes').find().toArray())
+    .then((recipes) => recipes.map(({ _id, ...sprParams }) => ({ id: _id, ...sprParams })));
 
 module.exports = {
   findRecipeByName,
-  createRecipe
+  createRecipe,
+  listRecipes
 };

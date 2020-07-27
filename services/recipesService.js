@@ -6,6 +6,8 @@ const existsCheck = async (name, id = null) => {
   return false;
 };
 
+const listRecipes = async () => recipesModel.listRecipes();
+
 const createRecipe = async ({ name, ingredients, preparation, _id }) => {
   if (!existsCheck(name)) { return 409; }
   const createRecipeModel = await recipesModel.createRecipe({ name, ingredients, preparation, _id });
@@ -13,5 +15,6 @@ const createRecipe = async ({ name, ingredients, preparation, _id }) => {
 };
 
 module.exports = {
-  createRecipe
-}
+  createRecipe,
+  listRecipes
+};
