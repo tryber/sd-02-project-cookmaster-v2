@@ -1,6 +1,12 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const findRecipeById = async (id) => {
+  if (!ObjectId.isValid(id)) { return null; }
+  return connection()
+    .then((db) => db.collection('recipes').findOne(ObjectId(id)));
+};
+
 const findRecipeByName = async (name, id = null) =>
   connection().then((db) => db.collection('users')
     .findOne({ name, _id: { $ne: ObjectId(id) } }));
@@ -15,8 +21,18 @@ const listRecipes = async () =>
     .then((db) => db.collection('recipes').find().toArray())
     .then((recipes) => recipes.map(({ _id, ...sprParams }) => ({ id: _id, ...sprParams })));
 
+const showOneRecipe = async (id) => {
+  const searchId = await findRecipeById(id);
+  if (searchId === null) {
+    return null;
+  }
+  const { _id, name, ingredients, preparation, url, authorId } = searchId;
+  return { id: _id, name, ingredients, preparation, url, authorId };
+};
+
 module.exports = {
   findRecipeByName,
   createRecipe,
-  listRecipes
+  listRecipes,
+  showOneRecipe
 };

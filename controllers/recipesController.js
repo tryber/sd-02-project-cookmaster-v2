@@ -27,5 +27,12 @@ router.get('/', rescue(async (_req, res) => {
   return res.status(201).json(listRecipes);
 }));
 
+router.get('/:id', rescue(async (req, res) => {
+  const { id } = req.params;
+  const singleRecipe = await recipesService.showOneRecipe(id);
+  if (singleRecipe === 404) { throw notFound; }
+  return res.status(200).json(singleRecipe);
+}));
+
 
 module.exports = router;

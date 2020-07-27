@@ -8,12 +8,10 @@ const JWT_SECRET = 'mypassword123';
 const auth = rescue(async (req, _res, next) => {
   const token = req.headers.authorization || null;
   const verifyToken = await jwt.verify(token, JWT_SECRET);
-  console.log(verifyToken);
   if (!verifyToken) { throw badData; }
   const checkId = await usersModel.findById(verifyToken.data._id);
   if (!checkId) { throw unauthorized; }
   req.user = checkId;
-  console.log(req.user);
   next();
 })
 

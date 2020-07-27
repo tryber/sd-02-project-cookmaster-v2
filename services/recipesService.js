@@ -14,7 +14,14 @@ const createRecipe = async ({ name, ingredients, preparation, _id }) => {
   return createRecipeModel;
 };
 
+const showOneRecipe = async (id) => {
+  const showFromModel = await recipesModel.showOneRecipe(id);
+  if (showFromModel === null) { return 404; }
+  return showFromModel;
+};
+
 module.exports = {
   createRecipe,
-  listRecipes
+  listRecipes,
+  showOneRecipe
 };
