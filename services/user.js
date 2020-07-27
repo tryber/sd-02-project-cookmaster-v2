@@ -18,7 +18,7 @@ const objectError = {
 const schema = Joi.object({
   name: Joi.string()
     .required(),
-  receivedEmail: Joi.string()
+  email: Joi.string()
     .required(),
   password: Joi.string()
     .required(),
@@ -26,7 +26,7 @@ const schema = Joi.object({
 
 
 const newUser = async ({ name, email: receivedEmail, password, role = 'user' }) => {
-  const { error } = await schema.validate({ name, receivedEmail, password });
+  const { error } = await schema.validate({ name, email: receivedEmail, password });
   if (error) return objectError.data(error);
   const { email, err: newError } = await findByEmail(receivedEmail).catch((err) => ({ err })) || {};
   if (newError) return objectError.internal(newError);
