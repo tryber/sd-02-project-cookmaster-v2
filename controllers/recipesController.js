@@ -3,7 +3,8 @@ const rescue = require('express-rescue');
 const recipesService = require('../services/recipesService');
 const { notFound, badData, exists, unauthorized } = require('../middlewares/error');
 const { auth } = require('../middlewares/auth');
-const uploadWithMulter = require('../middlewares/multerUpload');
+const verifyImage = require('../middlewares/verifyImage');
+const uploadImage = require('../middlewares/uploadImage');
 
 const router = express.Router();
 
@@ -53,11 +54,10 @@ router.delete('/:id', rescue(async (req, res) => {
   return res.status(204).json();
 }));
 
-// router.put('/:id/image', auth, uploadWithMulter, rescue(async (req, res, _next) => {
-//   if (!req.file) return next({ message: 'You need provide img to edit', code: 'invalid_data' });
-//   const { error } = await recipe.insertImageId(req.file, req.params.id);
-//   if (error) return next(error);
-//   return res.status(200).json(true);
-// }));
+router.put('/:id/image', auth, verifyImage, uploadImage, rescue(async (req, res, _next) => {
+  const { file: { filename }, params: { id } } = req;
+  const updatedRecipe = await recipesService.uploadRecipeImage(id, filename);
+  res.status(200).json(updatedRecipe);
+}));
 
 module.exports = router;
