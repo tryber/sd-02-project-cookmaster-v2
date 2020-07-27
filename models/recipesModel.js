@@ -8,7 +8,7 @@ const findRecipeById = async (id) => {
 };
 
 const findRecipeByName = async (name, id = null) =>
-  connection().then((db) => db.collection('users')
+  connection().then((db) => db.collection('recipes')
     .findOne({ name, _id: { $ne: ObjectId(id) } }));
 
 const createRecipe = async ({ name, ingredients, preparation, url = '', _id }) =>
@@ -30,9 +30,27 @@ const showOneRecipe = async (id) => {
   return { id: _id, name, ingredients, preparation, url, authorId };
 };
 
+const updateRecipe = async ({ name, ingredients, preparation, id }) =>
+  connection()
+    .then((db) => db.collection('recipes')
+      .updateOne({ _id: ObjectId(id) }, { $set: { name, ingredients, preparation } }));
+
+const deleteRecipe = async (id) => {
+  const searchId = await findRecipeById(id);
+  if (searchId === null) {
+    return null;
+  }
+  await connection()
+    .then((db) => db.collection('recipes').deleteOne({ _id: ObjectId(id) }));
+  return { ok: true };
+};
+
 module.exports = {
   findRecipeByName,
+  findRecipeById,
   createRecipe,
   listRecipes,
-  showOneRecipe
+  showOneRecipe,
+  updateRecipe,
+  deleteRecipe,
 };

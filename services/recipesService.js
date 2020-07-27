@@ -1,4 +1,5 @@
 const recipesModel = require('../models/recipesModel');
+const usersModel = require('../models/usersModel');
 
 const existsCheck = async (name, id = null) => {
   const modelCall = await recipesModel.findRecipeByName(name, id);
@@ -20,8 +21,27 @@ const showOneRecipe = async (id) => {
   return showFromModel;
 };
 
+const updateRecipe = async ({ name, ingredients, preparation, userId, id }) => {
+  console.log('_id: ', _id);
+  const recipeFound = await recipesModel.findRecipeById(id);
+  if (!recipeFound) { return 404; }
+  const checkAdmin = await usersModel.findById(userId);
+  console.log('checkAdmin Id: ', checkAdmin)
+  if (JSON.stringify(recipeFound.authorId) !== JSON.stringify(userId) && checkAdmin.role === 'user') { return 401; }
+  const updateRecipeModel = await recipesModel.updateRecipe({ name, ingredients, preparation, id });
+  return updateRecipeModel;
+};
+
+const deleteRecipe = async (id) => {
+  const deleteFromModel = await recipesModel.deleteRecipe(id);
+  if (deleteFromModel === null) { return 404; }
+  return deleteFromModel;
+};
+
 module.exports = {
   createRecipe,
   listRecipes,
-  showOneRecipe
+  showOneRecipe,
+  updateRecipe,
+  deleteRecipe,
 };
