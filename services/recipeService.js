@@ -8,11 +8,11 @@ const findById = (id) => recipeModels.findById(id);
 
 const validateRecipe = (name, ingredients, preparation) => {
   if (!name || !ingredients || !preparation) {
-    return { status: 200, error: 'Dados Inválidos', code: 'invalid_data' };
+    return { status: 422, error: 'Dados Inválidos', code: 'invalid_data' };
   }
 
   if (typeof name !== 'string' || typeof ingredients !== 'string' || typeof preparation !== 'string') {
-    return { status: 200, error: 'Formato inválido', code: 'invalid_data_format' };
+    return { status: 422, error: 'Formato inválido', code: 'invalid_data_format' };
   }
 
   return true;
@@ -25,7 +25,7 @@ const validateUpdate = async (id, authorID, role) => {
 
   if (!isUpdated) {
     return {
-      status: 400,
+      status: 404,
       message: 'Receita não existe',
       code: 'not_found',
     };
@@ -41,7 +41,7 @@ const validateUpdate = async (id, authorID, role) => {
 
   if (JSON.stringify(isUpdated.authorID) !== JSON.stringify(authorID) && role === 'user') {
     return {
-      status: 200,
+      status: 401,
       message: 'Usuário não tem permissão para alterar a receita',
       code: 'not_allowed',
     };

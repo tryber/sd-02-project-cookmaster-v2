@@ -19,7 +19,7 @@ const validateUser = async (email, password) => {
   }
 
   if (!user || user.password !== password || user.email !== email) {
-    return { status: 200, error: 'Usuário ou senha inválidos', code: 'invalid_data' };
+    return { status: 422, error: 'Usuário ou senha inválidos', code: 'invalid_data' };
   }
 
   const userInfo = { id: user._id, name: user.name, role: user.role };
@@ -29,12 +29,12 @@ const validateUser = async (email, password) => {
 
 const validateLogin = async (name, email, password) => {
   if (!name || !email || !password) {
-    return { status: 200, error: 'Dados Inválidos.', code: 'invalid_data' };
+    return { status: 422, error: 'Dados Inválidos.', code: 'invalid_data' };
   }
   const existUser = await userModels.findByEmail(email);
 
   if (existUser) {
-    return { status: 200, error: 'Usuário diplicado.', code: 'duplicated_user' };
+    return { status: 409, error: 'Usuário duplicado.', code: 'duplicated_user' };
   }
 
   if (existUser === false) {

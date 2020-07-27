@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const connection = require('./models/connections');
 const userRoutes = require('./controllers/userController');
@@ -19,6 +20,8 @@ connection().then(() => {
 });
 
 app.post('/login', loginValidation);
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/users', userRoutes);
 

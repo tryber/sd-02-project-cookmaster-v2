@@ -26,7 +26,7 @@ const getAllRecipes = async () => {
 
 const findById = async (id) => {
   if (!ObjectId.isValid(id)) {
-    return { status: 200, error: 'Id inválida', code: 'invalid_data' };
+    return { status: 422, error: 'Id inválida', code: 'invalid_data' };
   }
   try {
     const existUser = await connection()
@@ -40,7 +40,7 @@ const findById = async (id) => {
 
 const updateRecipeById = async (id, newRecipe) => {
   if (!ObjectId.isValid(id)) {
-    return { status: 200, error: 'Id inválida', code: 'invalid_data' };
+    return { status: 422, error: 'Id inválida', code: 'invalid_data' };
   }
 
   const query = { _id: ObjectId(id) };

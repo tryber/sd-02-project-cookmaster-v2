@@ -1,9 +1,19 @@
 const express = require('express');
+const multer = require('multer');
 const recipeService = require('../services/recipeService');
 const middlewares = require('../middlewares/authMiddleware');
-const { json } = require('body-parser');
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: 'images/',
+  filename: (req, file, cb) => {
+    const fileType = file.mimetype.split('/')[1];
+    cb(null, `${req.params.id}.${fileType}`);
+  },
+});
+
+const upload = multer({ storage });
 
 router.post('/', middlewares.tokenValidation, async (req, res) => {
   const { name, ingredients, preparation } = req.body;
@@ -114,8 +124,31 @@ router.put('/:id', middlewares.tokenValidation, async (req, res) => {
   return res.status(200).json({
     updatedRecipe,
   });
-
-  // const isValidUser = await recipeService.validateRecipeUser(req.user);
 });
+
+router.put('/:id/image',
+  middlewares.tokenValidation,
+  upload.single('image'),
+  async (req, res) => {
+    const { id } = req.params;
+    const { _id: authorID, role } = req.user;
+
+    const isAuthorValid = await recipeService.validateUpdate(id, authorID, role);
+
+    if (isAuthorValid.message) {
+      return res.status(isAuthorValid.status).json({
+        message: isAuthorValid.message,
+        code: isAuthorValid.code,
+      });
+    }
+
+    const newUrl = `localhost:3000/images/${req.file.filename}`;
+    const newRecipe = { ...isAuthorValid, urlImg: newUrl };
+    const updatedRecipe = await recipeService.updateRecipeById(id, newRecipe);
+
+    return res.status(200).json({
+      updatedRecipe,
+    });
+  });
 
 module.exports = router;
