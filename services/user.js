@@ -31,19 +31,19 @@ const newUser = async ({ name, email: receivedEmail, password, role = 'user' }) 
   const { email, err: newError } = await findByEmail(receivedEmail).catch((err) => ({ err })) || {};
   if (newError) return objectError.internal(newError);
   if (email) return objectError.duplicate('E-mail');
-  return postUser({ name, email: receivedEmail, password, role })
+  return postUser({ name, email: receivedEmail, password, role }).then((results) => ({ ...results }))
     .catch((catchError) => objectError.internal(catchError));
 };
 
 const loginUser = async ({ email, password }) => {
   const result = await findByEmail(email);
-  if (!result) {
+  if (Object.values(result).length === 0) {
     return objectError.unauthorized('E-mail not found.');
   }
   if (result.password !== password) {
     return objectError.unauthorized('The password does not match.');
   }
-  const { password: _password, ...restUser } = result;
+  const { password: _password, name: _name, ...restUser } = result;
   const token = jwt.sign({ data: restUser }, process.env.jwtSecret, jwtConfig);
   return { token };
 };

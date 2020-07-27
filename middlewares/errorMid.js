@@ -5,7 +5,8 @@ const errorReceive = {
   invalid_data: 422,
   unknown: 500,
 };
-const errorMid = (err = { message: 'Unknown error', code: 'unknown' }, _req, res, _next) =>
+
+const errorMid = (err, _req, res, _next) => 
   res.status(errorReceive[err.code])
     .json({
       err,

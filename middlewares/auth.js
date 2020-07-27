@@ -11,6 +11,8 @@ const authMiddleware = async (req, _res, next) => {
   try {
     const decoded = jwt.verify(token, jwtSecret);
     req.user = await findById(decoded.data);
+    req.user.id = req.user._id;
+    if (Object.values(req.user).length === 0) next({ message: 'User not found', code: 'unauthorized' });
     next();
   } catch (error) {
     next({ message: error.message, code: 'unauthorized' });
