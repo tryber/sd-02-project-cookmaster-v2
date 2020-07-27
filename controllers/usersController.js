@@ -7,10 +7,7 @@ const { auth } = require('../middlewares/auth');
 const router = express.Router();
 
 const checkIntegrity = (name, email, password) => {
-  if (typeof name !== 'string' || name.length === 0 || typeof email !== 'string' || email.length === 0 || typeof password !== 'string' || password.length === 0) {
-    return false;
-  }
-  return true;
+  return typeof name === 'string' && name.length !== 0 && typeof email === 'string' && email.length !== 0 && typeof password === 'string' && password.length !== 0;
 };
 
 router.post('/', rescue(async (req, res, _next) => {
