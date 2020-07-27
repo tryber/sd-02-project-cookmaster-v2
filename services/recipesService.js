@@ -21,13 +21,13 @@ const showOneRecipe = async (id) => {
   return showFromModel;
 };
 
-const updateRecipe = async ({ name, ingredients, preparation, userId, id }) => {
+const updateRecipe = async ({ name, ingredients, preparation, _id, id }) => {
   console.log('_id: ', _id);
   const recipeFound = await recipesModel.findRecipeById(id);
   if (!recipeFound) { return 404; }
-  const checkAdmin = await usersModel.findById(userId);
+  const checkAdmin = await usersModel.findById(_id);
   console.log('checkAdmin Id: ', checkAdmin)
-  if (JSON.stringify(recipeFound.authorId) !== JSON.stringify(userId) && checkAdmin.role === 'user') { return 401; }
+  if (JSON.stringify(recipeFound.authorId) !== JSON.stringify(_id) && checkAdmin.role === 'user') { return 401; }
   const updateRecipeModel = await recipesModel.updateRecipe({ name, ingredients, preparation, id });
   return updateRecipeModel;
 };
