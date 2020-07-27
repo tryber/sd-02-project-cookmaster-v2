@@ -35,7 +35,20 @@ const loginUser = async (user) => {
   return token;
 };
 
+const newAdminUser = async (user) => {
+  const { email } = user;
+  const existUser = await usersModel.findByEmail(email);
+  if (existUser) {
+    const err = { error: { message: 'Admin already exists', code: 'Already_exists' } };
+    throw err;
+  }
+  const { password, ...noPass } = user;
+  const adminUser = await usersModel.newUser(noPass, 'admin');
+  return adminUser;
+};
+
 module.exports = {
   newUsers,
   loginUser,
+  newAdminUser,
 };
