@@ -1,7 +1,7 @@
 const usersModel = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = 'mypassword123';
+const JWT_SECRET = 'mypassword123';
 
 const jwtConfig = {
   expiresIn: '300m',
@@ -24,7 +24,7 @@ const loginUser = async ({ email, password }) => {
   const checkEmail = await usersModel.findByEmail(email);
   if (!checkEmail) { return 404; };
   if (checkEmail.password !== password) { return 401; };
-  const { password: userPassword, ...restUser } = result;
+  const { password: userPassword, ...restUser } = checkEmail;
   const token = jwt.sign({ data: restUser }, JWT_SECRET, jwtConfig);
   return token;
 };

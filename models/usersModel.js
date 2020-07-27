@@ -5,9 +5,9 @@ const findUserByName = async (name, id = null) =>
   connection().then((db) => db.collection('users')
     .findOne({ name, _id: { $ne: ObjectId(id) } }));
 
-const findByEmail = async (email, id = null) =>
+const findByEmail = async (email) =>
   connection().then((db) => db.collection('users')
-    .findOne({ email, _id: { $ne: ObjectId(id) } }));
+    .findOne({ email }));
 
 const findById = async (id) =>
   connection().then((db) => db.collection('users')
