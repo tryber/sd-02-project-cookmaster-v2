@@ -46,10 +46,6 @@ const deleteById = async (user, id) => {
 };
 
 const uploadImage = async (id, filename) => {
-  // if (!filename) {
-  //   const err = { error: { message: 'Image not Found', code: 'Not_found' } };
-  //   throw err;
-  // }
   const recipe = await findRecipeById(id);
   const { _id, name, ingredients, preparation, authorId } = recipe;
   const mountedRecipe = {

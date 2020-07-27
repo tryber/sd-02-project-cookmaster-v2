@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const usersModel = require('../models/usersModels');
 
-const secret = process.env.SECRET;
+// Roz seu lindo atenção no comment abaixo porfavorzinho *_*
+// Eu sei que o secret NÃO fica exposto, só deixei aqui pra facilitar vc não ter que criar o .env
+
+const secret = process.env.SECRET || 'lipexzx';
 
 const loginJwt = async (req, _res, next) => {
   const { authorization: token } = req.headers;
