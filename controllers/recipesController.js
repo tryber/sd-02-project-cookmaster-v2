@@ -9,10 +9,7 @@ const uploadImage = require('../middlewares/uploadImage');
 const router = express.Router();
 
 const checkIntegrity = (name, preparation) => {
-  if (typeof name !== 'string' || name.length === 0 || typeof preparation !== 'string' || preparation.length === 0) {
-    return false;
-  }
-  return true;
+  return typeof name === 'string' && name.length !== 0 && typeof preparation === 'string' && preparation.length !== 0;
 };
 
 router.post('/', auth, rescue(async (req, res, _next) => {
