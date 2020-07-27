@@ -26,8 +26,7 @@ const updateRecipeById = async (recipe, user, id) => {
   const existRecipe = await findRecipeById(id);
   const { authorId } = existRecipe;
   if (String(authorId) === String(_id) || role === 'admin') {
-    const mountedRecipe = { ...recipe, url: '', authorId };
-    const updatedRecipe = await recipesModel.updateRecipeById(id, mountedRecipe);
+    const updatedRecipe = await recipesModel.updateRecipeById(id, recipe);
     return updatedRecipe;
   }
   const err = { error: { message: 'You not have permission to update', code: 'Unauthorized' } };
