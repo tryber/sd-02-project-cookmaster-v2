@@ -49,7 +49,13 @@ const uploadImage = async (id, filename) => {
   const recipe = await findRecipeById(id);
   const { _id, name, ingredients, preparation, authorId } = recipe;
   const mountedRecipe = {
-    _id, name, ingredients, preparation, url: `/images/${filename}`, authorId };
+    _id,
+    name,
+    ingredients,
+    preparation,
+    url: `https://localhost:${process.env.PORT || 3000}/images/${filename}`,
+    authorId,
+  };
   const updatedRecipe = await recipesModel.updateRecipeById(id, mountedRecipe);
   return updatedRecipe;
 };

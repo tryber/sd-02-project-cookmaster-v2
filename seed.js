@@ -39,7 +39,7 @@ db.recipes.insertMany([
     name: "Carne de Panela",
     ingredients: "Carne",
     preparation: "Joga a carne na panela e espera a magia acontecer",
-    url: "/images/5f1af646ce13552b19331f0e.jpeg",
+    url: "https://localhost:3000/images/5f1af646ce13552b19331f0e.jpeg",
     authorId: "5f1937f7f0f8ac59ba0c607e",
   },
   {
