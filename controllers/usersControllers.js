@@ -19,7 +19,7 @@ const loginUser = rescue(async (req, res) => {
 
 const newAdminUser = rescue(async (req, res) => {
   const { ...user } = req.body;
-  await validJoi.validateJoi(schemaLogin, user);
+  await validJoi.validateJoi(schemaNewUser, user);
   const adminUser = await usersService.newAdminUser(user);
   return res.status(201).json(adminUser);
 });

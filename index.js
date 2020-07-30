@@ -16,6 +16,7 @@ app.post('/users', indexControllers.usersControllers.getNewUsers);
 app.post('/users/admin',
   middlewares.validateJwt.loginAdmin,
   indexControllers.usersControllers.newAdminUser);
+
 app.post('/login', indexControllers.usersControllers.loginUser);
 
 app.post('/recipes', middlewares.validateJwt.loginJwt, indexControllers.recipesControllers.newRecipe);

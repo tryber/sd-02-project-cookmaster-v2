@@ -42,8 +42,7 @@ const newAdminUser = async (user) => {
     const err = { error: { message: 'Admin already exists', code: 'Already_exists' } };
     throw err;
   }
-  const { password, ...noPass } = user;
-  const adminUser = await usersModel.newUser(noPass, 'admin');
+  const adminUser = await usersModel.newUser(user, 'admin');
   return adminUser;
 };
 
