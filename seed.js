@@ -1,4 +1,4 @@
-use cook_master_v2;
+use cook_master;
 db.users.insertOne(
   {
     "email":"root@email.com",

@@ -2,9 +2,8 @@ const rescue = require('express-rescue');
 
 const Recipe = require('../models/Recipe');
 
-const chechAuth = (recipe, user) => {
-  return !(recipe.userId.equals(user.id) || user.role === 'admin')
-};
+const chechAuth = (recipe, user) =>
+  !(recipe.userId.equals(user.id) || user.role === 'admin');
 
 const getAll = rescue(async (_req, res) => {
   const receitas = await Recipe.getAll();
@@ -38,12 +37,12 @@ const add = rescue(async (req, res) => {
 
 const edit = rescue(async (req, res) => {
   const recipeId = req.params.id;
+
   const { name, ingredients, preparation } = req.body;
-  
   if (!name || !ingredients || !preparation) {
     return res.status(401).send('Nome, ingredientes e modo de preparação devem ser passados');
   }
-  
+
   const recipe = await Recipe.getById(recipeId);
   if (!recipe) {
     return res.status(404).send('Receita não encontrada');
