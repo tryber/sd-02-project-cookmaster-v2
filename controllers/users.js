@@ -11,6 +11,7 @@ const jwtConfig = {
 
 const login = rescue(async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) { return res.status(401).json(false); }
 
   const user = await User.getByEmail(email);

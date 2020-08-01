@@ -14,13 +14,11 @@ const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: (req, file, setFileName) => {
     const mimetype = file.mimetype.replace(/image\//, '');
-    console.log(mimetype)
     return setFileName(null, `${req.params.id}.${mimetype}`);
   },
 });
 
 const upload = multer({ storage });
-
 
 app.post('/login', controllers.users.login);
 
@@ -36,8 +34,7 @@ app.delete('/recipes/:id', middlewares.auth, controllers.recipes.del);
 app.post('/recipes/:id/image', middlewares.auth, upload.single('image'), controllers.recipes.addImage);
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
-app.listen(5000, () => console.log('Listening on 5000'));
-
+app.listen(process.env.PORT, () => console.log(`Listening on ${process.env.PORT}`));
 
 // {
 //   "name": "Jeijoado",

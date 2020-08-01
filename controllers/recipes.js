@@ -2,6 +2,10 @@ const rescue = require('express-rescue');
 
 const Recipe = require('../models/Recipe');
 
+const chechAuth = (recipe, user) => {
+  return !(recipe.userId.equals(user.id) || user.role === 'admin')
+};
+
 const getAll = rescue(async (_req, res) => {
   const receitas = await Recipe.getAll();
   return res.status(200).json(receitas);
@@ -34,7 +38,6 @@ const add = rescue(async (req, res) => {
 
 const edit = rescue(async (req, res) => {
   const recipeId = req.params.id;
-  const { id } = req.user;
   const { name, ingredients, preparation } = req.body;
   
   if (!name || !ingredients || !preparation) {
@@ -45,13 +48,8 @@ const edit = rescue(async (req, res) => {
   if (!recipe) {
     return res.status(404).send('Receita não encontrada');
   }
-  const { userId } = recipe;
 
-  console.log(typeof id);
-  console.log(typeof userId)
-  console.log(recipe.userId !== req.user.id)
-
-  if (!(toString(recipe.userId) === toString(req.user.id) || req.user.role === 'admin')) {
+  if (chechAuth(recipe, req.user)) {
     return res.status(403).send('Você não tem autorização');
   }
 
@@ -69,7 +67,7 @@ const del = rescue(async (req, res) => {
     return res.status(404).send('Receita não encontrada');
   }
 
-  if (!(toString(recipe.userId) === toString(req.user.id) || req.user.role === 'admin')) {
+  if (chechAuth(recipe, req.user)) {
     return res.status(403).send('Você não tem autorização');
   }
 
@@ -84,16 +82,16 @@ const addImage = rescue(async (req, res) => {
   const recipe = await Recipe.getById(id);
   if (!recipe) { return res.status(404).send('Receita não encontrada'); }
 
-  if (!(toString(recipe.userId) === toString(req.user.id) || req.user.role === 'admin')) {
+  if (chechAuth(recipe, req.user)) {
     return res.status(403).send('Você não tem autorização');
   }
 
   const { name, ingredients, preparation, userId } = recipe;
+  const fullPath = `http://localhost:${process.env.PORT}/images/${req.file.filename}`;
+  const newRecipe = new Recipe(name, ingredients, preparation, userId, fullPath);
+  newRecipe.updateById(id);
 
-  const newRecipe = new Recipe(name, ingredients, preparation, userId, req.file.filename);
-  const response = newRecipe.updateById(id);
-
-  res.status(200).json(response);
+  res.status(200).json(req.file);
 });
 
 module.exports = {
