@@ -53,9 +53,9 @@ const edit = rescue(async (req, res) => {
   }
 
   const newRecipe = new Recipe(name, ingredients, preparation, recipe.userId);
-  const response = await newRecipe.updateById(recipeId);
+  await newRecipe.updateById(recipeId);
 
-  res.status(200).json(response);
+  res.status(200).json({ mensagem: 'Atualizado com sucesso' });
 });
 
 const del = rescue(async (req, res) => {
@@ -70,9 +70,9 @@ const del = rescue(async (req, res) => {
     return res.status(403).send('Você não tem autorização');
   }
 
-  const response = await Recipe.deleteById(id);
+  await Recipe.deleteById(id);
 
-  res.status(200).json(response);
+  res.status(200).json({ mensagem: 'deletado com sucesso' });
 });
 
 const addImage = rescue(async (req, res) => {
