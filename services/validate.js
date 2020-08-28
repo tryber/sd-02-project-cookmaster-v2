@@ -6,7 +6,7 @@ const isUserValid = Joi.object({
     .alphanum()
     .min(3)
     .required(),
-  // email references = https://joi.dev/api/?v=17.2.1#example
+  // email references https://joi.dev/api/?v=17.2.1#example
   email: Joi
     .string()
     .email({
@@ -34,3 +34,8 @@ const isRecipeValid = Joi.object({
     .string()
     .required(),
 });
+
+module.exports = {
+  isUserValid,
+  isRecipeValid,
+};
