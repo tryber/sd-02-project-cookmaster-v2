@@ -16,6 +16,7 @@ const isUserValid = Joi.object({
       },
     })
     .required(),
+
   password: Joi
     .string()
     .alphanum()
@@ -27,9 +28,11 @@ const isRecipeValid = Joi.object({
   name: Joi
     .string()
     .required(),
+  
   ingredients: Joi
     .string()
     .required(),
+
   preparation: Joi
     .string()
     .required(),
