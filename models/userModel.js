@@ -1,4 +1,4 @@
-const dbCookmaster = require('./index');
+const dbCookmaster = require('./dbConnection');
 
 const insert = (coll, data) =>
   dbCookmaster(coll)
