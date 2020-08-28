@@ -21,7 +21,7 @@ const isUserValid = Joi.object({
     .string()
     .alphanum()
     .min(6)
-    .required()
+    .required(),
 });
 
 const isRecipeValid = Joi.object({
