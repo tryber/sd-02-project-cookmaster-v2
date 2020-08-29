@@ -1,5 +1,6 @@
-const { isUserValid } = require('./createValidUser');
+const { isUserValid, isLoginValid } = require('./createValidUser');
 
 module.exports = {
   isUserValid,
+  isLoginValid,
 }

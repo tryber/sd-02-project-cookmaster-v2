@@ -24,11 +24,29 @@ const isUserValid = Joi.object({
     .required(),
 });
 
+const isLoginValid = Joi.object({
+  email: Joi
+    .string()
+    .email({
+      minDomainSegments: 2,
+      tlds: {
+        allow: ['com', 'net'],
+      },
+    })
+    .required(),
+
+  password: Joi
+    .string()
+    .alphanum()
+    .min(6)
+    .required(),
+});
+
 const isRecipeValid = Joi.object({
   name: Joi
     .string()
     .required(),
-  
+
   ingredients: Joi
     .string()
     .required(),
@@ -41,4 +59,5 @@ const isRecipeValid = Joi.object({
 module.exports = {
   isUserValid,
   isRecipeValid,
+  isLoginValid,
 };

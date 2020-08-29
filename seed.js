@@ -55,3 +55,6 @@ db.recipes.insertMany([
     "preparation": "Ferver a agua com açú, passe a agua no pó e é isso ai.", "user_id": 2
   },
 ]);
+
+
+db.users.createIndex({ email: 1 }, { unique: true });
