@@ -4,7 +4,7 @@ const insert = (coll, data) =>
   dbCookmaster(coll)
     .then((collection) =>
       collection.insertOne(data))
-      .catch((err) => err);
+    .catch((err) => err);
 
 const getLastData = (coll) =>
   dbCookmaster(coll)
@@ -15,7 +15,15 @@ const getLastData = (coll) =>
         .limit(1)
         .toArray());
 
+const getBy = (coll, key, value) =>
+  dbCookmaster(coll)
+    .then((collection) =>
+      collection
+        .find({ [key]: value })
+        .toArray());
+
 module.exports = {
-  insert,
   getLastData,
+  insert,
+  getBy,
 };
