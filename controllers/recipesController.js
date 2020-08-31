@@ -1,8 +1,6 @@
 const rescue = require('express-rescue');
-const recipesModel = require('../models/recipesModel');
 const recipesCRUDModel = require('../models/admin/recipesCRUDModel');
-const recipeSearchModels = require('../models/admin/recipeSearchModel');
-const { recipesValidation } = require('../services/validation');
+const { recipesValidation, recipeIdValidation } = require('../services/inputValidation');
 const { MongoError } = require('../services/errorObjects');
 
 
@@ -26,14 +24,27 @@ const { MongoError } = require('../services/errorObjects');
 
 // const newRecipesPage = async (_req, res) => res.render('admin/newRecipe', { message: '', redirect: false });
 
-const createNewRecipe = rescue(async (req, res, next) => {
+const createRecipe = rescue(async (req, res, next) => {
   await recipesValidation.validateAsync(req.body)
     .then(async () => {
       const { id: authorId } = req.user;
-      console.log(authorId)
       const { body: recipeData } = req;
-      const { message, recipe } = await recipesCRUDModel.addNewRecipe(recipeData, authorId);
+      const { message, recipe } = await recipesCRUDModel.create(recipeData, authorId);
       res.status(201).send({ message, recipe })
+      next();
+    })
+    .catch((err) => {
+      throw new MongoError(err.message, err.status);
+    })
+});
+
+const listRecipes = rescue(async (req, res, next) => {
+  const recipeID = { id: String(req.url.match(/[^\/].*[^\/]$/gm))};
+  console.log(recipeID)
+  await recipeIdValidation.validateAsync(recipeID)
+    .then(async () => {
+      const { message, recipes } = await recipesCRUDModel.read(recipeID.id);
+      res.status(201).send({ message, recipes })
       next();
     })
     .catch((err) => {
@@ -106,7 +117,8 @@ module.exports = {
   // recipesLandingPage,
   // recipeDetails,
   // newRecipesPage,
-  createNewRecipe,
+  createRecipe,
+  listRecipes,
   // modifyRecipePage,
   // modifyRecipe,
   // deleteRecipePage,

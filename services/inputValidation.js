@@ -38,8 +38,13 @@ const recipesValidation = Joi.object({
   .required(),
 })
 
+const recipeIdValidation = Joi.object({
+  id: Joi.string(),
+})
+
 module.exports = {
   userValidation,
   loginValidation,
-  recipesValidation
+  recipesValidation,
+  recipeIdValidation,
 };

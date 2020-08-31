@@ -8,6 +8,11 @@ function UserAlreadyExists() {
   this.status = 400;
 }
 
+function RecipesNotFound() {
+  this.message = `Nenhuma receita foi encontrada.`
+  this.status = 404
+}
+
 function TokenNotFound() {
   this.message = `Token não encontrado ou informado`;
   this.status = 400;
@@ -47,5 +52,6 @@ module.exports = {
   TokenNotFound,
   UserWithTokenIdNotFound,
   InvalidToken,
+  RecipesNotFound,
   FailedToSaveRecipe
 };

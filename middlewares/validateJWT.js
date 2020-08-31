@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
-const { TokenNotFound, UserWithTokenIdNotFound, InvalidToken } = require('../services/errorObjects');
+const { TokenNotFound, UserWithTokenIdNotFound } = require('../services/errorObjects');
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -10,8 +10,6 @@ const validateJWT = async (req, res, next) => {
   if (!token) throw new TokenNotFound;
 
   const decoded = jwt.verify(token, secretKey);
-
-  console.log(decoded)
 
   const user = await userModel.findById(decoded.data.id);
 

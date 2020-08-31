@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const { UserNotFound, MongoError } = require('../services/errorObjects')
 const userModel = require('../models/userModel');
-const { loginValidation } = require('../services/validation');
+const { loginValidation } = require('../services/inputValidation');
 const jwt = require('jsonwebtoken');
 
 const login = rescue(async (req, res) => {

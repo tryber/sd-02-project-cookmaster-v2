@@ -1,14 +1,15 @@
 const express = require('express');
 const rescue = require('express-rescue');
-const controllers = require('../controllers');
+const { recipesController } = require('../controllers');
 const { validateJWT } = require('../middlewares/validateJWT');
 
 const router = express.Router();
 
+router.get('/', recipesController.listRecipes);
+
+router.get(/\/.*[^\/]$/gm, recipesController.listRecipes);
+
 router.use(rescue(validateJWT));
-
-// router.get(/\/[0-9]+$/, middlewares.auth(false), (req, res) => controllers.recipesController.recipeDetails(req, res));
-
 
 // router.get('/:id/edit', (req, res) => controllers.recipesController.modifyRecipePage(req, res));
 
@@ -22,8 +23,7 @@ router.use(rescue(validateJWT));
 
 // router.get('/new', (_req, res) => controllers.recipesController.newRecipesPage(_req, res));
 
-// router.get('/', (_req, res) => res.redirect('/recipes/new'));
 
-router.post('/', controllers.recipesController.createNewRecipe);
+router.post('/', recipesController.createRecipe);
 
 module.exports = router;

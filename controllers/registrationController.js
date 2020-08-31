@@ -3,7 +3,7 @@ const registrationModel = require('../models/registrationModel');
 const editUserModel = require('../models/admin/editUserModel');
 const userModel = require('../models/userModel');
 const { MongoError } = require('../services/errorObjects');
-const { userValidation } = require('../services/validation');
+const { userValidation } = require('../services/inputValidation');
 
 const displayRegistration = async (_req, res) => res.render('register', { message: '', redirect: false });
 
