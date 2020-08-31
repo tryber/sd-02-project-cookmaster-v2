@@ -6,6 +6,7 @@ const { UserAlreadyExists, FailedToSave } = require('../services/errorObjects');
 const registerNewUser = async (userData = null) => {
   const saltRounds = process.env.SALT_ROUNDS;
   const { email, name, password } = userData;
+
   const doesUserExists = await userModel.findByEmail(email);
   if (doesUserExists) throw new UserAlreadyExists;
 

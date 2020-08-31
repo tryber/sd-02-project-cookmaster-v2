@@ -4,10 +4,10 @@ const express = require('express');
 const rescue = require('express-rescue');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const middlewares = require('./middlewares');
+const { validateJWT } = require('./middlewares');
 const { userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
-const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe, FileNotAttached, ImageNotUploaded } = require('./services/errorObjects');
+const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe, FileNotAttached, ImageNotUploaded, AdminRightsRequired } = require('./services/errorObjects');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -23,6 +23,8 @@ app.use('/recipes', recipesRouter);
 app.post('/login', userController.login);
 
 app.post('/users', registrationController.registerUser);
+
+app.post('/users/admin', rescue(validateJWT), registrationController.registerAdmin);
 
 app.use(rescue.from(UserNotFound, (err, req, res, next) => {
   const { message, status } = err;
@@ -67,6 +69,12 @@ app.use(rescue.from(ImageNotUploaded, (err, req, res, next) => {
 }));
 
 app.use(rescue.from(UserWithTokenIdNotFound, (err, req, res, next) => {
+  const { message, status } = err;
+  res.status(status).send({ error: { message, code: status } });
+  next();
+}));
+
+app.use(rescue.from(AdminRightsRequired, (err, req, res, next) => {
   const { message, status } = err;
   res.status(status).send({ error: { message, code: status } });
   next();

@@ -1,6 +1,6 @@
 function UserNotFound(message = '') {
   this.message = `Usuário não foi encontrado.`;
-  this.status = 401;
+  this.status = 404;
 }
 
 function UserAlreadyExists() {
@@ -10,7 +10,12 @@ function UserAlreadyExists() {
 
 function UserDoesntOwnRecipe() {
   this.message = `O usuário não é dono da receita`;
-  this.status = 401;
+  this.status = 403;
+}
+
+function AdminRightsRequired() {
+  this.message = `Necessário credenciais de administrador`;
+  this.status = 403;
 }
 
 function RecipesNotFound() {
@@ -20,7 +25,7 @@ function RecipesNotFound() {
 
 function TokenNotFound() {
   this.message = `Token não encontrado ou informado`;
-  this.status = 400;
+  this.status = 404;
 }
 
 function UserWithTokenIdNotFound() {
@@ -61,7 +66,7 @@ function FailedToDeleteRecipe() {
 function MongoError(message, status) {
   this.name = 'MongoError';
   this.message = message || 'Mensagem de erro padrão';
-  this.status = status || 400;
+  this.status = status || 500;
 }
 
 module.exports = {
@@ -78,4 +83,5 @@ module.exports = {
   FailedToDeleteRecipe,
   FileNotAttached,
   ImageNotUploaded,
+  AdminRightsRequired,
 };
