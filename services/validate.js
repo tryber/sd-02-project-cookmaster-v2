@@ -45,14 +45,17 @@ const isLoginValid = Joi.object({
 const isRecipeValid = Joi.object({
   name: Joi
     .string()
+    .min(3)
     .required(),
 
   ingredients: Joi
     .string()
+    .min(3)
     .required(),
 
   preparation: Joi
     .string()
+    .min(10)
     .required(),
 });
 

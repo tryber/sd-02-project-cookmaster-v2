@@ -1,6 +1,11 @@
 const { isUserValid, isLoginValid } = require('./createValidUser');
+const { authUser, existsUser } = require('./authUser');
+const { isRecipeValid } = require('./isRecipeValid');
 
 module.exports = {
-  isUserValid,
+  isRecipeValid,
   isLoginValid,
+  isUserValid,
+  existsUser,
+  authUser,
 }
