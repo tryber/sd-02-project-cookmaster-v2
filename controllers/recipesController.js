@@ -37,10 +37,21 @@ recipesRouter.get('/', async (_req, res) => {
   const allRecipes = await models.getAllRecipes();
 
   if (!allRecipes.length) {
-    return res.status(200).json({ message: 'No recipes in database', status: 'Success' });
+    return res.status(404).json({ message: 'No recipes in database', code: 'not_found' });
   }
 
   return res.status(200).json({ status: 'success', recipes: [...allRecipes] });
+});
+
+recipesRouter.get('/:id', async (req, res) => {
+  const recipe = await models.getById('recipes', Number(req.params.id));
+  console.log(recipe);
+  if (!recipe.length) {
+    return res.status(404).json({ message: 'Id recipe not found in database', code: 'not_found' });
+  }
+
+  return res.status(200).json({ status: 'success', recipe: recipe[0] })
+
 });
 
 module.exports = recipesRouter;
