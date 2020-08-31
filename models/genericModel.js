@@ -3,8 +3,8 @@ const dbCookmaster = require('./dbConnection');
 const insert = (coll, data) =>
   dbCookmaster(coll)
     .then((collection) =>
-      collection.insertOne(data))
-    .catch((err) => err);
+      collection
+        .insertOne(data));
 
 const getLastData = (coll) =>
   dbCookmaster(coll)
@@ -37,10 +37,17 @@ const getAllRecipes = () =>
         .find()
         .toArray());
 
+const update = (coll, act, data) =>
+  dbCookmaster(coll)
+    .then((collection) =>
+      collection
+        .updateOne(act, { $set: { ...data } }));
+
 module.exports = {
   getAllRecipes,
   getLastData,
   getById,
+  update,
   insert,
   getBy,
 };

@@ -33,25 +33,47 @@ recipesRouter
       })
     });
 
-recipesRouter.get('/', async (_req, res) => {
-  const allRecipes = await models.getAllRecipes();
+recipesRouter
+  .get('/', async (_req, res) => {
+    const allRecipes = await models.getAllRecipes();
 
-  if (!allRecipes.length) {
-    return res.status(404).json({ message: 'No recipes in database', code: 'not_found' });
-  }
+    if (!allRecipes.length) {
+      return res.status(404).json({ message: 'No recipes in database', code: 'not_found' });
+    }
 
-  return res.status(200).json({ status: 'success', recipes: [...allRecipes] });
-});
+    return res.status(200).json({ status: 'success', recipes: [...allRecipes] });
+  });
 
-recipesRouter.get('/:id', async (req, res) => {
-  const recipe = await models.getById('recipes', Number(req.params.id));
-  console.log(recipe);
-  if (!recipe.length) {
-    return res.status(404).json({ message: 'Id recipe not found in database', code: 'not_found' });
-  }
+recipesRouter
+  .get('/:id', async (req, res) => {
+    const recipe = await models.getById('recipes', Number(req.params.id));
+    if (!recipe.length) {
+      return res.status(404).json({ message: 'Id recipe not found in database', code: 'not_found' });
+    }
 
-  return res.status(200).json({ status: 'success', recipe: recipe[0] })
+    return res.status(200).json({ status: 'success', recipe: recipe[0] })
+  });
 
-});
+recipesRouter
+  .put(
+    '/:id',
+    middlewares.authUser,
+    middlewares.existsUser,
+    middlewares.isRecipeValid,
+    async (req, res) => {
+      const { id } = req.params;
+      const existsRecipe = await models.getById('recipes', Number(id));
+
+      if (!existsRecipe.length) {
+        return res.status(404).json({ message: 'Id recipe not found in database', code: 'not found' });
+      }
+      const { name, ingredients, preparation } = req.body;
+
+      await models.update('recipes', { _id: Number(id) }, { name, ingredients, preparation });
+
+      const changedRecipe = await models.getById('recipes', Number(id));
+
+      return res.status(200).json({ message: 'success', editRecipe: changedRecipe[0] });
+    })
 
 module.exports = recipesRouter;
