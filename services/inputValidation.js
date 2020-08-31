@@ -10,7 +10,7 @@ const userValidation = Joi.object({
     .required(),
 
   password: Joi.string()
-    .min(8)
+    .min(5)
     .required()
 });
 
@@ -20,7 +20,7 @@ const loginValidation = Joi.object({
   .required(),
 
   password: Joi.string()
-  .min(8)
+  .min(5)
   .required()
 })
 

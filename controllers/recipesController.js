@@ -1,5 +1,6 @@
 const rescue = require('express-rescue');
 const recipesCRUDModel = require('../models/admin/recipesCRUDModel');
+const userModel = require('../models/userModel');
 const { recipesValidation, recipeIdValidation } = require('../services/inputValidation');
 const { MongoError, UserDoesntOwnRecipe, FileNotAttached } = require('../services/errorObjects');
 
@@ -8,8 +9,12 @@ const getRecipeId = (req) => {
 }
 
 const checkRecipeAuthority = async (recipeId, userId) => {
-  const { recipes: { authorId } } = await recipesCRUDModel.read(recipeId.id);
-  if (String(userId) !== String(authorId)) throw new UserDoesntOwnRecipe;
+  const { role } = await userModel.findById(userId);
+  if(role !== 'admin') {
+    const { recipes: { authorId } } = await recipesCRUDModel.read(recipeId.id);
+    if (String(userId) !== String(authorId)) throw new UserDoesntOwnRecipe;
+  }
+  return true;
 }
 
 const createRecipe = rescue(async (req, res, next) => {
