@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const recipesCRUDModel = require('../models/admin/recipesCRUDModel');
 const { recipesValidation, recipeIdValidation } = require('../services/inputValidation');
-const { MongoError, UserDoesntOwnRecipe } = require('../services/errorObjects');
+const { MongoError, UserDoesntOwnRecipe, FileNotAttached } = require('../services/errorObjects');
 
 const getRecipeId = (req) => {
   return { id: String(req.url.match(/[^\/].*[^\/]$/gm))};
@@ -69,8 +69,17 @@ const deleteRecipe = rescue(async (req, res) => {
 });
 
 const addRecipeImage = rescue(async(req, res, next) => {
-  console.log(req.file)
-  return res.send()
+  const recipeId = { id: req.params.id };
+  if (!req.file) throw new FileNotAttached;
+  const { id: userId } = req.user;
+  await checkRecipeAuthority(recipeId, userId);
+  const imagepath = `http://localhost:3000/images/${req.file.filename}`;
+  const { message } = await recipesCRUDModel.addRecipeImage(recipeId.id, imagepath)
+  .catch((err) => {
+    throw new MongoError(err.message, err.status);
+  })
+
+  return res.status(200).send({ message });
 });
 
 

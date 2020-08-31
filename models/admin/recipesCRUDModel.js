@@ -1,6 +1,6 @@
 const connection = require('../connection');
 const { ObjectId } = require('mongodb');
-const { FailedToSaveRecipe, RecipesNotFound, FailedToDeleteRecipe } = require('../../services/errorObjects')
+const { FailedToSaveRecipe, RecipesNotFound, FailedToDeleteRecipe, ImageNotUploaded } = require('../../services/errorObjects')
 
 const formatIngredients = (ingredientsArray) => {
   const formattedArray = ingredientsArray.split(',');
@@ -63,9 +63,21 @@ const deleteRecipe = async (recipeId) => {
   return { message: 'Receita deletada com sucesso' };
 };
 
+const addRecipeImage = async (recipeId, imagepath) => {
+  const updatedRecipes = await connection().then((db) =>
+    db.collection('recipes').updateOne({ _id: ObjectId(recipeId) },
+    {
+      $set: { imageUrl: imagepath }
+    }));
+
+  if(updatedRecipes.result.ok !== 1) throw new ImageNotUploaded;
+  return { message: 'Imagem adicionada com sucesso.' };
+}
+
 module.exports = {
   create,
   read,
   update,
-  deleteRecipe
+  deleteRecipe,
+  addRecipeImage
 };

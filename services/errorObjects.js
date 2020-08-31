@@ -33,6 +33,16 @@ function InvalidToken() {
   this.status = 400;
 }
 
+function FileNotAttached() {
+  this.message = `Arquivo não encontrado nos parâmetros da requisição`;
+  this.status = 400;
+}
+
+function ImageNotUploaded() {
+  this.message = `Falha ao adicionar imagem.`;
+  this.status = 500;
+}
+
 function FailedToSave() {
   this.message = `Erro ao salvar o usuário no banco.`;
   this.status = 500;
@@ -65,5 +75,7 @@ module.exports = {
   RecipesNotFound,
   FailedToSaveRecipe,
   UserDoesntOwnRecipe,
-  FailedToDeleteRecipe
+  FailedToDeleteRecipe,
+  FileNotAttached,
+  ImageNotUploaded,
 };

@@ -7,7 +7,7 @@ const path = require('path');
 const middlewares = require('./middlewares');
 const { userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
-const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe } = require('./services/errorObjects');
+const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe, FileNotAttached, ImageNotUploaded } = require('./services/errorObjects');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.set('views', './views');
 
 app.use(express.json());
 app.use(cookieParser());
-console.log(__dirname)
+
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/recipes', recipesRouter);
@@ -50,6 +50,18 @@ app.use(rescue.from(TokenNotFound, (err, req, res, next) => {
 }));
 
 app.use(rescue.from(UserDoesntOwnRecipe, (err, req, res, next) => {
+  const { message, status } = err;
+  res.status(status).send({ error: { message, code: status } });
+  next();
+}));
+
+app.use(rescue.from(FileNotAttached, (err, req, res, next) => {
+  const { message, status } = err;
+  res.status(status).send({ error: { message, code: status } });
+  next();
+}));
+
+app.use(rescue.from(ImageNotUploaded, (err, req, res, next) => {
   const { message, status } = err;
   res.status(status).send({ error: { message, code: status } });
   next();
