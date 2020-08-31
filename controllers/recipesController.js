@@ -74,6 +74,34 @@ recipesRouter
       const changedRecipe = await models.getById('recipes', Number(id));
 
       return res.status(200).json({ message: 'success', editRecipe: changedRecipe[0] });
-    })
+    });
+
+recipesRouter
+  .delete(
+    '/:id',
+    middlewares.authUser,
+    middlewares.existsUser,
+    async (req, res) => {
+      const { id } = req.params;
+      const recipeToDelete = await models.getById('recipes', Number(id));
+      console.log(recipeToDelete);
+
+      if (!recipeToDelete.length) {
+        return res.status(404).json({ message: 'Id recipe not found in database', code: 'not found' });
+      }
+
+      const { userId, _id: recipeId } = recipeToDelete[0];
+      const { _id, role } = JWT.decode(req.headers.authorization);
+
+      if (role === 'admin' || userId === _id) {
+        await models.deleteOne('recipes', recipeId);
+        return res.status(200).json({ message: 'recipe deleted', status: 'success' });
+      }
+
+      return res.status(403).json({
+        message: 'You do not have rights to delete another users data.',
+        code: 'unauthorized',
+      });
+    });
 
 module.exports = recipesRouter;

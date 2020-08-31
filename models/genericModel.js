@@ -43,9 +43,15 @@ const update = (coll, act, data) =>
       collection
         .updateOne(act, { $set: { ...data } }));
 
+const deleteOne = (coll, _id) =>
+  dbCookmaster(coll)
+    .then((collection) =>
+      collection.deleteOne({ _id }));
+
 module.exports = {
   getAllRecipes,
   getLastData,
+  deleteOne,
   getById,
   update,
   insert,
