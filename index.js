@@ -21,38 +21,37 @@ app.get('/', recipesController.recipesLandingPage);
 
 app.get('/admin', middlewares.auth(), (req, res) => res.render('admin/home', { user: req.user }));
 
-app.get('/logout', userController.logout);
+// app.get('/logout', userController.logout);
 app.post('/login', userController.login);
 
-app.post('/users', (req, res, next) => registrationController.registerUser(req, res, next));
+app.post('/users', registrationController.registerUser);
 
 app.get('/me/recipes', middlewares.auth(), recipesController.fetchMyRecipesPage);
 app.get('/me/edit', middlewares.auth(), registrationController.editUserPage);
 app.post('/me', middlewares.auth(), registrationController.editUser);
 
-app.use(rescue.from(UserNotFound, (err, req, res, _next) => {
+app.use(rescue.from(UserNotFound, (err, req, res, next) => {
   const { message, status } = err;
-  res.status(status)
-    .send({ error: { message, code: status } });
+  res.status(status).send({ error: { message, code: status } });
+  next();
 }));
 
-app.use(rescue.from(UserAlreadyExists, (err, req, res, _next) => {
+app.use(rescue.from(UserAlreadyExists, (err, req, res, next) => {
   const { message, status } = err;
-  res.status(status)
-    .send({ error: { message, code: status } });
+  res.status(status).send({ error: { message, code: status } });
+  next();
 }));
 
 
-app.use(rescue.from(MongoError, (err, req, res, _next) => {
+app.use(rescue.from(MongoError, (err, req, res, next) => {
   const { message, status } = err;
-  res.status(status)
-    .send({ error: { message, code: status } });
+  res.status(status).send({ error: { message, code: status } });
+  next();
 }));
 
 app.use((err, req, res, _next) => {
   const { message } = err;
-  res.status(500)
-    .send({ error: { message, code: 500 } });
+  res.status(500).send({ error: { message, code: 500 } });
 });
 
 app.listen(3000, () => console.log(`Listening on ${process.env.PORT}`));

@@ -7,10 +7,11 @@ const { userValidation } = require('../services/validation');
 
 const displayRegistration = async (_req, res) => res.render('register', { message: '', redirect: false });
 
-const registerUser = rescue(async (req, res) => userValidation.validateAsync(req.body)
+const registerUser = rescue(async (req, res, next) => userValidation.validateAsync(req.body)
   .then(async () => {
     const { user, message } = await registrationModel.registerNewUser(req.body);
-    return res.status(201).send({ user, message });
+    res.status(201).send({ user, message });
+    next();
   })
   .catch((err) => {
     throw new MongoError(err.message, err.status);

@@ -14,7 +14,18 @@ const userValidation = Joi.object({
     .required()
 });
 
+const loginValidation = Joi.object({
+  email: Joi.string()
+  .email({ minDomainSegments: 2 })
+  .required(),
+
+  password: Joi.string()
+  .min(8)
+  .required()
+})
+
 
 module.exports = {
   userValidation,
+  loginValidation
 };
