@@ -22,7 +22,14 @@ const getBy = (coll, key, value) =>
         .find({ [key]: value })
         .toArray());
 
+const getAllRecipes = () =>
+  dbCookmaster('recipes')
+    .then((collection) =>
+      collection.find()
+        .toArray());
+
 module.exports = {
+  getAllRecipes,
   getLastData,
   insert,
   getBy,

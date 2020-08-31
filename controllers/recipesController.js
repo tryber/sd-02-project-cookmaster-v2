@@ -33,5 +33,14 @@ recipesRouter
       })
     });
 
+recipesRouter.get('/', async (_req, res) => {
+  const allRecipes = await models.getAllRecipes();
+
+  if (!allRecipes.length) {
+    return res.status(200).json({ message: 'No recipes in database', status: 'Success' });
+  }
+
+  return res.status(200).json({ status: 'success', recipes: [...allRecipes] });
+});
 
 module.exports = recipesRouter;
