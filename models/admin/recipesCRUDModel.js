@@ -1,6 +1,6 @@
 const connection = require('../connection');
 const { ObjectId } = require('mongodb');
-const { FailedToSaveRecipe, RecipesNotFound } = require('../../services/errorObjects')
+const { FailedToSaveRecipe, RecipesNotFound, FailedToDeleteRecipe } = require('../../services/errorObjects')
 
 const formatIngredients = (ingredientsArray) => {
   const formattedArray = ingredientsArray.split(',');
@@ -54,35 +54,18 @@ const update = async (recipeData) => {
   return { message: 'Receita atualizada com sucesso' }
 };
 
-// const deleteRecipe = async (recipeId, userId, deletePassword) => {
-//   const userPassword = await connection().then((db) =>
-//     db
-//       .getTable('users').select('password').where('id = :userId').bind('userId', userId)
-//       .execute()
-//       .then((results) => results.fetchAll())
-//       .then(([[password]]) => password));
+const deleteRecipe = async (recipeId) => {
+  const deletedRecipe = await connection()
+    .then((db) => db.collection('recipes').deleteOne({ _id: ObjectId(recipeId)}));
 
-//   if (deletePassword === userPassword) {
-//     await connection().then((db) =>
-//       db
-//         .getTable('recipes_ingredients').delete().where('recipe_id = :recipeId').bind('recipeId', recipeId)
-//         .execute()
-//         .then(() => db
-//           .getTable('users_recipes').delete().where('recipe_id = :recipeId').bind('recipeId', recipeId)
-//           .execute()
-//           .then(() => db
-//             .getTable('recipes').delete().where('id = :recipeId').bind('recipeId', recipeId)
-//             .execute())));
+  if(deletedRecipe.result.ok !== 1) throw new FailedToDeleteRecipe;
 
-//     return { redirect: true };
-//   }
-
-//   return { redirect: false };
-// };
+  return { message: 'Receita deletada com sucesso' };
+};
 
 module.exports = {
   create,
   read,
   update,
-  // deleteRecipe,
+  deleteRecipe
 };

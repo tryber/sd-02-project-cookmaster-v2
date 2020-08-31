@@ -21,6 +21,8 @@ router.use(rescue(validateJWT));
 
 router.put('/:id', recipesController.modifyRecipe);
 
+router.delete('/:id', recipesController.deleteRecipe)
+
 // router.get('/new', (_req, res) => controllers.recipesController.newRecipesPage(_req, res));
 
 

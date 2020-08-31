@@ -39,7 +39,12 @@ function FailedToSave() {
 }
 
 function FailedToSaveRecipe() {
-  this.message = `Erro ao salvar a receita no banco.`;
+  this.message = `Erro ao salvar/atualizar a receita no banco.`;
+  this.status = 500;
+}
+
+function FailedToDeleteRecipe() {
+  this.message = `Erro ao deletar receita do banco.`;
   this.status = 500;
 }
 
@@ -59,5 +64,6 @@ module.exports = {
   InvalidToken,
   RecipesNotFound,
   FailedToSaveRecipe,
-  UserDoesntOwnRecipe
+  UserDoesntOwnRecipe,
+  FailedToDeleteRecipe
 };

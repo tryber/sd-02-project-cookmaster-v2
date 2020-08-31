@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const middlewares = require('./middlewares');
 const { userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
-const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe } = require('./services/errorObjects');
+const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe } = require('./services/errorObjects');
 
 const app = express();
 
@@ -69,6 +69,12 @@ app.use(rescue.from(UserWithTokenIdNotFound, (err, req, res, next) => {
 }));
 
 app.use(rescue.from(InvalidToken, (err, req, res, next) => {
+  const { message, status } = err;
+  res.status(status).send({ error: { message, code: status } });
+  next();
+}));
+
+app.use(rescue.from(FailedToDeleteRecipe, (err, req, res, next) => {
   const { message, status } = err;
   res.status(status).send({ error: { message, code: status } });
   next();
