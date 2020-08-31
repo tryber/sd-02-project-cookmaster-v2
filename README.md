@@ -1,4 +1,4 @@
-# Boas vindas ao projeto Cookmaster V2!
+# Boas vindas ao projeto Cookmaster!
 
 Você já usa o GitHub diariamente para desenvolver os exercícios, certo? Agora, para desenvolver os projetos, você deverá seguir as instruções a seguir. Fique atento a cada passo, e se tiver qualquer dúvida, nos envie por Slack! #vqv 🚀
 
@@ -8,208 +8,164 @@ Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu
 
 ## O que deverá ser desenvolvido
 
-Você vai desenvolver seu app utilizando a arquitetura MSC!
+Você vai desenvolver seu primeiro app utilizando a arquitetura MVC!
 
-Você já construiu o projeto cookmaster, uma aplicação de cadastro de receitas, onde era possível criar e visualizar receitas, seus ingredientes, e sua forma de preparo. Agora você vai implementar novas funcionalidades ao projeto anterior! Caso deseje, pode começar um novo projeto do zero.
-Nesse novo projeto deverá ser possível fazer o cadastramento e login de usuário, onde apenas esse usúario poderá acessar, modificar e deletar as receitas que cadastrou.
+A aplicação a ser construída trata-se de um cadastro de receitas, onde será possível criar e visualizar receitas, seus ingredientes, e sua forma de preparo.
 
 ---
 
 ## Desenvolvimento
 
-Você vai desenvolver todas as camadas da aplicação (Models, Service e Controllers) a partir do seu código no projeto cookmaster.
+Você vai desenvolver todas as camadas da aplicação (Models, Views e Controllers) a partir do código deste repositório, que já possui a lógica necessária para realizar login e logout de usuários, bem como um middleware que você pode utilizar em todas as rotas que precisem de autenticação.
 
 Através dessa aplicação, será possível realizar as operações básicas que se pode fazer em um determinado banco de dados: Criação, Leitura, Atualização e Exclusão (ou `CRUD`, pros mais íntimos 😜).
 
-Para realizar qualquer tipo de alteração no banco de dados (como cadastro, edição ou exclusão de receitas) será necessário autenticar-se. Além disso, os usuários devem poder ser clientes ou administradores. Os clientes apenas poderão disparar ações nas receitas que ele mesmo criou. Já um administrador pode disparar qualquer ação em qualquer receita.
-
-A autenticação deverá ser feita via `JWT`.
+Para realizar qualquer tipo de alteração no banco de dados (como cadastro, edição ou exclusão de receitas) será necessário autenticar-se. Para visualizar receitas, a autenticação não é necessária.
 
 O código para cadastro de usuários deve ser criado por você utilizando os conhecimentos adiquiridos nesse bloco.
 
-Deverá ser possível adicionar uma imagem à uma receita, utilizando o upload de arquivos fornecido pelo `multer`.
-
 ⚠️ **Dicas Importantes** ⚠️:
+- No código deste repositório, utilizamos o middleware `cookie-parser` para realizar a leitura do cookie contendo o token de autenticação. Ele é necessário para que o sistema de login / logout funcione. **Não o remova**!
 
-- Não haverá front-end nesse projeto, portanto não se preocupe com a visualização, mas apenas com as funcionalidades e organização do código.
+- Você não precisa alterar a lógica de gerenciamento de sessões (login / logout de usuários).
 
-- Para permitir que as imagens sejam acessadas através da API, você deve utilizar o middleware `static` do express, da seguinte forma:
+- No `package.json`, você vai encontrar dois scripts que iniciam sua aplicação: `start` e `start:watch`. O primeiro, apenas inicia o servidor normalmente, enquanto o segundo inicia o servidor e o reinicia a cada alteração no código.
 
-  ```js
-  const path = require('path');
-  // ...
-  
-  // /images é o caminho da API onde as imagens estarão disponíveis
-  // path.join(__dirname, 'uploads') é o caminho da pasta onde o multer salva suas imagens ao realizar o upload
-  app.use('/images', express.static(path.join(__dirname, 'uploads')));
-  
-  // ...
-  ```
+- O arquivo `models/userModel.js` está criado, mas não contém código para conexão com o banco. As funções existentes nele servem para _guardar lugar_ para algumas das funções que você deve criar. O papel de cada uma dessas funções está descrito nos comentários acima delas.
+
+- O middleware `authMiddleware`, presente em `middlewares/auth.js` pode ser usado nas rotas que exigem autenticação.
+  - Quando você utiliza o `authMiddleware` em uma rota, ele cria a propriedade `req.user`, que contém as informações do usuário atual, conforme retornadas pelo `userModel`.
+  - O `authMiddleware` está disponível no `index.js` da aplicação através de `middlewares.auth`.
+
+- Você pode modificar o layout das views que já existem. No entando, deve garantir que a funcionalidade continua a mesma.
+
+- Nas aulas ao vivo e no conteúdo, você viu como realizar um `INSERT` no banco. Para realizar um `UPDATE` a lógica é a mesma. O que muda são os métodos a serem utilizados para construir o comando que será enviado ao MySQL.
+
+- Quando o atributo `method` de um formulário é definido para `GET`, o navegador utiliza o atributo `name` de cada campo para montar a query string. Isso quer dizer que, se você quiser um atributo chamado `search` na query string, precisa de um input com `name="search"` no seu formulário.
+
+- Toda vez que uma view precisar saber se existe ou não um usuário logado, você pode, no controller, passar o conteúdo de `req.user` para essa view. Depois, na view, basta verificar se esse campo veio preenchido ou não, utilizando algo como `<% if (user) { %> \<\!-- Utiliza os dados do usuário --\> <% } %>`.
+
+- O middleware `authMiddleware` recebe um único parâmetro chamado `required`. Quando verdadeiro, esse parâmetro faz com que uma rota só possa ser acessada por pessoas logadas. Em alguns casos, uma página precisa ter acesso aos dados do usuário, caso essa pessoa esteja logada, mas deve continuar podendo ser acessada por pessoas que não estejam autenticadas. Para esse caso, passe `false` no parâmetro required para a função `authMiddleware`. Ex.: `middlewares.auth(false)`.
+
+### Protótipo e telas
+
+Você pode acessar um protótipo da aplicação com todas as telas (tanto obrigatórias quanto bônus) [neste link](https://www.figma.com/file/CAEkOBX1n3mpVXr4kjgvY8/Project-Cookmaster?node-id=0%3A1).
+
+Não estamos avaliando o **estilo** da página. Cores, tamanhos de texto e afins não serão avaliados.
 
 ---
 
 ## Requisitos do projeto
 
-### 1 - Todos os seus endpoints devem estar no padrão REST
+### Páginas
 
-- Use os verbos HTTP adequados para cada operação.
+#### Funcionalidades de visualização
 
-- Agrupe e padronize suas URL em cada recurso.
+> Páginas que podem ser acessadas sem login
 
-- Garanta que seus endpoints sempre retornem uma resposta, havendo sucesso nas operações ou não.
+### 1 - Crie uma tela de listagem de receitas
 
-- Retorne os códigos de status corretos (recurso criado, erro de validação, autorização, etc).
+A página deve ser acessível através da rota principal (`/`).
 
-### 2 - Crie um endpoint para o cadastro de usuários
+Para cada receita, deve ser mostrado apenas o nome da receita e o nome da pessoa que cadastrou aquela receita, bem como um link para ver seus detalhes.
 
-- A rota deve ser (`/users`).
+Um botão "Nova receita" deve ser exibido **apenas quando houver um usuário logado**.
 
-- No banco um usuário precisa ter os campos Email, Senha, Nome e Role.
+### 2 - Crie uma tela para visualizar uma receita específica
 
-- Para criar um usuário através da API, todos os campos são obrigatórios, com exceção do Role.
+A tela deve estar diponível no endpoint `/recipes/:id`
 
-- O campo Email deve ser único.
+Caso o ID da pessoa logada na aplicação seja o mesmo ID da pessoa que criou a receita, um botão "Editar receita" e um outro "Excluir receita" devem ser exibidos na página. Esses botões devem levar a pessoa para as páginas e editar e de excluir receita, respectivamente. Caso não haja nenhuma pessoa logada, nenhum desses botões deve ser exibido.
 
-- Usuários criados através desse endpoint devem ter seu campo Role com o atributo _user_, ou seja, devem ser usuários comuns, e não admins.
+Esta página deve exibir o título, os ingredientes, e a forma de preparo da receita.
 
-- O body da requisição deve conter o seguinte formato:
+> Dica: esse é um dos casos no qual você pode utilizar o `authMiddleware` passando `false` para o parâmetro `required`, e passar o conteúdo de `req.user` para a view, o que o permitirá determinar se existe um usuário logado e, portanto, se os botões devem ser exibidos.
 
-  ```json
-  {
-    "name": "string",
-    "email": "string",
-    "password": "string"
-  }
-  ```
+### 3 - Crie uma página de cadastro de usuários
 
-### 3 - Crie um endpoint para o login de usuários
+Um usuário precisa ter os campos ID, E-mail, Senha, Nome e Sobrenome. Todos os campos são obrigatórios. O ID deve ser gerado automaticamente, não devendo ser preenchido pelo usuário no momento do cadastro.
 
-- A rota deve ser (`/login`).
+A validação dos campos deve acontecer no backend, e uma mensagem deve ser enviada ao frontend através de uma propriedade passada para o EJS, da mesma forma que acontece com a view `users/login`.
 
-- A rota deve receber os campos Email e Senha e esses campos devem ser validados no banco de dados.
+**⚠️ Atenção ⚠️**: O sistema de autenticação espera que as funções `findUserByEmail` e `findUserById` retornem um objeto com, pelo menos, os campos `email`, `password` e `id`. Se você alterar o nome desses campos, precisará alterar o código de login.
 
-- Um token `JWT` deve ser gerado e retornado caso haja sucesso no login. No seu payload deve estar presente o id, email e role do usuário.
+#### Funções administrativas
 
-- O body da requisição deve conter o seguinte formato:
+> Páginas que **não** podem ser acessadas sem login. Para essas páginas, utilize o `authMiddleware` sem passar parâmetro algum.
 
-  ```json
-  {
-    "email": "string",
-    "password": "string"
-  }
-  ```
+### 4 - Crie uma página de cadastro de receitas
 
-### 4 - Crie um endpoint para o cadastro de receitas
+A página deve ser acessível através do endpoint `/recipes/new`, e o formulário deve ser enviado para o endpoint `POST /recipes`
 
-- A rota deve ser (`/recipes`).
+A receita deve ter os campos ID, Nome, Ingredientes, Modo de preparo e Autor. Sinta-se à vontade para modelar o banco da forma que achar melhor. O ID deve ser gerado automaticamente, não devendo ser preenchido no formulário de cadastro de receita.
 
-- A receita só pode ser criada caso o usuário esteja logado e o token `JWT` validado.
+O campo dos ingredientes pode ser um campo de texto aberto.
 
-- No banco, a receita deve ter os campos Nome, Ingredientes, Modo de preparo, URL da imagem e Id do Autor.
+### 5 - Crie uma página de edição de receitas
 
-- Nome, ingredientes e modo de preparo devem ser recebidos no corpo da requisição, com o seguinte formato:
+A página deve ser acessível através do endpoint `/recipes/:id/edit`, e o formulário deve ser enviado para o endpoint `POST /recipes/:id`.
 
-  ```json
-  {
-    "name": "string",
-    "ingredients": "string",
-    "preparation": "string"
-  }
-  ```
+Ao carregar, a página já deve conter as informações atuais daquela receita. Você pode utilizar o atributo `value` dos inputs no HTML para preencher esses campos.
 
-- O campo dos ingredientes pode ser um campo de texto aberto.
+Apenas a pessoa que criou a receita deve ter permissão para edita-la. Para verificar isso, você pode utilizar a propriedade `id` localizada em `req.user` (que é criada pelo `authMiddleware`) e compará-la ao ID de quem criou a receita. Caso os IDs não sejam idênticos, a pessoa deve ser redirecionada à página de visualizar receita utilizando o método `res.redirect` no controller.
 
-- O campo ID do autor, deve ser preenchido automaticamente com o ID do usuário logado, que deve ser extraído do token JWT.
+Caso a edição aconteça com sucesso, a pessoa deve ser redirecionada para a página de visualização daquela receita, já com os dados atualizados.
 
-- A URL da imagem será preenchida através de outro endpoint
+A validação dos campos deve ser realizada no backend.
 
-### 5 - Crie um endpoint para a listagem de receitas
+**⚠️ Atenção ⚠️**: Lembre-se que a tela não é a única forma de acessar os endpoints. Uma requisição feita utilizando o Postman para o endpoint `POST /recipes/:id` **não deve** alterar o ID da receita ou o nome de quem a cadastrou. Para isso, garanta que não está enviando esses campos ao banco de dados na função de update do seu model de receitas.
 
-- A rota deve ser (`/recipes`).
+### 6 - Crie uma página de exclusão de uma receita
 
-- A rota pode ser acessada por usuários logados ou não
+A página deve ser acessível através do endpoint `/recipes/:id/delete`, e só pode ser acessada pela pessoa que cadastrou a receita.
 
-### 6 - Crie um endpoint para visualizar uma receita específica
+Ao acessar a página, um formulário deve ser exibido, solicitando a senha da pessoa para confirmar a operação. Esse formulário deve ser enviado para o endpoint `POST /recipes/:id/delete`.
 
-- A rota deve ser (`/recipes/:id`).
+A receita só deve ser excluída caso a senha esteja correta. Caso ela esteja incorreta, a pessoa deve ser redirecionada à página de exclusão da receita com a mensagem "Senha incorreta. Por favor, tente novamente".
 
-- A rota pode ser acessada por usuários logados ou não
+Caso a receita seja excluída com sucesso, a pessoa deve ser redirecionada à página de listagem de receitas.
 
-### 7 - Crie um endpoint para a edição de uma receita
+### 7 - Cria uma página de pesquisa de receitas
 
-- A rota deve ser (`/recipes/:id`).
+A página deve estar acessível através do endpoint `/recipes/search`.
 
-- A receita só pode ser atualizada caso o usuário esteja logado e o token `JWT` validado.
+Um input do tipo texto deve ser exibido juntamente com um botão "Pesquisar". O conteúdo do input deve ser enviado para o endpoint `GET /recipes/search` através do parâmetro `q` na query string.
 
-- A receita só pode ser atualizada caso pertença ao usuário logado, ou caso esse usuário seja um admin.
+No backend, o valor do input de texto estará acessível através da propriedade `q` do objeto `req.query`. Caso nada seja informado para pesquisa, a view deve ser renderizada apenas com o campo de pesquisa. Caso um valor seja informado, uma lista semelhante à tela de listar receitas deve ser exibida, contendo o título, nome da pessoa que cadastrou, e um link para cada receita.
 
-- O corpo da requisição deve receber o seguinte formato:
-
-  ```json
-  {
-    "name": "string",
-    "ingredients": "string",
-    "preparation": "string"
-  }
-  ```
-
-### 8 - Crie um endpoint para a exclusão de uma receita
-
-- A rota deve ser (`/recipes/:id`).
-
-- A receita só pode ser excluída caso o usuário esteja logado e o token `JWT` validado.
-
-- A receita só pode ser excluída caso pertença ao usuário logado, ou caso o usuário logado seja um admin.
-
-### 9 - Crie um endpoint para a adição de uma imagem a uma receita
-
-- A rota deve ser (`/recipes/:id/image/`).
-
-- A imagem deve ser lida do campo `image`.
-
-- O endpoint deve aceitar requisições no formato `multipart/form-data`.
-
-- A receita só pode ser atualizada caso o usuário esteja logado e o token `JWT` validado.
-
-- A receita só pode ser atualizada caso pertença ao usuário logado ou caso o usuário logado seja admin.
-
-- O upload da imagem deverá ser feito utilizando o `Multer`.
-
-- O nome do arquivo deve ser o ID da receita, sem extensão. As imagens devem estar disponíveis através da rota `/images/<id-da-receita>` na API.
-
-- A URL completa para acessar a imagem através da API deve ser gravada no banco de dados, junto com os dados da receita.
-
-### 10 - Permissões do usuário admin
-
-- Por padrão, deve existir no banco de dados ao menos um usuário com a Role _admin_.
-
-- Esse usuário tem o poder de criar, deletar, atualizar ou remover qualquer receita, independente de quem a cadastrou.
-
-- Crie um script na raiz do seu projeto com a extensão `.sql`, caso utilize o MySQL, ou `.js`, caso utilize o mongodb. Este arquivo deve inicializar o banco de dados e cadastrar um usuário admin com o email `root@email.com` e a senha `admin`.
+Para realizar a pesquisa, o controller de receitas deve solicitar ao model que pesquise por receitas **contendo em seu nome** o valor digitado no input de pesquisa.
 
 ## Bônus
 
-### 11 - Cadastramento de admin
+### 8 - Crie uma página de "Minhas receitas"
 
-- A rota deve ser (`/users/admin`).
+O link para acessar essa página só deve estar visível para pessoas logadas.
 
-- Só será possível adicionar um admin caso esta ação esteja sendo feita por outro admin, portanto, deve ser validado se há um admin logado.
+A página deve estar acessível através do endpoint `/me/recipes`, e deve renderizar uma lista igual à que é exibida na página de listar receitas, populada com as receitas cadastradas pelo usuário logado.
 
-- Por padrão, as requisições pra esse endpoint devem adicionar um usuário com a role _admin_.
+Caso uma pessoa que não está logada acesse essa página, ela deve ser redirecionada para a tela de login. (O middleware `authMiddleware` já implementa essa funcionalidade, então não se esqueça de utilizá-lo aqui.)
 
-- O corpo da requisição deve ter o seguinte formato:
+> Lembrete: o ID do usuário logado está disponível em `req.user.id`.
 
-  ```json
-  {
-    "name": "string",
-    "email": "string",
-    "password": "string"
-  }
-  ```
+### 9 - Crie uma página de editar usuário
 
-### 12 - Utilize o MongoDB como banco de dados
+O link para acessar essa página só deve estar visível para pessoas logadas.
 
-O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como banco de dados. Altere seus `Model`s para que sua aplicação utilize o MongoDB ao invés do MySQL.
+Cada pessoa só deve poder editar o próprio perfil. Para isso, o backend deve extrair o ID do usuário a ser atualizado da propriedade `req.user`, e não do corpo da request. Esse deve ser o ID enviado ao model para realizar a atualização do usuário.
+
+Esta página deve estar acessível através do endpoint `/me/edit`, e o formulário deve ser enviado para o endpoint `POST /me`.
+
+Caso uma pessoa não logada tente acessar a página, ela deve ser redirecionada para o login. (O middleware `authMiddleware` já implementa essa funcionalidade, então não se esqueça de utilizá-lo aqui.)
+
+O ID da pessoa não deve poder ser editado. Nem através da tela, nem através de uma request realizada pelo Postman. Para isso, garanta que seu model não envia esse campo para o banco de dados.
+
+### 10 - Utilize `includes` do EJS para renderizar a navbar das páginas
+
+Parte do HTML ficará repetido em todas as páginas como, por exemplo, a barra de navegação.
+
+Para esses conteúdos repetitivos, você pode utilizar `includes` do EJS.
+
+A [documentação do EJS](https://ejs.co/#docs) (dê um Ctrl + F e pesquise por "includes") fala brevemente sobre o use de includes nas suas views.
 
 ---
 
@@ -218,9 +174,9 @@ O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como ban
 ### ANTES DE COMEÇAR A DESENVOLVER:
 
 1. Clone o repositório
-  - `git clone git@github.com:tryber/sd-0x-project-cookmaster-v2.git`.
+  - `git clone git@github.com:tryber/sd-0x-blockxx-cookmaster.git`.
   - Entre na pasta do repositório que você acabou de clonar:
-    - `cd sd-0x-project-cookmaster-v2`
+    - `cd sd-0x-blockxx-cookmaster`
 
 2. Instale as dependências
   - `npm install`
@@ -232,7 +188,7 @@ O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como ban
     - Exemplo: `git checkout master`
   - Agora crie uma branch à qual você vai submeter os `commits` do seu projeto
     - Você deve criar uma branch no seguinte formato: `nome-de-usuario-nome-do-projeto`
-    - Exemplo: `git checkout -b joaozinho-cookmaster-v2`
+    - Exemplo: `git checkout -b joaozinho-cookmaster`
 
 4. Adicione as mudanças ao _stage_ do Git e faça um `commit`
   - Verifique que as mudanças ainda não estão no _stage_
@@ -243,20 +199,20 @@ O projeto Cookmaster que você realizou anteriormente utilizava o MySQL como ban
       - `git status` (deve aparecer listado o arquivo adicionado em verde)
   - Faça o `commit` inicial
     - Exemplo:
-      - `git commit -m 'Iniciando o projeto Cookmaster v2'` (fazendo o primeiro commit)
+      - `git commit -m 'Iniciando o projeto Cookmaster'` (fazendo o primeiro commit)
       - `git status` (deve aparecer uma mensagem tipo _nothing to commit_ )
 
 5. Adicione a sua branch com o novo `commit` ao repositório remoto
-  - Usando o exemplo anterior: `git push -u origin joaozinho-cookmaster-v2`
+  - Usando o exemplo anterior: `git push -u origin joaozinho-cookmaster`
 
 6. Crie um novo `Pull Request` _(PR)_
-  - Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls)
+  - Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-0x-blockxx-cookmaster/pulls)
   - Clique no botão verde _"New pull request"_
   - Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
   - Clique no botão verde _"Create pull request"_
   - Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
   - **Não se preocupe em preencher mais nada por enquanto!**
-  - Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-0x-blockxx-cookmaster-v2/pulls) e confira que o seu _Pull Request_ está criado
+  - Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-0x-blockxx-cookmaster/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
