@@ -28,6 +28,11 @@ function FailedToSave() {
   this.status = 500;
 }
 
+function FailedToSaveRecipe() {
+  this.message = `Erro ao salvar a receita no banco.`;
+  this.status = 500;
+}
+
 function MongoError(message, status) {
   this.name = 'MongoError';
   this.message = message || 'Mensagem de erro padrão';
@@ -41,5 +46,6 @@ module.exports = {
   MongoError,
   TokenNotFound,
   UserWithTokenIdNotFound,
-  InvalidToken
+  InvalidToken,
+  FailedToSaveRecipe
 };

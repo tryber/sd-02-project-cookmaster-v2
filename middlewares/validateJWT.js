@@ -4,22 +4,24 @@ const { TokenNotFound, UserWithTokenIdNotFound, InvalidToken } = require('../ser
 
 const secretKey = process.env.SECRET_KEY;
 
-module.exports = async (req, res, next) => {
+const validateJWT = async (req, res, next) => {
   const token = req.headers['authorization'];
 
   if (!token) throw new TokenNotFound;
 
-  try {
-    const decoded = jwt.verify(token, secretKey);
+  const decoded = jwt.verify(token, secretKey);
 
-    const user = await userModel.findById(decoded.data._id);
+  console.log(decoded)
 
-    if (!user) throw new UserWithTokenIdNotFound;
+  const user = await userModel.findById(decoded.data.id);
 
-    req.user = user;
+  if (!user) throw new UserWithTokenIdNotFound;
 
-    next();
-  } catch (err) {
-    throw new InvalidToken;
-  }
+  req.user = user;
+
+  next();
 };
+
+module.exports = {
+  validateJWT,
+}

@@ -16,7 +16,7 @@ const login = rescue(async (req, res) => {
     if (!user) throw new UserNotFound;
 
     const jwtConfig = {
-      expiresIn: '5m',
+      expiresIn: '30m',
       algorithm: 'HS256',
     };
 

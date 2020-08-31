@@ -1,4 +1,5 @@
 const connection = require('./connection');
+const { ObjectId } = require('mongodb');
 
 /**
  * Busca um usuário através do seu email e, se encontrado, retorna-o.
@@ -27,10 +28,10 @@ const findByEmail = async (userEmail) => {
  * Busca um usuário através do seu ID
  * @param {string} id ID do usuário
  */
-const findById = async (userID) => {
+const findById = async (userId) => {
   const registeredUser = await connection().then((db) =>
   db
-    .collection('users').findOne({ _id: userID}));
+    .collection('users').findOne(ObjectId(userId)));
 
 return anyUserFound(registeredUser);
 };

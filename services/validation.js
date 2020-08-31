@@ -24,8 +24,22 @@ const loginValidation = Joi.object({
   .required()
 })
 
+const recipesValidation = Joi.object({
+  name: Joi.string()
+  .min(3)
+  .required(),
+
+  ingredients: Joi.string()
+  .min(3)
+  .required(),
+
+  preparation: Joi.string()
+  .min(3)
+  .required(),
+})
 
 module.exports = {
   userValidation,
-  loginValidation
+  loginValidation,
+  recipesValidation
 };

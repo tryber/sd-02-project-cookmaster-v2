@@ -1,4 +1,5 @@
 const connection = require('../connection');
+const { FailedToSaveRecipe } = require('../../services/errorObjects')
 
 const formatIngredients = (ingredientsArray) => {
   const formattedArray = ingredientsArray.split(',');
@@ -9,33 +10,26 @@ const formatIngredients = (ingredientsArray) => {
     .filter((ingredient) => ingredient !== ' ' && ingredient !== undefined && ingredient !== '');
 };
 
-const addNewRecipe = async (recipeData, userId) => {
-  const { name, ingredients, description } = recipeData;
+const addNewRecipe = async (recipeData, authorId) => {
+  const { name, ingredients, preparation } = recipeData;
   const ingredientsArray = formatIngredients(ingredients);
-  const newRecipe = await connection().then((db) =>
-    db
-      .getTable('recipes').insert(['name', 'recipe_description']).values([name, description])
-      .execute()
-      .then((results) => results.getAutoIncrementValue())
-      .then((recipeId) => db
-        .getTable('users_recipes').insert(['user_id', 'recipe_id']).values([userId, recipeId])
-        .execute()
-        .then(() => ingredientsArray.map((ingredient) => db
-          .getTable('ingredients').insert('ingredient_name').values(ingredient)
-          .execute()
-          .then((results) => results.getAutoIncrementValue())
-          .then((ingredientId) => db
-            .getTable('recipes_ingredients').insert(['recipe_id', 'ingredient_id']).values([recipeId, ingredientId])
-            .execute())))));
+  const recipe = await connection().then((db) =>
+    db.collection('recipes').insertOne({
+      name,
+      ingredients: ingredientsArray,
+      preparation,
+      authorId,
+      imageUrl: ''
+    }))
+    .catch((err) => {
+      throw new FailedToSaveRecipe;
+    });
 
-  const status = await Promise.all(newRecipe).then((results) => results);
-  const errorCount = status.reduce((acc, stats) => acc + stats.getWarnings().length, 0);
-  if (errorCount === 0) return { message: 'Receita criada com sucesso', redirect: true };
-  return { message: 'Algo deu errado...', redirect: false };
+  return { message: 'Receita criada com sucesso', recipe: recipe.ops[0]};
 };
 
 const updateRecipe = async (recipeData) => {
-  const { id, name, description, ingredients } = recipeData;
+  const { id, name, preparation, ingredients } = recipeData;
   const ingredientsArray = formatIngredients(ingredients);
 
   console.log(recipeData);
@@ -44,7 +38,7 @@ const updateRecipe = async (recipeData) => {
     db
       .getTable('recipes').update().where('id = :id').bind('id', id)
       .set('name', name)
-      .set('recipe_description', description)
+      .set('recipe_preparation', preparation)
       .execute()
       .then(() => db.getTable('recipes_ingredients')
         .delete()
