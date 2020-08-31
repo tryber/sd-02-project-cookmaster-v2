@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const rescue = require('express-rescue');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const middlewares = require('./middlewares');
 const { userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
@@ -15,22 +16,14 @@ app.set('views', './views');
 
 app.use(express.json());
 app.use(cookieParser());
+console.log(__dirname)
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/recipes', recipesRouter);
-
-// app.get('/', recipesController.recipesLandingPage);
-
-// app.get('/admin', middlewares.auth(), (req, res) => res.render('admin/home', { user: req.user }));
-
-// app.get('/logout', userController.logout);
 
 app.post('/login', userController.login);
 
 app.post('/users', registrationController.registerUser);
-
-// app.get('/me/recipes', middlewares.auth(), recipesController.fetchMyRecipesPage);
-// app.get('/me/edit', middlewares.auth(), registrationController.editUserPage);
-// app.post('/me', middlewares.auth(), registrationController.editUser);
 
 app.use(rescue.from(UserNotFound, (err, req, res, next) => {
   const { message, status } = err;

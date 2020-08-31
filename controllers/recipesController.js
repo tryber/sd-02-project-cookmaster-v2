@@ -9,7 +9,7 @@ const getRecipeId = (req) => {
 
 const checkRecipeAuthority = async (recipeId, userId) => {
   const { recipes: { authorId } } = await recipesCRUDModel.read(recipeId.id);
-if (String(userId) !== String(authorId)) throw new UserDoesntOwnRecipe;
+  if (String(userId) !== String(authorId)) throw new UserDoesntOwnRecipe;
 }
 
 const createRecipe = rescue(async (req, res, next) => {
@@ -68,6 +68,10 @@ const deleteRecipe = rescue(async (req, res) => {
     });
 });
 
+const addRecipeImage = rescue(async(req, res, next) => {
+  console.log(req.file)
+  return res.send()
+});
 
 
 module.exports = {
@@ -75,4 +79,5 @@ module.exports = {
   listRecipes,
   modifyRecipe,
   deleteRecipe,
+  addRecipeImage
 };
