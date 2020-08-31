@@ -1,31 +1,14 @@
 const rescue = require('express-rescue');
 const recipesCRUDModel = require('../models/admin/recipesCRUDModel');
 const { recipesValidation, recipeIdValidation } = require('../services/inputValidation');
-const { MongoError } = require('../services/errorObjects');
+const { MongoError, UserDoesntOwnRecipe } = require('../services/errorObjects');
 
-
-
-// const recipesLandingPage = async (req, res) => {
-//   const recipesData = await recipesModel.readRecipes();
-//   return res.render('home', { recipesData, userLogged: !!req.user });
-// };
-
-// const recipeDetails = async (req, res) => {
-//   const recipeID = Number(req.originalUrl.match(/[0-9]+/g)[0]);
-//   const recipeData = await recipesModel.readRecipes(recipeID);
-//   if (!recipeData) return res.render('404');
-
-//   const {
-//     id, name, description, authorInfo, ingredients,
-//   } = recipeData;
-
-//   return res.render('recipeDetails', { user: req.user, authorInfo, recipe: { id, name, description, ingredients } });
-// };
-
-// const newRecipesPage = async (_req, res) => res.render('admin/newRecipe', { message: '', redirect: false });
+const getRecipeId = (req) => {
+  return { id: String(req.url.match(/[^\/].*[^\/]$/gm))};
+}
 
 const createRecipe = rescue(async (req, res, next) => {
-  await recipesValidation.validateAsync(req.body)
+  return recipesValidation.validateAsync(req.body)
     .then(async () => {
       const { id: authorId } = req.user;
       const { body: recipeData } = req;
@@ -39,47 +22,33 @@ const createRecipe = rescue(async (req, res, next) => {
 });
 
 const listRecipes = rescue(async (req, res, next) => {
-  const recipeID = { id: String(req.url.match(/[^\/].*[^\/]$/gm))};
-  console.log(recipeID)
-  await recipeIdValidation.validateAsync(recipeID)
+  const recipeId = getRecipeId(req);
+  return recipeIdValidation.validateAsync(recipeId)
     .then(async () => {
-      const { message, recipes } = await recipesCRUDModel.read(recipeID.id);
-      res.status(201).send({ message, recipes })
-      next();
+      const { message, recipes } = await recipesCRUDModel.read(recipeId.id);
+      return res.status(200).send({ message, recipes })
     })
     .catch((err) => {
       throw new MongoError(err.message, err.status);
     })
 });
 
-// const modifyRecipePage = async (req, res) => {
-//   const { id: userId } = req.user;
-//   const recipeID = Number(req.originalUrl.match(/[0-9]+/g)[0]);
-//   const recipeData = await recipesModel.readRecipes(recipeID);
-//   console.log(recipeData)
-//   if (!recipeData) return res.render('404').status(404);
-
-//   const {
-//     id, name, description, authorInfo, ingredients,
-//   } = recipeData;
-
-//   if (userId !== authorInfo.authorID) return res.redirect('/');
-
-//   return res.render('admin/editRecipe', { user: req.user, authorInfo, recipe: { id, name, description, ingredients } });
-// };
-
-// const modifyRecipe = async (req, res) => {
-//   const { id: userId } = req.user;
-//   const id = Number(req.originalUrl.match(/[0-9]+/g)[0]);
-
-//   const { authorInfo: { authorID } } = await recipesModel.readRecipes(id);
-//   if (userId !== authorID) return res.redirect(`/recipes/${id}`);
-
-//   const { body } = req;
-//   const recipeData = { id, ...body };
-//   await recipesCRUDModel.updateRecipe(recipeData);
-//   return setTimeout(() => res.redirect(`/recipes/${id}`), 3000);
-// };
+const modifyRecipe = rescue(async (req, res) => {
+  const recipeId = getRecipeId(req);
+  const { id: userId } = req.user;
+  return recipeIdValidation.validateAsync(recipeId)
+  .then(async () => recipesValidation.validateAsync(req.body)
+    .then(async () => {
+      const { recipes: { authorId } } = await recipesCRUDModel.read(recipeId.id);
+      if (String(userId) !== String(authorId)) throw new UserDoesntOwnRecipe;
+      const recipesData = { recipeId: recipeId.id, ...req.body };
+      const { message } = await recipesCRUDModel.update(recipesData)
+      return res.status(200).send({ message });
+    }))
+  .catch((err) => {
+    throw new MongoError(err.message, err.status);
+  })
+});
 
 // const deleteRecipePage = async (req, res) => {
 //   const { id: userId } = req.user;
@@ -119,6 +88,7 @@ module.exports = {
   // newRecipesPage,
   createRecipe,
   listRecipes,
+  modifyRecipe,
   // modifyRecipePage,
   // modifyRecipe,
   // deleteRecipePage,

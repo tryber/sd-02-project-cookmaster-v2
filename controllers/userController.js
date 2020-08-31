@@ -5,7 +5,7 @@ const { loginValidation } = require('../services/inputValidation');
 const jwt = require('jsonwebtoken');
 
 const login = rescue(async (req, res) => {
-  await loginValidation.validateAsync(req.body)
+  return loginValidation.validateAsync(req.body)
   .then(async () => {
     const { email, password } = req.body;
 
@@ -16,7 +16,7 @@ const login = rescue(async (req, res) => {
     if (!user) throw new UserNotFound;
 
     const jwtConfig = {
-      expiresIn: '30m',
+      expiresIn: '3h',
       algorithm: 'HS256',
     };
 
@@ -24,7 +24,7 @@ const login = rescue(async (req, res) => {
 
     const token = jwt.sign({ data: user }, process.env.SECRET_KEY, jwtConfig);
 
-    res.status(200).json({ user: { id, email, role }, token, expires: jwtConfig.expiresIn });
+    return res.status(200).json({ user: { id, email, role }, token, expires: jwtConfig.expiresIn });
   })
   .catch((err) => {
     throw new MongoError(err.message, err.status);

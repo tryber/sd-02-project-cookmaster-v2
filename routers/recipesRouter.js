@@ -19,7 +19,7 @@ router.use(rescue(validateJWT));
 
 // router.get('/search', (req, res) => controllers.recipesController.recipeSearchPage(req, res));
 
-// router.post('/:id', (req, res) => controllers.recipesController.modifyRecipe(req, res));
+router.put('/:id', recipesController.modifyRecipe);
 
 // router.get('/new', (_req, res) => controllers.recipesController.newRecipesPage(_req, res));
 

@@ -5,24 +5,17 @@ const userModel = require('../models/userModel');
 const { MongoError } = require('../services/errorObjects');
 const { userValidation } = require('../services/inputValidation');
 
-const displayRegistration = async (_req, res) => res.render('register', { message: '', redirect: false });
-
-const registerUser = rescue(async (req, res, next) => userValidation.validateAsync(req.body)
-  .then(async () => {
-    const { user, message } = await registrationModel.registerNewUser(req.body);
-    res.status(201).send({ user, message });
-    next();
-  })
-  .catch((err) => {
-    throw new MongoError(err.message, err.status);
-  })
+const registerUser = rescue(async (req, res, next) =>
+  userValidation.validateAsync(req.body)
+    .then(async () => {
+      const { user, message } = await registrationModel.registerNewUser(req.body);
+      res.status(201).send({ user, message });
+      next();
+    })
+    .catch((err) => {
+      throw new MongoError(err.message, err.status);
+    })
 );
-
-const editUserPage = async (req, res) => {
-  const { user: { id } } = req;
-  const userData = await userModel.findById(id);
-  res.render('admin/editUser', { message: '', ...userData });
-};
 
 const editUser = async (req, res) => {
   const { message } = await editUserModel.editUser(req.body, req.user.id);
@@ -32,8 +25,5 @@ const editUser = async (req, res) => {
 };
 
 module.exports = {
-  displayRegistration,
   registerUser,
-  editUserPage,
-  editUser,
 };
