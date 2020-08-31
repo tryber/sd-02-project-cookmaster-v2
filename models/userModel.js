@@ -7,7 +7,7 @@ const connection = require('./connection');
 
 const anyUserFound = (userData) => {
   if (userData) {
-    const { id, email, password, name, role } = userData;
+    const { _id: id, email, password, name, role } = userData;
     const userObject = { id, email, password, name, role };
     return userObject;
   }

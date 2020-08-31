@@ -20,9 +20,11 @@ const login = rescue(async (req, res) => {
       algorithm: 'HS256',
     };
 
+    const { id, role } = user;
+
     const token = jwt.sign({ data: user }, process.env.SECRET_KEY, jwtConfig);
 
-    res.status(200).json({ token, expires: jwtConfig.expiresIn });
+    res.status(200).json({ user: { id, email, role }, token, expires: jwtConfig.expiresIn });
   })
   .catch((err) => {
     throw new MongoError(err.message, err.status);
