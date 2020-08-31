@@ -1,18 +1,32 @@
-const rescue = require('express-rescue');
 const connection = require('./connection');
 const userModel = require('./userModel');
-const { UserAlreadyExists } = require('../services/errorObjects');
+const bcrypt = require('bcrypt');
+const { UserAlreadyExists, FailedToSave } = require('../services/errorObjects');
 
 const registerNewUser = async (userData = null) => {
+  const saltRounds = process.env.SALT_ROUNDS;
   const { email, name, password } = userData;
   const doesUserExists = await userModel.findByEmail(email);
   if (doesUserExists) throw new UserAlreadyExists;
 
-  const user = await connection().then((db) =>
-    db.collection('users').insertOne({ email, name, password, role: 'user' }))
+  bcrypt.genSalt(saltRounds, (err, salt) =>
+    bcrypt.hash(password, salt, (err, hash) =>
+      connection()
+        .then((db) => db.collection('users')
+          .insertOne({ email, name, password: hash, role: 'user' }))
+        .catch((err) => {
+          throw new FailedToSave;
+        })));
 
-  return { user: user.ops[0], message: 'Usuário cadastrado com sucesso.' };
-};
+  let registeredUser;
+
+  while(!registeredUser) {
+    registeredUser = await userModel.findByEmail(email);
+  }
+
+  return { message: 'Usuário adicionado com sucesso.', user: registeredUser };
+}
+
 
 module.exports = {
   registerNewUser,

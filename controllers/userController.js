@@ -1,44 +1,34 @@
-const { v4: uuid } = require('uuid');
-const { SESSIONS } = require('../middlewares/auth');
-
+const rescue = require('express-rescue');
+const { UserNotFound, MongoError } = require('../services/errorObjects')
 const userModel = require('../models/userModel');
+const { loginValidation } = require('../services/validation');
+const jwt = require('jsonwebtoken');
 
-const loginForm = (req, res) => {
-  const { token = '' } = req.cookies || {};
+const login = rescue(async (req, res) => {
+  await loginValidation.validateAsync(req.body)
+  .then(async () => {
+    const { email, password } = req.body;
 
-  if (SESSIONS[token]) return res.redirect('/');
+    if (!email || !password) throw new UserNotFound;
 
-  return res.render('admin/login', {
-    message: null,
-    redirect: req.query.redirect,
-  });
-};
+    const user = await userModel.findByEmail(email);
 
-const login = async (req, res, next) => {
-  const { email, password, redirect } = req.body;
+    if (!user) throw new UserNotFound;
 
-  if (!email || !password) {
-    return res.render('admin/login', {
-      message: 'Preencha o email e a senha',
-      redirect: null,
-    });
-  }
+    const jwtConfig = {
+      expiresIn: '5m',
+      algorithm: 'HS256',
+    };
 
-  const user = await userModel.findByEmail(email);
+    const token = jwt.sign({ data: user }, process.env.SECRET_KEY, jwtConfig);
 
-  if (!user || user.password !== password) {
-    return res.render('admin/login', {
-      message: 'Email ou senha incorretos',
-      redirect: null,
-    });
-  }
+    res.status(200).json({ token, expires: jwtConfig.expiresIn });
+  })
+  .catch((err) => {
+    throw new MongoError(err.message, err.status);
+  })
+});
 
-  const token = uuid();
-  SESSIONS[token] = user.id;
-
-  res.cookie('token', token, { httpOnly: true, sameSite: true });
-  res.redirect(redirect || '/admin');
-};
 
 const logout = (req, res) => {
   res.clearCookie('token');
@@ -48,6 +38,5 @@ const logout = (req, res) => {
 
 module.exports = {
   login,
-  loginForm,
   logout,
 };

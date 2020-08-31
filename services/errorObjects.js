@@ -1,11 +1,31 @@
 function UserNotFound(message = '') {
   this.message = `Usuário não foi encontrado.`;
-  this.status = 404;
+  this.status = 401;
 }
 
 function UserAlreadyExists() {
   this.message = `Usuário com o mesmo e-mail já cadastrado.`;
   this.status = 400;
+}
+
+function TokenNotFound() {
+  this.message = `Token não encontrado ou informado`;
+  this.status = 400;
+}
+
+function UserWithTokenIdNotFound() {
+  this.message = `Erro ao procurar usuario do token.`;
+  this.status = 401;
+}
+
+function InvalidToken() {
+  this.message = `Erro: Seu token é inválido`;
+  this.status = 400;
+}
+
+function FailedToSave() {
+  this.message = `Erro ao salvar o usuário no banco.`;
+  this.status = 500;
 }
 
 function MongoError(message, status) {
@@ -15,7 +35,11 @@ function MongoError(message, status) {
 }
 
 module.exports = {
+  FailedToSave,
   UserNotFound,
   UserAlreadyExists,
   MongoError,
+  TokenNotFound,
+  UserWithTokenIdNotFound,
+  InvalidToken
 };
