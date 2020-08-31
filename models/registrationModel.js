@@ -1,19 +1,17 @@
+const rescue = require('express-rescue');
 const connection = require('./connection');
 const userModel = require('./userModel');
+const { UserAlreadyExists } = require('../services/errorObjects');
 
 const registerNewUser = async (userData = null) => {
-  if (!userData) return { message: 'Valores inválidos', error: true };
-  const [{ email, name, lastName, password, role }] = userData;
+  const { email, name, password } = userData;
   const doesUserExists = await userModel.findByEmail(email);
-  if (doesUserExists) return { message: 'E-mail já cadastrado', error: true };
+  if (doesUserExists) throw new UserAlreadyExists;
 
   const user = await connection().then((db) =>
-    db.collection('users').insertOne({ email, name, lastName, password, role }))
-  .catch((err) => {
-    throw err;
-  });
+    db.collection('users').insertOne({ email, name, password, role: 'user' }))
 
-  return { user: user.ops[0], message: 'Usuário cadastrado com sucesso.', error: false };
+  return { user: user.ops[0], message: 'Usuário cadastrado com sucesso.' };
 };
 
 module.exports = {

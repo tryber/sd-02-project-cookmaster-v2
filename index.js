@@ -1,36 +1,58 @@
 require('dotenv').config();
 
 const express = require('express');
-const bodyParser = require('body-parser');
+const rescue = require('express-rescue');
 const cookieParser = require('cookie-parser');
 const middlewares = require('./middlewares');
-const controllers = require('./controllers');
+const { recipesController, userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
+const { MongoError, UserNotFound, UserAlreadyExists } = require('./services/errorObjects');
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
 app.use('/recipes', recipesRouter);
 
-app.get('/', controllers.recipesController.recipesLandingPage);
+app.get('/', recipesController.recipesLandingPage);
 
 app.get('/admin', middlewares.auth(), (req, res) => res.render('admin/home', { user: req.user }));
 
-app.get('/login', controllers.userController.loginForm);
-app.get('/logout', controllers.userController.logout);
-app.post('/login', controllers.userController.login);
+app.get('/logout', userController.logout);
+app.post('/login', userController.login);
 
-app.get('/register', controllers.registrationController.displayRegistration);
-app.post('/register', controllers.registrationController.registerUser);
+app.post('/users', (req, res, next) => registrationController.registerUser(req, res, next));
 
-app.get('/me/recipes', middlewares.auth(), controllers.recipesController.fetchMyRecipesPage);
-app.get('/me/edit', middlewares.auth(), controllers.registrationController.editUserPage);
-app.post('/me', middlewares.auth(), controllers.registrationController.editUser);
+app.get('/me/recipes', middlewares.auth(), recipesController.fetchMyRecipesPage);
+app.get('/me/edit', middlewares.auth(), registrationController.editUserPage);
+app.post('/me', middlewares.auth(), registrationController.editUser);
+
+app.use(rescue.from(UserNotFound, (err, req, res, _next) => {
+  const { message, status } = err;
+  res.status(status)
+    .send({ error: { message, code: status } });
+}));
+
+app.use(rescue.from(UserAlreadyExists, (err, req, res, _next) => {
+  const { message, status } = err;
+  res.status(status)
+    .send({ error: { message, code: status } });
+}));
+
+
+app.use(rescue.from(MongoError, (err, req, res, _next) => {
+  const { message, status } = err;
+  res.status(status)
+    .send({ error: { message, code: status } });
+}));
+
+app.use((err, req, res, _next) => {
+  const { message } = err;
+  res.status(500)
+    .send({ error: { message, code: 500 } });
+});
 
 app.listen(3000, () => console.log(`Listening on ${process.env.PORT}`));

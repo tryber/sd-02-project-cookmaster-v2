@@ -1,14 +1,21 @@
+const rescue = require('express-rescue');
 const registrationModel = require('../models/registrationModel');
 const editUserModel = require('../models/admin/editUserModel');
 const userModel = require('../models/userModel');
+const { MongoError } = require('../services/errorObjects');
+const { userValidation } = require('../services/validation');
 
 const displayRegistration = async (_req, res) => res.render('register', { message: '', redirect: false });
 
-const registerUser = async (req, res) => {
-  const { user, message, error } = await registrationModel.registerNewUser(req.body);
-  if (error) return res.status(400).send({ message });
-  return res.status(201).send({ user, message });
-};
+const registerUser = rescue(async (req, res) => userValidation.validateAsync(req.body)
+  .then(async () => {
+    const { user, message } = await registrationModel.registerNewUser(req.body);
+    return res.status(201).send({ user, message });
+  })
+  .catch((err) => {
+    throw new MongoError(err.message, err.status);
+  })
+);
 
 const editUserPage = async (req, res) => {
   const { user: { id } } = req;
