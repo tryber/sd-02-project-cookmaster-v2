@@ -83,7 +83,6 @@ recipesRouter
         message: 'You do not have rights to change another users data.',
         code: 'unauthorized',
       });
-
     });
 
 recipesRouter

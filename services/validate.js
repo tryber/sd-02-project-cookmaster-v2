@@ -20,7 +20,7 @@ const isUserValid = Joi.object({
   password: Joi
     .string()
     .alphanum()
-    .min(6)
+    .min(4)
     .required(),
 });
 
@@ -38,7 +38,7 @@ const isLoginValid = Joi.object({
   password: Joi
     .string()
     .alphanum()
-    .min(6)
+    .min(4)
     .required(),
 });
 
