@@ -8,7 +8,6 @@ const middlewares = require('./middlewares');
 const { userController, registrationController } = require('./controllers');
 const recipesRouter = require('./routers/recipesRouter');
 const { MongoError, UserNotFound, RecipesNotFound, UserAlreadyExists, TokenNotFound, UserWithTokenIdNotFound, InvalidToken, FailedToSave, FailedToSaveRecipe, UserDoesntOwnRecipe, FailedToDeleteRecipe, FileNotAttached, ImageNotUploaded } = require('./services/errorObjects');
-
 const app = express();
 
 app.set('view engine', 'ejs');

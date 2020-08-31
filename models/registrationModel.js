@@ -9,7 +9,7 @@ const registerNewUser = async (userData = null) => {
   const doesUserExists = await userModel.findByEmail(email);
   if (doesUserExists) throw new UserAlreadyExists;
 
-  bcrypt.genSalt(saltRounds, (err, salt) =>
+  bcrypt.genSalt(Number(saltRounds), (err, salt) =>
     bcrypt.hash(password, salt, (err, hash) =>
       connection()
         .then((db) => db.collection('users')
