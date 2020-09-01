@@ -23,7 +23,6 @@ usersRouter
     return res.status(201).json({
       message: 'Success',
       user: newUser[0],
-      token,
     });
   });
 
