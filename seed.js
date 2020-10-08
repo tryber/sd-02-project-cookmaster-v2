@@ -1,0 +1,23 @@
+use cookmaster;
+
+db.users.insertOne({ name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' });
+
+db.recipes.insertMany(
+  [
+    {
+      name: 'banana caramelizada',
+      ingredients: 'banana, açúcar',
+      preparation: 'coloque o açúcar na frigideira até virar caramelo e jogue a banana',
+    },
+    {
+      name: 'maçã cozida',
+      ingredients: 'maça, açúcar, cravo e canela',
+      preparation: 'ponha a maçã para cozinhar com tudo',
+    },
+    {
+      name: 'pipoca de microondas',
+      ingredients: 'pacote de pipoca de microondas',
+      preparation: 'siga as instruções do pacote',
+    }
+  ]
+);
